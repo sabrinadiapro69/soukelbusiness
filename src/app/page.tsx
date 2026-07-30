@@ -44,7 +44,7 @@ export default function Home() {
             <a href="#categories" className="hover:text-orange-700">
               Catégories
             </a>
-            <a href="#produits" className="hover:text-orange-700">
+            <a href="/produits" className="hover:text-orange-700">
               Produits
             </a>
             <a href="#vendre" className="hover:text-orange-700">
@@ -136,6 +136,14 @@ export default function Home() {
                   </div>
                 </div>
               ))}
+            </div>
+            <div className="mt-8 text-center">
+              <a
+                href="/produits"
+                className="inline-block rounded-full border border-orange-600 px-6 py-2 text-sm font-semibold text-orange-700 transition-colors hover:bg-orange-50"
+              >
+                Voir toutes les annonces
+              </a>
             </div>
           </div>
         </section>
