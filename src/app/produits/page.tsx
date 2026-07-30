@@ -1,165 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
-
-type SellerType = "particulier" | "pro";
-
-type Listing = {
-  id: number;
-  title: string;
-  price: number;
-  category: string;
-  sellerType: SellerType;
-  sellerName: string;
-  location: string;
-  postedAt: string;
-  emoji: string;
-};
-
-const categories = [
-  "Toutes catégories",
-  "Artisanat",
-  "Mode & Textile",
-  "Épicerie fine",
-  "Maison & Déco",
-  "Bijoux",
-  "Beauté",
-];
-
-const listings: Listing[] = [
-  {
-    id: 1,
-    title: "Théière en cuivre gravée",
-    price: 45,
-    category: "Maison & Déco",
-    sellerType: "pro",
-    sellerName: "Atelier Nour",
-    location: "Marseille",
-    postedAt: "il y a 2h",
-    emoji: "🫖",
-  },
-  {
-    id: 2,
-    title: "Tapis berbère fait main",
-    price: 180,
-    category: "Maison & Déco",
-    sellerType: "pro",
-    sellerName: "Maison Zayn",
-    location: "Lyon",
-    postedAt: "il y a 5h",
-    emoji: "🧶",
-  },
-  {
-    id: 3,
-    title: "Coffret d'épices du souk",
-    price: 22,
-    category: "Épicerie fine",
-    sellerType: "pro",
-    sellerName: "Épices Amir",
-    location: "Paris",
-    postedAt: "hier",
-    emoji: "🌶️",
-  },
-  {
-    id: 4,
-    title: "Babouches brodées, peu portées",
-    price: 18,
-    category: "Mode & Textile",
-    sellerType: "particulier",
-    sellerName: "Sarah M.",
-    location: "Toulouse",
-    postedAt: "il y a 1h",
-    emoji: "👡",
-  },
-  {
-    id: 5,
-    title: "Collier argent ciselé",
-    price: 60,
-    category: "Bijoux",
-    sellerType: "particulier",
-    sellerName: "Yasmine B.",
-    location: "Nice",
-    postedAt: "il y a 3h",
-    emoji: "💍",
-  },
-  {
-    id: 6,
-    title: "Kaftan brodé, taille M",
-    price: 35,
-    category: "Mode & Textile",
-    sellerType: "particulier",
-    sellerName: "Amine K.",
-    location: "Lille",
-    postedAt: "il y a 4h",
-    emoji: "🧵",
-  },
-  {
-    id: 7,
-    title: "Savon noir traditionnel x3",
-    price: 12,
-    category: "Beauté",
-    sellerType: "pro",
-    sellerName: "Hammam Beauté",
-    location: "Paris",
-    postedAt: "il y a 6h",
-    emoji: "🧴",
-  },
-  {
-    id: 8,
-    title: "Plateau marocain artisanal",
-    price: 55,
-    category: "Artisanat",
-    sellerType: "particulier",
-    sellerName: "Karim T.",
-    location: "Bordeaux",
-    postedAt: "il y a 30 min",
-    emoji: "🏺",
-  },
-  {
-    id: 9,
-    title: "Lanterne marocaine en fer forgé",
-    price: 40,
-    category: "Maison & Déco",
-    sellerType: "particulier",
-    sellerName: "Nadia F.",
-    location: "Strasbourg",
-    postedAt: "il y a 8h",
-    emoji: "🏮",
-  },
-  {
-    id: 10,
-    title: "Coffret bijoux fantaisie x5",
-    price: 28,
-    category: "Bijoux",
-    sellerType: "pro",
-    sellerName: "Bijoux Layla",
-    location: "Marseille",
-    postedAt: "il y a 1 jour",
-    emoji: "💎",
-  },
-  {
-    id: 11,
-    title: "Huile d'argan pure 100ml",
-    price: 15,
-    category: "Beauté",
-    sellerType: "particulier",
-    sellerName: "Leïla R.",
-    location: "Nantes",
-    postedAt: "il y a 2 jours",
-    emoji: "🌿",
-  },
-  {
-    id: 12,
-    title: "Sac en cuir cousu main",
-    price: 75,
-    category: "Mode & Textile",
-    sellerType: "pro",
-    sellerName: "Cuir & Fil",
-    location: "Lyon",
-    postedAt: "il y a 3 jours",
-    emoji: "👜",
-  },
-];
+import { categories, listings, type SellerType } from "@/data/listings";
 
 type SortOrder = "recent" | "price-asc" | "price-desc";
 
@@ -192,26 +35,29 @@ export default function ProduitsPage() {
     <div className="flex flex-1 flex-col">
       <header className="sticky top-0 z-10 border-b border-orange-100 bg-white/90 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <a href="/" className="text-xl font-bold tracking-tight text-orange-700">
+          <Link
+            href="/"
+            className="text-xl font-bold tracking-tight text-orange-700"
+          >
             Souk El Business
-          </a>
+          </Link>
           <nav className="hidden gap-8 text-sm font-medium text-stone-600 sm:flex">
-            <a href="/#categories" className="hover:text-orange-700">
+            <Link href="/#categories" className="hover:text-orange-700">
               Catégories
-            </a>
-            <a href="/produits" className="text-orange-700">
+            </Link>
+            <Link href="/produits" className="text-orange-700">
               Produits
-            </a>
-            <a href="/#vendre" className="hover:text-orange-700">
+            </Link>
+            <Link href="/#vendre" className="hover:text-orange-700">
               Devenir vendeur
-            </a>
+            </Link>
           </nav>
-          <a
+          <Link
             href="/#vendre"
             className="rounded-full bg-orange-600 px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-orange-700"
           >
             Vendre sur Souk
-          </a>
+          </Link>
         </div>
       </header>
 
@@ -274,8 +120,9 @@ export default function ProduitsPage() {
 
         <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {filteredListings.map((listing) => (
-            <div
+            <Link
               key={listing.id}
+              href={`/produits/${listing.id}`}
               className="flex flex-col overflow-hidden rounded-2xl border border-orange-100 bg-white shadow-sm transition-shadow hover:shadow-md"
             >
               <div className="flex h-36 items-center justify-center bg-gradient-to-br from-amber-100 to-orange-100 text-4xl">
@@ -307,7 +154,7 @@ export default function ProduitsPage() {
                   {listing.postedAt}
                 </span>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
 
