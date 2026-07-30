@@ -46,6 +46,21 @@ export const categories = [
   "Beauté",
 ];
 
+// Postgres "numeric" columns (price, rating) come back as strings from
+// PostgREST to avoid float precision loss — coerce them to numbers here so
+// the rest of the app can rely on the TypeScript types above.
+function normalizeSeller(seller: Seller): Seller {
+  return { ...seller, rating: Number(seller.rating) };
+}
+
+function normalizeListing(listing: Listing): Listing {
+  return {
+    ...listing,
+    price: Number(listing.price),
+    seller: listing.seller ? normalizeSeller(listing.seller) : listing.seller,
+  };
+}
+
 export async function getListings(): Promise<Listing[]> {
   const { data, error } = await supabase
     .from("listings")
@@ -53,7 +68,7 @@ export async function getListings(): Promise<Listing[]> {
     .order("created_at", { ascending: false });
 
   if (error) throw error;
-  return data ?? [];
+  return (data ?? []).map(normalizeListing);
 }
 
 export async function getListingById(id: number): Promise<Listing | null> {
@@ -64,7 +79,7 @@ export async function getListingById(id: number): Promise<Listing | null> {
     .maybeSingle();
 
   if (error) throw error;
-  return data;
+  return data ? normalizeListing(data) : null;
 }
 
 export async function getListingsByCategory(
@@ -79,7 +94,7 @@ export async function getListingsByCategory(
     .limit(3);
 
   if (error) throw error;
-  return data ?? [];
+  return (data ?? []).map(normalizeListing);
 }
 
 export async function getSellerById(id: string): Promise<Seller | null> {
@@ -90,7 +105,7 @@ export async function getSellerById(id: string): Promise<Seller | null> {
     .maybeSingle();
 
   if (error) throw error;
-  return data;
+  return data ? normalizeSeller(data) : null;
 }
 
 export async function getListingsBySeller(
@@ -103,7 +118,7 @@ export async function getListingsBySeller(
     .order("created_at", { ascending: false });
 
   if (error) throw error;
-  return data ?? [];
+  return (data ?? []).map(normalizeListing);
 }
 
 export async function getReviewsBySeller(
