@@ -1,13 +1,15 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { listings } from "@/data/listings";
+import {
+  formatRelativeTime,
+  getListingById,
+  getListingsByCategory,
+} from "@/lib/queries";
 import NegotiationPanel from "@/components/NegotiationPanel";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 
-export async function generateStaticParams() {
-  return listings.map((listing) => ({ id: String(listing.id) }));
-}
+export const dynamic = "force-dynamic";
 
 export default async function ProduitPage({
   params,
@@ -15,17 +17,16 @@ export default async function ProduitPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const listing = listings.find((item) => item.id === Number(id));
+  const listing = await getListingById(Number(id));
 
   if (!listing) {
     notFound();
   }
 
-  const similarListings = listings
-    .filter(
-      (item) => item.category === listing.category && item.id !== listing.id
-    )
-    .slice(0, 3);
+  const similarListings = await getListingsByCategory(
+    listing.category,
+    listing.id
+  );
 
   return (
     <div className="flex flex-1 flex-col">
@@ -51,12 +52,12 @@ export default async function ProduitPage({
               </h1>
               <span
                 className={`shrink-0 rounded-full px-3 py-1 text-xs font-semibold ${
-                  listing.sellerType === "pro"
+                  listing.seller?.type === "pro"
                     ? "bg-orange-100 text-orange-700"
                     : "bg-stone-100 text-stone-600"
                 }`}
               >
-                {listing.sellerType === "pro" ? "Pro" : "Particulier"}
+                {listing.seller?.type === "pro" ? "Pro" : "Particulier"}
               </span>
             </div>
 
@@ -73,16 +74,16 @@ export default async function ProduitPage({
               <span>•</span>
               <span>{listing.location}</span>
               <span>•</span>
-              <span>{listing.postedAt}</span>
+              <span>{formatRelativeTime(listing.created_at)}</span>
             </div>
 
             <div className="mt-4 rounded-2xl border border-orange-100 bg-white p-5">
               <p className="text-sm text-stone-500">Vendu par</p>
               <Link
-                href={`/vendeurs/${listing.sellerId}`}
+                href={`/vendeurs/${listing.seller_id}`}
                 className="mt-1 inline-block font-semibold text-stone-900 hover:text-orange-700"
               >
-                {listing.sellerName}
+                {listing.seller?.name}
               </Link>
               <p className="text-sm text-stone-500">{listing.location}</p>
               <button className="mt-4 w-full rounded-full border border-orange-600 px-6 py-3 text-sm font-semibold text-orange-700 transition-colors hover:bg-orange-50">
@@ -92,7 +93,7 @@ export default async function ProduitPage({
 
             <NegotiationPanel
               askingPrice={listing.price}
-              sellerName={listing.sellerName}
+              sellerName={listing.seller?.name ?? "le vendeur"}
             />
           </div>
         </div>

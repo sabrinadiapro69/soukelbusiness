@@ -1,13 +1,15 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { listings } from "@/data/listings";
-import { sellers } from "@/data/sellers";
+import {
+  formatMemberSince,
+  getListingsBySeller,
+  getReviewsBySeller,
+  getSellerById,
+} from "@/lib/queries";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 
-export async function generateStaticParams() {
-  return sellers.map((seller) => ({ id: seller.id }));
-}
+export const dynamic = "force-dynamic";
 
 function StarRating({ rating }: { rating: number }) {
   const fullStars = Math.round(rating);
@@ -25,15 +27,16 @@ export default async function VendeurPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const seller = sellers.find((item) => item.id === id);
+  const seller = await getSellerById(id);
 
   if (!seller) {
     notFound();
   }
 
-  const sellerListings = listings.filter(
-    (listing) => listing.sellerId === seller.id
-  );
+  const [sellerListings, reviews] = await Promise.all([
+    getListingsBySeller(seller.id),
+    getReviewsBySeller(seller.id),
+  ]);
 
   return (
     <div className="flex flex-1 flex-col">
@@ -49,7 +52,7 @@ export default async function VendeurPage({
 
         <div className="mt-6 flex flex-col gap-6 rounded-2xl border border-orange-100 bg-white p-6 sm:flex-row sm:items-center">
           <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-amber-100 to-orange-100 text-5xl">
-            {seller.avatarEmoji}
+            {seller.avatar_emoji}
           </div>
           <div className="flex-1">
             <div className="flex flex-wrap items-center gap-3">
@@ -71,8 +74,8 @@ export default async function VendeurPage({
             </p>
             <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm text-stone-500">
               <span>📍 {seller.city}</span>
-              <span>📅 Membre depuis {seller.memberSince}</span>
-              <span>🤝 {seller.transactionsCount} transactions</span>
+              <span>📅 Membre depuis {formatMemberSince(seller.member_since)}</span>
+              <span>🤝 {seller.transactions_count} transactions</span>
               <span>
                 <StarRating rating={seller.rating} /> {seller.rating.toFixed(1)}
                 /5
@@ -116,13 +119,13 @@ export default async function VendeurPage({
 
         <section className="mt-12">
           <h2 className="text-xl font-bold text-stone-900">
-            Avis ({seller.reviews.length})
+            Avis ({reviews.length})
           </h2>
-          {seller.reviews.length > 0 ? (
+          {reviews.length > 0 ? (
             <div className="mt-6 flex flex-col gap-4">
-              {seller.reviews.map((review, index) => (
+              {reviews.map((review) => (
                 <div
-                  key={index}
+                  key={review.id}
                   className="rounded-2xl border border-orange-100 bg-white p-5"
                 >
                   <div className="flex items-center justify-between">
@@ -134,7 +137,9 @@ export default async function VendeurPage({
                   <p className="mt-2 text-sm text-stone-600">
                     {review.comment}
                   </p>
-                  <p className="mt-2 text-xs text-stone-400">{review.date}</p>
+                  <p className="mt-2 text-xs text-stone-400">
+                    {formatMemberSince(review.created_at)}
+                  </p>
                 </div>
               ))}
             </div>
