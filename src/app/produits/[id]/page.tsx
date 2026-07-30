@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { listings } from "@/data/listings";
+import NegotiationPanel from "@/components/NegotiationPanel";
 
 export async function generateStaticParams() {
   return listings.map((listing) => ({ id: String(listing.id) }));
@@ -108,10 +109,15 @@ export default async function ProduitPage({
                 {listing.sellerName}
               </Link>
               <p className="text-sm text-stone-500">{listing.location}</p>
-              <button className="mt-4 w-full rounded-full bg-orange-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-orange-700">
+              <button className="mt-4 w-full rounded-full border border-orange-600 px-6 py-3 text-sm font-semibold text-orange-700 transition-colors hover:bg-orange-50">
                 Contacter le vendeur
               </button>
             </div>
+
+            <NegotiationPanel
+              askingPrice={listing.price}
+              sellerName={listing.sellerName}
+            />
           </div>
         </div>
 
