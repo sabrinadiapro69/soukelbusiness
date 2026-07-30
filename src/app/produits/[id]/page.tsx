@@ -101,9 +101,12 @@ export default async function ProduitPage({
 
             <div className="mt-4 rounded-2xl border border-orange-100 bg-white p-5">
               <p className="text-sm text-stone-500">Vendu par</p>
-              <p className="mt-1 font-semibold text-stone-900">
+              <Link
+                href={`/vendeurs/${listing.sellerId}`}
+                className="mt-1 inline-block font-semibold text-stone-900 hover:text-orange-700"
+              >
                 {listing.sellerName}
-              </p>
+              </Link>
               <p className="text-sm text-stone-500">{listing.location}</p>
               <button className="mt-4 w-full rounded-full bg-orange-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-orange-700">
                 Contacter le vendeur

@@ -6,6 +6,7 @@ export type Listing = {
   price: number;
   category: string;
   sellerType: SellerType;
+  sellerId: string;
   sellerName: string;
   location: string;
   postedAt: string;
@@ -30,6 +31,7 @@ export const listings: Listing[] = [
     price: 45,
     category: "Maison & Déco",
     sellerType: "pro",
+    sellerId: "atelier-nour",
     sellerName: "Atelier Nour",
     location: "Marseille",
     postedAt: "il y a 2h",
@@ -43,6 +45,7 @@ export const listings: Listing[] = [
     price: 180,
     category: "Maison & Déco",
     sellerType: "pro",
+    sellerId: "maison-zayn",
     sellerName: "Maison Zayn",
     location: "Lyon",
     postedAt: "il y a 5h",
@@ -56,6 +59,7 @@ export const listings: Listing[] = [
     price: 22,
     category: "Épicerie fine",
     sellerType: "pro",
+    sellerId: "epices-amir",
     sellerName: "Épices Amir",
     location: "Paris",
     postedAt: "hier",
@@ -69,6 +73,7 @@ export const listings: Listing[] = [
     price: 18,
     category: "Mode & Textile",
     sellerType: "particulier",
+    sellerId: "sarah-m",
     sellerName: "Sarah M.",
     location: "Toulouse",
     postedAt: "il y a 1h",
@@ -82,6 +87,7 @@ export const listings: Listing[] = [
     price: 60,
     category: "Bijoux",
     sellerType: "particulier",
+    sellerId: "yasmine-b",
     sellerName: "Yasmine B.",
     location: "Nice",
     postedAt: "il y a 3h",
@@ -95,6 +101,7 @@ export const listings: Listing[] = [
     price: 35,
     category: "Mode & Textile",
     sellerType: "particulier",
+    sellerId: "amine-k",
     sellerName: "Amine K.",
     location: "Lille",
     postedAt: "il y a 4h",
@@ -108,6 +115,7 @@ export const listings: Listing[] = [
     price: 12,
     category: "Beauté",
     sellerType: "pro",
+    sellerId: "hammam-beaute",
     sellerName: "Hammam Beauté",
     location: "Paris",
     postedAt: "il y a 6h",
@@ -121,6 +129,7 @@ export const listings: Listing[] = [
     price: 55,
     category: "Artisanat",
     sellerType: "particulier",
+    sellerId: "karim-t",
     sellerName: "Karim T.",
     location: "Bordeaux",
     postedAt: "il y a 30 min",
@@ -134,6 +143,7 @@ export const listings: Listing[] = [
     price: 40,
     category: "Maison & Déco",
     sellerType: "particulier",
+    sellerId: "nadia-f",
     sellerName: "Nadia F.",
     location: "Strasbourg",
     postedAt: "il y a 8h",
@@ -147,6 +157,7 @@ export const listings: Listing[] = [
     price: 28,
     category: "Bijoux",
     sellerType: "pro",
+    sellerId: "bijoux-layla",
     sellerName: "Bijoux Layla",
     location: "Marseille",
     postedAt: "il y a 1 jour",
@@ -160,6 +171,7 @@ export const listings: Listing[] = [
     price: 15,
     category: "Beauté",
     sellerType: "particulier",
+    sellerId: "leila-r",
     sellerName: "Leïla R.",
     location: "Nantes",
     postedAt: "il y a 2 jours",
@@ -173,6 +185,7 @@ export const listings: Listing[] = [
     price: 75,
     category: "Mode & Textile",
     sellerType: "pro",
+    sellerId: "cuir-fil",
     sellerName: "Cuir & Fil",
     location: "Lyon",
     postedAt: "il y a 3 jours",
