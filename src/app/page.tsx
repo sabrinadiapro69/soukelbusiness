@@ -1,3 +1,6 @@
+import SiteHeader from "@/components/SiteHeader";
+import SiteFooter from "@/components/SiteFooter";
+
 const categories = [
   { name: "Artisanat", emoji: "🏺" },
   { name: "Mode & Textile", emoji: "🧵" },
@@ -35,30 +38,7 @@ const features = [
 export default function Home() {
   return (
     <div className="flex flex-1 flex-col">
-      <header className="sticky top-0 z-10 border-b border-orange-100 bg-white/90 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <span className="text-xl font-bold tracking-tight text-orange-700">
-            Souk El Business
-          </span>
-          <nav className="hidden gap-8 text-sm font-medium text-stone-600 sm:flex">
-            <a href="#categories" className="hover:text-orange-700">
-              Catégories
-            </a>
-            <a href="/produits" className="hover:text-orange-700">
-              Produits
-            </a>
-            <a href="#vendre" className="hover:text-orange-700">
-              Devenir vendeur
-            </a>
-          </nav>
-          <a
-            href="#vendre"
-            className="rounded-full bg-orange-600 px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-orange-700"
-          >
-            Vendre sur Souk
-          </a>
-        </div>
-      </header>
+      <SiteHeader />
 
       <main className="flex-1">
         <section className="bg-gradient-to-br from-orange-600 via-amber-600 to-yellow-600 text-white">
@@ -186,19 +166,7 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className="border-t border-orange-100 bg-white py-8">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 text-sm text-stone-500 sm:flex-row">
-          <span>© {new Date().getFullYear()} Souk El Business</span>
-          <div className="flex gap-6">
-            <a href="#" className="hover:text-orange-700">
-              Mentions légales
-            </a>
-            <a href="#" className="hover:text-orange-700">
-              Contact
-            </a>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

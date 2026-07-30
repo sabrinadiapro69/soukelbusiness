@@ -2,6 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { listings } from "@/data/listings";
 import { sellers } from "@/data/sellers";
+import SiteHeader from "@/components/SiteHeader";
+import SiteFooter from "@/components/SiteFooter";
 
 export async function generateStaticParams() {
   return sellers.map((seller) => ({ id: seller.id }));
@@ -35,33 +37,7 @@ export default async function VendeurPage({
 
   return (
     <div className="flex flex-1 flex-col">
-      <header className="sticky top-0 z-10 border-b border-orange-100 bg-white/90 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-          <Link
-            href="/"
-            className="text-xl font-bold tracking-tight text-orange-700"
-          >
-            Souk El Business
-          </Link>
-          <nav className="hidden gap-8 text-sm font-medium text-stone-600 sm:flex">
-            <Link href="/#categories" className="hover:text-orange-700">
-              Catégories
-            </Link>
-            <Link href="/produits" className="hover:text-orange-700">
-              Produits
-            </Link>
-            <Link href="/#vendre" className="hover:text-orange-700">
-              Devenir vendeur
-            </Link>
-          </nav>
-          <Link
-            href="/#vendre"
-            className="rounded-full bg-orange-600 px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-orange-700"
-          >
-            Vendre sur Souk
-          </Link>
-        </div>
-      </header>
+      <SiteHeader />
 
       <main className="mx-auto w-full max-w-6xl flex-1 px-6 py-10">
         <Link
@@ -170,19 +146,7 @@ export default async function VendeurPage({
         </section>
       </main>
 
-      <footer className="border-t border-orange-100 bg-white py-8">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 text-sm text-stone-500 sm:flex-row">
-          <span>© {new Date().getFullYear()} Souk El Business</span>
-          <div className="flex gap-6">
-            <a href="#" className="hover:text-orange-700">
-              Mentions légales
-            </a>
-            <a href="#" className="hover:text-orange-700">
-              Contact
-            </a>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
