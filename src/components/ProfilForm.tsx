@@ -5,18 +5,17 @@ import { updateProfileAction, type UpdateProfileState } from "@/app/actions";
 
 const emojiOptions = [
   "🙂",
+  "😊",
   "😎",
   "🥳",
+  "🤓",
   "🧕",
   "🧔",
-  "👩‍🎨",
-  "🧑‍🍳",
-  "🫖",
-  "🧶",
-  "🌶️",
-  "🏺",
-  "💍",
-  "👜",
+  "👩",
+  "👨",
+  "👵",
+  "👴",
+  "🧑",
 ];
 
 const initialState: UpdateProfileState = { error: null };
