@@ -79,6 +79,7 @@ export async function updateProfileAction(
   const city = formData.get("city")?.toString().trim() ?? "";
   const description = formData.get("description")?.toString().trim() ?? "";
   const avatarEmoji = formData.get("avatar_emoji")?.toString() || "🙂";
+  const metier = formData.get("metier")?.toString().trim();
 
   if (!name || !city) {
     return { error: "Le nom et la ville sont obligatoires." };
@@ -97,6 +98,118 @@ export async function updateProfileAction(
   if (error) {
     return { error: error.message };
   }
+
+  if (metier !== undefined) {
+    await supabase
+      .from("pro_profiles")
+      .upsert({ seller_id: user.id, metier }, { onConflict: "seller_id" });
+  }
+
+  return { error: null, success: true };
+}
+
+// --- Les Talentueux (profil pro, portfolio, avis) ---
+
+export async function addPortfolioItemAction(formData: FormData) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) redirect("/connexion");
+
+  const emoji = formData.get("emoji")?.toString() || "🛠️";
+  const title = formData.get("title")?.toString().trim() ?? "";
+  const description = formData.get("description")?.toString().trim() ?? "";
+
+  if (!title) return;
+
+  await supabase.from("portfolio_items").insert({
+    seller_id: user.id,
+    emoji,
+    title,
+    description,
+  });
+
+  revalidatePath("/profil");
+  revalidatePath(`/vendeurs/${user.id}`);
+}
+
+export async function removePortfolioItemAction(formData: FormData) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) redirect("/connexion");
+
+  const itemId = Number(formData.get("itemId"));
+
+  await supabase
+    .from("portfolio_items")
+    .delete()
+    .eq("id", itemId)
+    .eq("seller_id", user.id);
+
+  revalidatePath("/profil");
+  revalidatePath(`/vendeurs/${user.id}`);
+}
+
+export type SubmitReviewState = { error: string | null; success?: boolean };
+
+export async function submitReviewAction(
+  _prevState: SubmitReviewState,
+  formData: FormData
+): Promise<SubmitReviewState> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) redirect("/connexion");
+
+  const offerId = Number(formData.get("offerId"));
+  const rating = Number(formData.get("rating"));
+  const comment = formData.get("comment")?.toString().trim() ?? "";
+
+  if (!Number.isFinite(offerId) || !Number.isFinite(rating)) {
+    return { error: "Formulaire invalide." };
+  }
+  if (rating < 1 || rating > 5) {
+    return { error: "La note doit être comprise entre 1 et 5." };
+  }
+
+  // Le vendeur est déduit de l'offre elle-même côté serveur (jamais du
+  // formulaire) pour qu'un avis ne puisse pas être attribué à un autre
+  // vendeur en modifiant un champ caché.
+  const { data: offer } = await supabase
+    .from("offers")
+    .select("listings(seller_id)")
+    .eq("id", offerId)
+    .eq("buyer_id", user.id)
+    .maybeSingle();
+
+  const listings = offer?.listings as { seller_id: string } | { seller_id: string }[] | undefined;
+  const sellerId = Array.isArray(listings) ? listings[0]?.seller_id : listings?.seller_id;
+
+  if (!sellerId) {
+    return { error: "Offre introuvable." };
+  }
+
+  const { error } = await supabase.from("reviews").insert({
+    offer_id: offerId,
+    seller_id: sellerId,
+    buyer_id: user.id,
+    rating,
+    comment,
+  });
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  revalidatePath("/mes-offres");
+  revalidatePath(`/vendeurs/${sellerId}`);
 
   return { error: null, success: true };
 }

@@ -5,6 +5,7 @@ import { formatDA } from "@/lib/queries";
 import { acceptCounterAction, concludeTransactionAction } from "@/app/actions";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import ReviewForm from "@/components/ReviewForm";
 
 export const dynamic = "force-dynamic";
 
@@ -27,7 +28,7 @@ export default async function MesOffresPage() {
 
   const { data: offers } = await supabase
     .from("offers")
-    .select("*, listings(*)")
+    .select("*, listings(*), review:reviews(id)")
     .eq("buyer_id", user.id)
     .order("created_at", { ascending: false });
 
@@ -94,9 +95,16 @@ export default async function MesOffresPage() {
                 {offer.statut === "acceptee" && (
                   <div className="mt-4">
                     {offer.conclue_par_acheteur ? (
-                      <p className="text-sm font-medium text-green-700">
-                        ✅ Transaction marquée comme conclue.
-                      </p>
+                      <>
+                        <p className="text-sm font-medium text-green-700">
+                          ✅ Transaction marquée comme conclue.
+                        </p>
+                        {(Array.isArray(offer.review)
+                          ? offer.review.length === 0
+                          : !offer.review) && (
+                          <ReviewForm offerId={offer.id} />
+                        )}
+                      </>
                     ) : (
                       <form action={concludeTransactionAction}>
                         <input type="hidden" name="offerId" value={offer.id} />

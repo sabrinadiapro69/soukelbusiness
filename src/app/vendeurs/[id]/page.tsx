@@ -4,6 +4,8 @@ import {
   formatDA,
   formatMemberSince,
   getListingsBySeller,
+  getPortfolioBySeller,
+  getProProfile,
   getReviewsBySeller,
   getSellerById,
 } from "@/lib/queries";
@@ -34,9 +36,11 @@ export default async function VendeurPage({
     notFound();
   }
 
-  const [sellerListings, reviews] = await Promise.all([
+  const [sellerListings, reviews, proProfile, portfolio] = await Promise.all([
     getListingsBySeller(seller.id),
     getReviewsBySeller(seller.id),
+    seller.type === "pro" ? getProProfile(seller.id) : Promise.resolve(null),
+    seller.type === "pro" ? getPortfolioBySeller(seller.id) : Promise.resolve([]),
   ]);
 
   return (
@@ -67,7 +71,17 @@ export default async function VendeurPage({
               >
                 {seller.type === "pro" ? "Professionnel" : "Particulier"}
               </span>
+              {proProfile?.verified && (
+                <span className="flex items-center gap-1 rounded-full bg-gold px-3 py-1 text-xs font-bold text-[#3A2C05]">
+                  🏅 Talentueux
+                </span>
+              )}
             </div>
+            {proProfile?.metier && (
+              <p className="mt-1 text-sm font-medium text-ink-soft">
+                {proProfile.metier}
+              </p>
+            )}
             <p className="mt-2 max-w-2xl text-sm text-ink-soft">
               {seller.description}
             </p>
@@ -118,6 +132,30 @@ export default async function VendeurPage({
           )}
         </section>
 
+        {seller.type === "pro" && portfolio.length > 0 && (
+          <section className="mt-12">
+            <h2 className="text-xl font-bold text-ink">Portfolio</h2>
+            <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+              {portfolio.map((item) => (
+                <div
+                  key={item.id}
+                  className="rounded-xl border border-line bg-paper p-4"
+                >
+                  <div className="text-2xl">{item.emoji}</div>
+                  <p className="mt-2 text-sm font-semibold text-ink">
+                    {item.title}
+                  </p>
+                  {item.description && (
+                    <p className="mt-1 text-xs text-ink-soft">
+                      {item.description}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
         <section className="mt-12">
           <h2 className="text-xl font-bold text-ink">
             Avis ({reviews.length})
@@ -131,7 +169,7 @@ export default async function VendeurPage({
                 >
                   <div className="flex items-center justify-between">
                     <span className="font-semibold text-ink">
-                      {review.author}
+                      {review.buyer?.avatar_emoji} {review.buyer?.name ?? "Acheteur"}
                     </span>
                     <StarRating rating={review.rating} />
                   </div>

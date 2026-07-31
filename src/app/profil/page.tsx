@@ -17,18 +17,33 @@ export default async function ProfilPage() {
     redirect("/connexion");
   }
 
-  const [{ data: seller }, { count: reviewsCount }, { count: listingsCount }] =
-    await Promise.all([
-      supabase.from("sellers").select("*").eq("id", user.id).single(),
-      supabase
-        .from("reviews")
-        .select("*", { count: "exact", head: true })
-        .eq("seller_id", user.id),
-      supabase
-        .from("listings")
-        .select("*", { count: "exact", head: true })
-        .eq("seller_id", user.id),
-    ]);
+  const [
+    { data: seller },
+    { count: reviewsCount },
+    { count: listingsCount },
+    { data: proProfile },
+    { data: portfolio },
+  ] = await Promise.all([
+    supabase.from("sellers").select("*").eq("id", user.id).single(),
+    supabase
+      .from("reviews")
+      .select("*", { count: "exact", head: true })
+      .eq("seller_id", user.id),
+    supabase
+      .from("listings")
+      .select("*", { count: "exact", head: true })
+      .eq("seller_id", user.id),
+    supabase
+      .from("pro_profiles")
+      .select("*")
+      .eq("seller_id", user.id)
+      .maybeSingle(),
+    supabase
+      .from("portfolio_items")
+      .select("*")
+      .eq("seller_id", user.id)
+      .order("created_at", { ascending: true }),
+  ]);
 
   if (!seller) {
     redirect("/");
@@ -142,7 +157,11 @@ export default async function ProfilPage() {
           <h2 className="text-lg font-semibold text-ink">
             Modifier mon profil
           </h2>
-          <ProfilForm seller={seller} />
+          <ProfilForm
+            seller={seller}
+            metier={proProfile?.metier ?? ""}
+            portfolio={portfolio ?? []}
+          />
         </div>
       </main>
 

@@ -30,11 +30,35 @@ export type Listing = {
 
 export type Review = {
   id: number;
+  offer_id: number;
   seller_id: string;
-  author: string;
+  buyer_id: string;
   rating: number;
   comment: string;
   created_at: string;
+  buyer?: { name: string; avatar_emoji: string };
+};
+
+export type ProProfile = {
+  seller_id: string;
+  metier: string;
+  verified: boolean;
+};
+
+export type PortfolioItem = {
+  id: number;
+  seller_id: string;
+  emoji: string;
+  title: string;
+  description: string;
+  created_at: string;
+};
+
+export type Talent = {
+  seller: Seller;
+  pro_profile: ProProfile;
+  portfolio: PortfolioItem[];
+  reviewsCount: number;
 };
 
 export type OfferStatus = "en_attente" | "acceptee" | "refusee" | "contre_offre";
@@ -143,12 +167,69 @@ export async function getReviewsBySeller(
 ): Promise<Review[]> {
   const { data, error } = await supabase
     .from("reviews")
-    .select("*")
+    .select("*, buyer:sellers(name, avatar_emoji)")
     .eq("seller_id", sellerId)
     .order("created_at", { ascending: false });
 
   if (error) throw error;
   return data ?? [];
+}
+
+export async function getProProfile(
+  sellerId: string
+): Promise<ProProfile | null> {
+  const { data, error } = await supabase
+    .from("pro_profiles")
+    .select("*")
+    .eq("seller_id", sellerId)
+    .maybeSingle();
+
+  if (error) throw error;
+  return data;
+}
+
+export async function getPortfolioBySeller(
+  sellerId: string
+): Promise<PortfolioItem[]> {
+  const { data, error } = await supabase
+    .from("portfolio_items")
+    .select("*")
+    .eq("seller_id", sellerId)
+    .order("created_at", { ascending: true });
+
+  if (error) throw error;
+  return data ?? [];
+}
+
+export async function getTopTalents(limit = 4): Promise<Talent[]> {
+  const { data, error } = await supabase
+    .from("pro_profiles")
+    .select("*, seller:sellers!inner(*), portfolio:portfolio_items(*)")
+    .eq("verified", true)
+    .order("rating", { ascending: false, referencedTable: "seller" })
+    .limit(limit);
+
+  if (error) throw error;
+
+  return Promise.all(
+    (data ?? []).map(async (row) => {
+      const { count } = await supabase
+        .from("reviews")
+        .select("*", { count: "exact", head: true })
+        .eq("seller_id", row.seller_id);
+
+      return {
+        seller: normalizeSeller(row.seller),
+        pro_profile: {
+          seller_id: row.seller_id,
+          metier: row.metier,
+          verified: row.verified,
+        },
+        portfolio: (row.portfolio ?? []).slice(0, 3),
+        reviewsCount: count ?? 0,
+      };
+    })
+  );
 }
 
 export function formatDA(price: number): string {

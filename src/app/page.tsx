@@ -3,6 +3,9 @@ import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import DressingScroll from "@/components/DressingScroll";
 import AnnoncesFilter from "@/components/AnnoncesFilter";
+import { getTopTalents } from "@/lib/queries";
+
+export const dynamic = "force-dynamic";
 
 const rayons = [
   {
@@ -102,46 +105,75 @@ const metiers = [
   },
 ];
 
-const talents = [
+const fallbackTalents = [
   {
+    key: "amine-k",
+    href: "#",
     name: "Amine K.",
     metier: "Plombier · Alger",
     rating: "4.9",
     reviews: 86,
     badge: true,
     color: "bg-primary",
-    icon: <path d="M14 7a4 4 0 1 0-6 3.5V21h4v-6h2v6h4V10.5A4 4 0 0 0 14 7Z" />,
+    portfolioEmojis: ["🔧", "🔧", "🔧"],
   },
   {
+    key: "lynda-b",
+    href: "#",
     name: "Lynda B.",
     metier: "Couturière · Oran",
     rating: "5.0",
     reviews: 112,
     badge: true,
     color: "bg-accent",
-    icon: <path d="M6 3h12l-2 6H8L6 3Zm2 6-3 12h14L16 9M12 9v12" />,
+    portfolioEmojis: ["✂️", "✂️", "✂️"],
   },
   {
+    key: "sofiane-r",
+    href: "#",
     name: "Sofiane R.",
     metier: "Maçon · Constantine",
     rating: "4.8",
     reviews: 64,
     badge: true,
     color: "bg-gold",
-    icon: <path d="M3 21h18M5 21V9l7-5 7 5v12M9 21v-6h6v6" />,
+    portfolioEmojis: ["🏗️", "🏗️", "🏗️"],
   },
   {
+    key: "hakim-m",
+    href: "#",
     name: "Hakim M.",
     metier: "Électricien · Béjaïa",
     rating: "4.6",
     reviews: 29,
     badge: false,
     color: "bg-primary-dark",
-    icon: <path d="M13 3 4 14h6l-1 7 9-11h-6l1-7Z" />,
+    portfolioEmojis: ["⚡", "⚡", "⚡"],
   },
 ];
 
-export default function Home() {
+const talentColors = ["bg-primary", "bg-accent", "bg-gold", "bg-primary-dark"];
+
+export default async function Home() {
+  const realTalents = await getTopTalents(4);
+  const talents =
+    realTalents.length > 0
+      ? realTalents.map((t, i) => ({
+          key: t.seller.id,
+          href: `/vendeurs/${t.seller.id}`,
+          name: t.seller.name,
+          metier: `${t.pro_profile.metier || "Professionnel"} · ${t.seller.city}`,
+          rating: t.seller.rating.toFixed(1),
+          reviews: t.reviewsCount,
+          badge: true,
+          color: talentColors[i % talentColors.length],
+          portfolioEmojis:
+            t.portfolio.length > 0
+              ? t.portfolio.slice(0, 3).map((p) => p.emoji)
+              : ["🛠️", "🛠️", "🛠️"],
+        }))
+      : fallbackTalents;
+
   return (
     <div className="flex flex-1 flex-col">
       <SiteHeader />
@@ -343,7 +375,7 @@ export default function Home() {
             <div className="mb-7 flex gap-4 overflow-x-auto pb-2.5">
               {talents.map((t) => (
                 <div
-                  key={t.name}
+                  key={t.key}
                   className="relative w-[240px] shrink-0 rounded-2xl border border-line bg-paper p-[18px]"
                 >
                   {t.badge && (
@@ -373,19 +405,17 @@ export default function Home() {
                     </span>
                   </div>
                   <div className="mb-3.5 grid grid-cols-3 gap-1.5">
-                    {[0, 1, 2].map((i) => (
+                    {t.portfolioEmojis.map((emoji, i) => (
                       <div
                         key={i}
-                        className="flex aspect-square items-center justify-center rounded-lg bg-bg-alt"
+                        className="flex aspect-square items-center justify-center rounded-lg bg-bg-alt text-lg"
                       >
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" className="w-[40%] text-primary-dark opacity-35">
-                          {t.icon}
-                        </svg>
+                        {emoji}
                       </div>
                     ))}
                   </div>
                   <Link
-                    href="#"
+                    href={t.href}
                     className="block w-full rounded-full border border-line py-2.5 text-center text-[13px] font-semibold transition-colors hover:border-ink"
                   >
                     Voir le profil
