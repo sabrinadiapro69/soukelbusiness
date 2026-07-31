@@ -221,6 +221,7 @@ export async function sellerRespondOfferAction(formData: FormData) {
   if (!user) redirect("/connexion");
 
   const offerId = Number(formData.get("offerId"));
+  const listingId = Number(formData.get("listingId"));
   const decision = formData.get("decision")?.toString();
   const counterRaw = formData.get("montant")?.toString();
 
@@ -239,4 +240,7 @@ export async function sellerRespondOfferAction(formData: FormData) {
   }
 
   revalidatePath("/offres");
+  if (Number.isFinite(listingId)) {
+    revalidatePath(`/produits/${listingId}`);
+  }
 }

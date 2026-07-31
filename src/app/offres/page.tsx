@@ -78,6 +78,11 @@ export default async function OffresPage() {
                   <div className="mt-4 flex flex-wrap items-end gap-2">
                     <form action={sellerRespondOfferAction}>
                       <input type="hidden" name="offerId" value={offer.id} />
+                      <input
+                        type="hidden"
+                        name="listingId"
+                        value={offer.listings.id}
+                      />
                       <input type="hidden" name="decision" value="accepter" />
                       <button
                         type="submit"
@@ -88,6 +93,11 @@ export default async function OffresPage() {
                     </form>
                     <form action={sellerRespondOfferAction}>
                       <input type="hidden" name="offerId" value={offer.id} />
+                      <input
+                        type="hidden"
+                        name="listingId"
+                        value={offer.listings.id}
+                      />
                       <input type="hidden" name="decision" value="refuser" />
                       <button
                         type="submit"
@@ -101,6 +111,11 @@ export default async function OffresPage() {
                       className="flex items-end gap-2"
                     >
                       <input type="hidden" name="offerId" value={offer.id} />
+                      <input
+                        type="hidden"
+                        name="listingId"
+                        value={offer.listings.id}
+                      />
                       <input
                         type="hidden"
                         name="decision"
