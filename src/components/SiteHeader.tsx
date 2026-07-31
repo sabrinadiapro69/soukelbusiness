@@ -58,9 +58,12 @@ export default async function SiteHeader() {
 
         {user ? (
           <div className="flex items-center gap-4">
-            <span className="hidden text-sm text-stone-600 sm:inline">
+            <Link
+              href="/profil"
+              className="hidden text-sm text-stone-600 hover:text-orange-700 sm:inline"
+            >
               Bonjour {displayName}
-            </span>
+            </Link>
             <form action={signOutAction}>
               <button
                 type="submit"

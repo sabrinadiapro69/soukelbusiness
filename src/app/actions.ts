@@ -57,6 +57,47 @@ export async function createListingAction(
   return { error: null, success: true };
 }
 
+export type UpdateProfileState = { error: string | null; success?: boolean };
+
+export async function updateProfileAction(
+  _prevState: UpdateProfileState,
+  formData: FormData
+): Promise<UpdateProfileState> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/connexion");
+  }
+
+  const name = formData.get("name")?.toString().trim() ?? "";
+  const city = formData.get("city")?.toString().trim() ?? "";
+  const description = formData.get("description")?.toString().trim() ?? "";
+  const avatarEmoji = formData.get("avatar_emoji")?.toString() || "🙂";
+
+  if (!name || !city) {
+    return { error: "Le nom et la ville sont obligatoires." };
+  }
+
+  const { error } = await supabase
+    .from("sellers")
+    .update({
+      name,
+      city,
+      description,
+      avatar_emoji: avatarEmoji,
+    })
+    .eq("id", user.id);
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  return { error: null, success: true };
+}
+
 async function requireAdmin() {
   const supabase = await createClient();
   const {
