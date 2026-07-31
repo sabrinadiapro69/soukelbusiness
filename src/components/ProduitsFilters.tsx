@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import {
   categories,
   formatDA,
+  formatEurApprox,
   formatRelativeTime,
   type Listing,
   type SellerType,
@@ -14,8 +15,10 @@ type SortOrder = "recent" | "price-asc" | "price-desc";
 
 export default function ProduitsFilters({
   listings,
+  taux,
 }: {
   listings: Listing[];
+  taux: number;
 }) {
   const [sellerFilter, setSellerFilter] = useState<"tous" | SellerType>(
     "tous"
@@ -133,6 +136,9 @@ export default function ProduitsFilters({
                   {listing.negociable ? "Négociable" : "Prix ferme"}
                 </span>
               </div>
+              <span className="text-[11px] text-ink-soft/70">
+                {formatEurApprox(listing.price, taux)}
+              </span>
               <div className="mt-auto flex items-center justify-between text-xs text-ink-soft">
                 <span>{listing.seller?.name}</span>
                 <span>📍 {listing.location}</span>

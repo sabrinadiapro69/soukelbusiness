@@ -243,6 +243,24 @@ export function formatDA(price: number): string {
   return `${new Intl.NumberFormat("fr-FR").format(Math.round(price))} DA`;
 }
 
+const DEFAULT_TAUX_EUR_DA = 260;
+
+export async function getTauxChange(): Promise<number> {
+  const { data, error } = await supabase
+    .from("parametres")
+    .select("taux_eur_da")
+    .eq("id", 1)
+    .maybeSingle();
+
+  if (error || !data) return DEFAULT_TAUX_EUR_DA;
+  return Number(data.taux_eur_da);
+}
+
+export function formatEurApprox(priceDA: number, tauxEurDa: number): string {
+  const eur = priceDA / tauxEurDa;
+  return `≈ ${new Intl.NumberFormat("fr-FR", { maximumFractionDigits: 0 }).format(eur)} €`;
+}
+
 export function formatMemberSince(dateStr: string): string {
   return new Intl.DateTimeFormat("fr-FR", {
     month: "long",

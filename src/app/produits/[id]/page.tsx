@@ -1,10 +1,13 @@
 import Link from "next/link";
+import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import {
   formatDA,
+  formatEurApprox,
   formatRelativeTime,
   getListingById,
   getListingsByCategory,
+  getTauxChange,
   type Offer,
 } from "@/lib/queries";
 import { createClient } from "@/lib/supabase/server";
@@ -30,6 +33,15 @@ export default async function ProduitPage({
     listing.category,
     listing.id
   );
+
+  const taux = await getTauxChange().catch(() => 260);
+
+  const requestHeaders = await headers();
+  const host = requestHeaders.get("host");
+  const protocol = host?.startsWith("localhost") ? "http" : "https";
+  const listingUrl = `${protocol}://${host}/produits/${listing.id}`;
+  const whatsappMessage = `${listing.title} — ${formatDA(listing.price)}\n${listingUrl}`;
+  const whatsappHref = `https://wa.me/?text=${encodeURIComponent(whatsappMessage)}`;
 
   const supabase = await createClient();
   const {
@@ -78,7 +90,7 @@ export default async function ProduitPage({
               </span>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3">
               <span className="font-mono text-3xl font-bold text-accent-dark">
                 {formatDA(listing.price)}
               </span>
@@ -92,6 +104,9 @@ export default async function ProduitPage({
                 {listing.negociable ? "Négociable" : "Prix ferme"}
               </span>
             </div>
+            <span className="text-xs text-ink-soft">
+              {formatEurApprox(listing.price, taux)} (taux indicatif)
+            </span>
 
             <p className="leading-relaxed text-ink-soft">
               {listing.description}
@@ -117,6 +132,14 @@ export default async function ProduitPage({
               <button className="mt-4 w-full rounded-full border border-accent px-6 py-3 text-sm font-semibold text-accent transition-colors hover:bg-dawn-soft">
                 Contacter le vendeur
               </button>
+              <a
+                href={whatsappHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-2 flex w-full items-center justify-center gap-2 rounded-full bg-[#25D366] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#1ebe57]"
+              >
+                Partager sur WhatsApp
+              </a>
             </div>
 
             <NegotiationPanel

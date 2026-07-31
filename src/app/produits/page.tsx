@@ -1,12 +1,15 @@
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import ProduitsFilters from "@/components/ProduitsFilters";
-import { getListings } from "@/lib/queries";
+import { getListings, getTauxChange } from "@/lib/queries";
 
 export const dynamic = "force-dynamic";
 
 export default async function ProduitsPage() {
-  const listings = await getListings();
+  const [listings, taux] = await Promise.all([
+    getListings(),
+    getTauxChange().catch(() => 260),
+  ]);
 
   return (
     <div className="flex flex-1 flex-col">
@@ -16,7 +19,7 @@ export default async function ProduitsPage() {
         <h1 className="text-2xl font-bold text-ink">
           Toutes les annonces
         </h1>
-        <ProduitsFilters listings={listings} />
+        <ProduitsFilters listings={listings} taux={taux} />
       </main>
 
       <SiteFooter />
