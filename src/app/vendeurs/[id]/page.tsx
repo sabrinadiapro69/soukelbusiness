@@ -5,6 +5,7 @@ import {
   formatMemberSince,
   getListingsBySeller,
   getPortfolioBySeller,
+  getPortfolioPhotoUrl,
   getProProfile,
   getReviewsBySeller,
   getSellerById,
@@ -139,13 +140,22 @@ export default async function VendeurPage({
         {seller.type === "pro" && portfolio.length > 0 && (
           <section className="mt-12">
             <h2 className="text-xl font-bold text-ink">Portfolio</h2>
-            <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+            <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {portfolio.map((item) => (
                 <div
                   key={item.id}
                   className="rounded-xl border border-line bg-paper p-4"
                 >
-                  <div className="text-2xl">{item.emoji}</div>
+                  <div className="flex gap-2">
+                    {item.photos.map((path) => (
+                      <img
+                        key={path}
+                        src={getPortfolioPhotoUrl(path)}
+                        alt={item.title}
+                        className="h-20 w-20 rounded-lg object-cover"
+                      />
+                    ))}
+                  </div>
                   <p className="mt-2 text-sm font-semibold text-ink">
                     {item.title}
                   </p>

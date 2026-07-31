@@ -1,5 +1,6 @@
 "use server";
 
+import { randomUUID } from "crypto";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
@@ -118,17 +119,35 @@ export async function addPortfolioItemAction(formData: FormData) {
 
   if (!user) redirect("/connexion");
 
-  const emoji = formData.get("emoji")?.toString() || "🛠️";
   const title = formData.get("title")?.toString().trim() ?? "";
   const description = formData.get("description")?.toString().trim() ?? "";
+  const files = [
+    formData.get("photo1"),
+    formData.get("photo2"),
+    formData.get("photo3"),
+  ].filter(
+    (f): f is File =>
+      f instanceof File && f.size > 0 && f.type.startsWith("image/")
+  );
 
-  if (!title) return;
+  if (!title || files.length === 0 || files.length > 3) return;
+
+  const paths: string[] = [];
+  for (const file of files) {
+    const ext = file.name.split(".").pop() || "jpg";
+    const path = `${user.id}/${randomUUID()}.${ext}`;
+    const { error: uploadError } = await supabase.storage
+      .from("portfolio-photos")
+      .upload(path, file, { contentType: file.type });
+    if (uploadError) return;
+    paths.push(path);
+  }
 
   await supabase.from("portfolio_items").insert({
     seller_id: user.id,
-    emoji,
     title,
     description,
+    photos: paths,
   });
 
   revalidatePath("/profil");
@@ -145,11 +164,22 @@ export async function removePortfolioItemAction(formData: FormData) {
 
   const itemId = Number(formData.get("itemId"));
 
+  const { data: item } = await supabase
+    .from("portfolio_items")
+    .select("photos")
+    .eq("id", itemId)
+    .eq("seller_id", user.id)
+    .maybeSingle();
+
   await supabase
     .from("portfolio_items")
     .delete()
     .eq("id", itemId)
     .eq("seller_id", user.id);
+
+  if (item?.photos?.length) {
+    await supabase.storage.from("portfolio-photos").remove(item.photos);
+  }
 
   revalidatePath("/profil");
   revalidatePath(`/vendeurs/${user.id}`);

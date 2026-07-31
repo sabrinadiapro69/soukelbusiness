@@ -48,11 +48,18 @@ export type ProProfile = {
 export type PortfolioItem = {
   id: number;
   seller_id: string;
-  emoji: string;
   title: string;
   description: string;
+  photos: string[];
   created_at: string;
 };
+
+const PORTFOLIO_BUCKET = "portfolio-photos";
+
+export function getPortfolioPhotoUrl(path: string): string {
+  return supabase.storage.from(PORTFOLIO_BUCKET).getPublicUrl(path).data
+    .publicUrl;
+}
 
 export type Talent = {
   seller: Seller;

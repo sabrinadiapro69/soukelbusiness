@@ -8,7 +8,7 @@ import {
   type UpdateProfileState,
 } from "@/app/actions";
 import { wilayas } from "@/lib/wilayas";
-import type { PortfolioItem } from "@/lib/queries";
+import { getPortfolioPhotoUrl, type PortfolioItem } from "@/lib/queries";
 
 const emojiOptions = [
   "🙂",
@@ -24,8 +24,6 @@ const emojiOptions = [
   "👴",
   "🧑",
 ];
-
-const portfolioEmojiOptions = ["🛠️", "🎨", "🏗️", "✂️", "🍽️", "🚿", "⚡", "🚗"];
 
 const initialState: UpdateProfileState = { error: null };
 
@@ -49,9 +47,6 @@ export default function ProfilForm({
     initialState
   );
   const [avatar, setAvatar] = useState(seller.avatar_emoji);
-  const [portfolioEmoji, setPortfolioEmoji] = useState(
-    portfolioEmojiOptions[0]
-  );
 
   return (
     <>
@@ -158,10 +153,11 @@ export default function ProfilForm({
       <div className="mt-10">
         <h2 className="text-lg font-semibold text-ink">Mon portfolio</h2>
         <p className="mt-1 text-sm text-ink-soft">
-          Quelques réalisations à montrer aux visiteurs de votre profil.
+          Chaque réalisation doit avoir entre 1 et 3 photos pour être visible
+          des visiteurs sur votre fiche vendeur.
         </p>
 
-        <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+        <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
           {portfolio.map((item) => (
             <div
               key={item.id}
@@ -177,7 +173,16 @@ export default function ProfilForm({
                   ✕
                 </button>
               </form>
-              <div className="text-2xl">{item.emoji}</div>
+              <div className="flex gap-2">
+                {item.photos.map((path) => (
+                  <img
+                    key={path}
+                    src={getPortfolioPhotoUrl(path)}
+                    alt={item.title}
+                    className="h-16 w-16 rounded-lg object-cover"
+                  />
+                ))}
+              </div>
               <p className="mt-2 text-sm font-semibold text-ink">
                 {item.title}
               </p>
@@ -199,23 +204,6 @@ export default function ProfilForm({
           action={addPortfolioItemAction}
           className="mt-5 flex flex-col gap-3 rounded-xl border border-line bg-bg-alt p-4"
         >
-          <input type="hidden" name="emoji" value={portfolioEmoji} />
-          <div className="flex flex-wrap gap-2">
-            {portfolioEmojiOptions.map((option) => (
-              <button
-                key={option}
-                type="button"
-                onClick={() => setPortfolioEmoji(option)}
-                className={`flex h-9 w-9 items-center justify-center rounded-lg border text-lg transition-colors ${
-                  portfolioEmoji === option
-                    ? "border-accent bg-dawn-soft"
-                    : "border-line bg-paper hover:bg-bg-alt"
-                }`}
-              >
-                {option}
-              </button>
-            ))}
-          </div>
           <input
             type="text"
             name="title"
@@ -229,6 +217,40 @@ export default function ProfilForm({
             placeholder="Description courte (facultatif)"
             className="w-full rounded-xl border border-line px-4 py-2 text-sm text-ink outline-none focus:border-accent"
           />
+          <div>
+            <label className="text-xs font-medium text-ink-soft">
+              Photo 1 (obligatoire)
+            </label>
+            <input
+              type="file"
+              name="photo1"
+              accept="image/*"
+              required
+              className="mt-1 w-full text-sm text-ink-soft"
+            />
+          </div>
+          <div>
+            <label className="text-xs font-medium text-ink-soft">
+              Photo 2 (facultative)
+            </label>
+            <input
+              type="file"
+              name="photo2"
+              accept="image/*"
+              className="mt-1 w-full text-sm text-ink-soft"
+            />
+          </div>
+          <div>
+            <label className="text-xs font-medium text-ink-soft">
+              Photo 3 (facultative)
+            </label>
+            <input
+              type="file"
+              name="photo3"
+              accept="image/*"
+              className="mt-1 w-full text-sm text-ink-soft"
+            />
+          </div>
           <button
             type="submit"
             className="self-start rounded-full border border-accent px-5 py-2 text-sm font-semibold text-accent transition-colors hover:bg-dawn-soft"

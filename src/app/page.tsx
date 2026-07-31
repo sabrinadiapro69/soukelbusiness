@@ -3,7 +3,7 @@ import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import DressingScroll from "@/components/DressingScroll";
 import AnnoncesFilter from "@/components/AnnoncesFilter";
-import { getTopTalents } from "@/lib/queries";
+import { getPortfolioPhotoUrl, getTopTalents } from "@/lib/queries";
 
 export const dynamic = "force-dynamic";
 
@@ -105,6 +105,8 @@ const metiers = [
   },
 ];
 
+type Thumb = { type: "emoji" | "photo"; value: string };
+
 const fallbackTalents = [
   {
     key: "amine-k",
@@ -115,7 +117,11 @@ const fallbackTalents = [
     reviews: 86,
     badge: true,
     color: "bg-primary",
-    portfolioEmojis: ["🔧", "🔧", "🔧"],
+    thumbs: [
+      { type: "emoji", value: "🔧" },
+      { type: "emoji", value: "🔧" },
+      { type: "emoji", value: "🔧" },
+    ] as Thumb[],
   },
   {
     key: "lynda-b",
@@ -126,7 +132,11 @@ const fallbackTalents = [
     reviews: 112,
     badge: true,
     color: "bg-accent",
-    portfolioEmojis: ["✂️", "✂️", "✂️"],
+    thumbs: [
+      { type: "emoji", value: "✂️" },
+      { type: "emoji", value: "✂️" },
+      { type: "emoji", value: "✂️" },
+    ] as Thumb[],
   },
   {
     key: "sofiane-r",
@@ -137,7 +147,11 @@ const fallbackTalents = [
     reviews: 64,
     badge: true,
     color: "bg-gold",
-    portfolioEmojis: ["🏗️", "🏗️", "🏗️"],
+    thumbs: [
+      { type: "emoji", value: "🏗️" },
+      { type: "emoji", value: "🏗️" },
+      { type: "emoji", value: "🏗️" },
+    ] as Thumb[],
   },
   {
     key: "hakim-m",
@@ -148,7 +162,11 @@ const fallbackTalents = [
     reviews: 29,
     badge: false,
     color: "bg-primary-dark",
-    portfolioEmojis: ["⚡", "⚡", "⚡"],
+    thumbs: [
+      { type: "emoji", value: "⚡" },
+      { type: "emoji", value: "⚡" },
+      { type: "emoji", value: "⚡" },
+    ] as Thumb[],
   },
 ];
 
@@ -167,10 +185,15 @@ export default async function Home() {
           reviews: t.reviewsCount,
           badge: true,
           color: talentColors[i % talentColors.length],
-          portfolioEmojis:
-            t.portfolio.length > 0
-              ? t.portfolio.slice(0, 3).map((p) => p.emoji)
-              : ["🛠️", "🛠️", "🛠️"],
+          thumbs: (t.portfolio.length > 0
+            ? t.portfolio
+                .slice(0, 3)
+                .map((p): Thumb => ({
+                  type: "photo",
+                  value: getPortfolioPhotoUrl(p.photos[0]),
+                }))
+            : [{ type: "emoji", value: "🛠️" } as Thumb]
+          ),
         }))
       : fallbackTalents;
 
@@ -405,12 +428,20 @@ export default async function Home() {
                     </span>
                   </div>
                   <div className="mb-3.5 grid grid-cols-3 gap-1.5">
-                    {t.portfolioEmojis.map((emoji, i) => (
+                    {t.thumbs.map((thumb, i) => (
                       <div
                         key={i}
-                        className="flex aspect-square items-center justify-center rounded-lg bg-bg-alt text-lg"
+                        className="flex aspect-square items-center justify-center overflow-hidden rounded-lg bg-bg-alt text-lg"
                       >
-                        {emoji}
+                        {thumb.type === "photo" ? (
+                          <img
+                            src={thumb.value}
+                            alt=""
+                            className="h-full w-full object-cover"
+                          />
+                        ) : (
+                          thumb.value
+                        )}
                       </div>
                     ))}
                   </div>
