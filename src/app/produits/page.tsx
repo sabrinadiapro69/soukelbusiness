@@ -1,9 +1,16 @@
+import type { Metadata } from "next";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import ProduitsFilters from "@/components/ProduitsFilters";
 import { getListings, getTauxChange } from "@/lib/queries";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Toutes les annonces",
+  description:
+    "Parcourez les annonces de véhicules, immobilier, mode, électronique et services partout en Algérie.",
+};
 
 export default async function ProduitsPage() {
   const [listings, taux] = await Promise.all([

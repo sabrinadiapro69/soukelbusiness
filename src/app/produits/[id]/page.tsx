@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import {
   formatDA,
   formatEurApprox,
@@ -16,6 +17,32 @@ import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const listing = await getListingById(Number(id));
+
+  if (!listing) return {};
+
+  const description = `${formatDA(listing.price)} · ${listing.category} · ${listing.location}. ${listing.description}`.slice(
+    0,
+    160
+  );
+
+  return {
+    title: listing.title,
+    description,
+    openGraph: {
+      title: listing.title,
+      description,
+      type: "website",
+    },
+  };
+}
 
 export default async function ProduitPage({
   params,

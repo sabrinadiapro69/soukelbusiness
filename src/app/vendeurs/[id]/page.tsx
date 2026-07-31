@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import type { Metadata } from "next";
 import {
   formatDA,
   formatMemberSince,
@@ -23,6 +24,32 @@ function StarRating({ rating }: { rating: number }) {
       <span className="text-line">{"★".repeat(5 - fullStars)}</span>
     </span>
   );
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const seller = await getSellerById(id);
+
+  if (!seller) return {};
+
+  const title =
+    seller.type === "pro" ? `${seller.name}, professionnel` : seller.name;
+  const description =
+    seller.description || `Profil vendeur ${seller.name} sur Souk El Business.`;
+
+  return {
+    title,
+    description: description.slice(0, 160),
+    openGraph: {
+      title,
+      description: description.slice(0, 160),
+      type: "profile",
+    },
+  };
 }
 
 export default async function VendeurPage({
