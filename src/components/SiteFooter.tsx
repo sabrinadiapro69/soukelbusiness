@@ -1,6 +1,12 @@
 import Link from "next/link";
+import { getLocale } from "@/lib/i18n/locale";
+import { getDictionary } from "@/lib/i18n/dictionaries";
 
-export default function SiteFooter() {
+export default async function SiteFooter() {
+  const locale = await getLocale();
+  const dict = await getDictionary(locale);
+  const t = dict.footer;
+
   return (
     <footer className="border-t border-line pt-11 pb-7">
       <div className="mx-auto max-w-6xl px-6">
@@ -10,70 +16,72 @@ export default function SiteFooter() {
               <span className="text-accent">Souk</span> El Business
             </span>
             <p className="mt-2.5 max-w-[230px] text-[13px] leading-relaxed text-ink-soft">
-              La marketplace généraliste et de mode entre particuliers,
-              pensée pour l&apos;Algérie.
+              {t.tagline}
             </p>
           </div>
           <div>
             <h5 className="mb-3.5 text-[12.5px] font-semibold tracking-wide text-ink-soft uppercase">
-              Catégories
+              {t.categories}
             </h5>
             <Link href="/#rayons" className="mb-2 block text-[13.5px]">
-              Véhicules
+              {t.vehicules}
             </Link>
             <Link href="/#rayons" className="mb-2 block text-[13.5px]">
-              Immobilier
+              {t.immobilier}
             </Link>
             <Link href="/#dressing" className="mb-2 block text-[13.5px]">
-              Dressing
+              {t.dressing}
             </Link>
             <Link href="/#rayons" className="mb-2 block text-[13.5px]">
-              Multimédia
+              {t.multimedia}
             </Link>
           </div>
           <div>
             <h5 className="mb-3.5 text-[12.5px] font-semibold tracking-wide text-ink-soft uppercase">
-              Souk El Business
+              {t.souk}
             </h5>
             <Link href="/contact" className="mb-2 block text-[13.5px]">
-              À propos
+              {t.apropos}
             </Link>
             <Link href="/contact" className="mb-2 block text-[13.5px]">
-              Presse
+              {t.presse}
             </Link>
             <Link href="/publier" className="mb-2 block text-[13.5px]">
-              Souk El Business Pro
+              {t.pro}
             </Link>
           </div>
           <div>
             <h5 className="mb-3.5 text-[12.5px] font-semibold tracking-wide text-ink-soft uppercase">
-              Assistance
+              {t.assistance}
             </h5>
             <Link href="/contact" className="mb-2 block text-[13.5px]">
-              Centre d&apos;aide
+              {t.aide}
             </Link>
             <Link href="/contact" className="mb-2 block text-[13.5px]">
-              Sécurité
+              {t.securite}
             </Link>
             <Link href="/contact" className="mb-2 block text-[13.5px]">
-              Signaler une annonce
+              {t.signaler}
             </Link>
           </div>
           <div>
             <h5 className="mb-3.5 text-[12.5px] font-semibold tracking-wide text-ink-soft uppercase">
-              Légal
+              {t.legal}
             </h5>
             <Link href="/mentions-legales" className="mb-2 block text-[13.5px]">
-              Mentions légales
+              {t.mentions}
             </Link>
-            <Link href="/contact" className="mb-2 block text-[13.5px]">
-              Confidentialité
+            <Link href="/cgu" className="mb-2 block text-[13.5px]">
+              {t.cgu}
+            </Link>
+            <Link href="/confidentialite" className="mb-2 block text-[13.5px]">
+              {t.confidentialite}
             </Link>
           </div>
         </div>
         <div className="flex flex-col items-center justify-between gap-2 border-t border-line pt-5 text-[12.5px] text-ink-soft sm:flex-row">
           <span>© {new Date().getFullYear()} Souk El Business</span>
-          <span>Fait avec 🌿 à Alger</span>
+          <span>{t.fait}</span>
         </div>
       </div>
     </footer>

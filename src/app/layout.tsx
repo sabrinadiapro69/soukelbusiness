@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Fraunces, Inter, IBM_Plex_Mono } from "next/font/google";
 import { SITE_URL } from "@/lib/site";
+import { getLocale } from "@/lib/i18n/locale";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -48,14 +49,16 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getLocale();
+
   return (
     <html
-      lang="fr"
+      lang={locale}
       className={`${fraunces.variable} ${inter.variable} ${ibmPlexMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-(--bg) text-(--ink) font-sans">

@@ -3,12 +3,29 @@
 import { randomUUID } from "crypto";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { cookies, headers } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
+import { locales, type Locale } from "@/lib/i18n/locale";
 
 export async function signOutAction() {
   const supabase = await createClient();
   await supabase.auth.signOut();
   redirect("/");
+}
+
+export async function setLocaleAction(formData: FormData) {
+  const locale = formData.get("locale")?.toString();
+
+  if (locales.includes(locale as Locale)) {
+    const cookieStore = await cookies();
+    cookieStore.set("locale", locale as string, {
+      path: "/",
+      maxAge: 60 * 60 * 24 * 365,
+    });
+  }
+
+  const referer = (await headers()).get("referer");
+  redirect(referer || "/");
 }
 
 export type CreateListingState = { error: string | null; success?: boolean };

@@ -1,12 +1,24 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { signOutAction } from "@/app/actions";
+import { signOutAction, setLocaleAction } from "@/app/actions";
+import { getLocale, type Locale } from "@/lib/i18n/locale";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+
+const languageLabels: Record<Locale, string> = {
+  fr: "FR",
+  en: "EN",
+  ar: "العربية",
+};
 
 export default async function SiteHeader() {
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
+
+  const locale = await getLocale();
+  const dict = await getDictionary(locale);
+  const t = dict.header;
 
   const displayName =
     (user?.user_metadata?.name as string | undefined) ?? user?.email;
@@ -27,26 +39,32 @@ export default async function SiteHeader() {
         <div className="mx-auto flex h-[34px] max-w-6xl items-center justify-between px-6">
           <div className="flex gap-5">
             <span className="cursor-pointer opacity-100">
-              📍 Alger, Alger-Centre{" "}
+              {t.location}{" "}
               <em className="text-xs opacity-60 underline decoration-1 underline-offset-2 not-italic">
-                · changer
+                · {t.change}
               </em>
             </span>
-            <span className="hidden opacity-85 sm:inline">Assistance</span>
             <span className="hidden opacity-85 sm:inline">
-              Souk El Business Pro
+              {t.assistance}
             </span>
+            <span className="hidden opacity-85 sm:inline">{t.pro}</span>
           </div>
           <div className="flex gap-5">
-            <span className="cursor-pointer font-semibold opacity-100">
-              FR
-            </span>
-            <span className="hidden cursor-pointer opacity-55 sm:inline">
-              EN
-            </span>
-            <span className="hidden cursor-pointer opacity-55 sm:inline">
-              العربية
-            </span>
+            {(Object.keys(languageLabels) as Locale[]).map((code) => (
+              <form key={code} action={setLocaleAction}>
+                <input type="hidden" name="locale" value={code} />
+                <button
+                  type="submit"
+                  className={`cursor-pointer ${
+                    locale === code
+                      ? "font-semibold opacity-100"
+                      : "hidden opacity-55 sm:inline"
+                  }`}
+                >
+                  {languageLabels[code]}
+                </button>
+              </form>
+            ))}
           </div>
         </div>
       </div>
@@ -72,31 +90,31 @@ export default async function SiteHeader() {
                 href="/#rayons"
                 className="border-b-2 border-transparent py-1.5 hover:border-accent"
               >
-                Rayons
+                {t.rayons}
               </Link>
               <Link
                 href="/#artisanat"
                 className="border-b-2 border-transparent py-1.5 hover:border-accent"
               >
-                Artisanat
+                {t.artisanat}
               </Link>
               <Link
                 href="/#dressing"
                 className="border-b-2 border-transparent py-1.5 hover:border-accent"
               >
-                Dressing
+                {t.dressing}
               </Link>
               <Link
                 href="/produits"
                 className="border-b-2 border-transparent py-1.5 hover:border-accent"
               >
-                Annonces
+                {t.annonces}
               </Link>
               <Link
                 href="/#confiance"
                 className="border-b-2 border-transparent py-1.5 hover:border-accent"
               >
-                Confiance
+                {t.confiance}
               </Link>
               {user && (
                 <>
@@ -104,13 +122,13 @@ export default async function SiteHeader() {
                     href="/mes-offres"
                     className="border-b-2 border-transparent py-1.5 hover:border-accent"
                   >
-                    Offres envoyées
+                    {t.offresEnvoyees}
                   </Link>
                   <Link
                     href="/offres"
                     className="border-b-2 border-transparent py-1.5 hover:border-accent"
                   >
-                    Offres reçues
+                    {t.offresRecues}
                   </Link>
                 </>
               )}
@@ -119,7 +137,7 @@ export default async function SiteHeader() {
                   href="/admin"
                   className="border-b-2 border-transparent py-1.5 hover:border-accent"
                 >
-                  Modération
+                  {t.moderation}
                 </Link>
               )}
             </nav>
@@ -131,14 +149,14 @@ export default async function SiteHeader() {
                     href="/profil"
                     className="hidden text-sm font-medium text-ink-soft hover:text-ink sm:inline"
                   >
-                    Bonjour {displayName}
+                    {t.bonjour} {displayName}
                   </Link>
                   <form action={signOutAction}>
                     <button
                       type="submit"
                       className="rounded-full border border-line px-5 py-2.5 text-sm font-semibold transition-colors hover:border-ink"
                     >
-                      Se déconnecter
+                      {t.deconnexion}
                     </button>
                   </form>
                 </>
@@ -147,14 +165,14 @@ export default async function SiteHeader() {
                   href="/connexion"
                   className="rounded-full border border-line px-5 py-2.5 text-sm font-semibold transition-colors hover:border-ink"
                 >
-                  Se connecter
+                  {t.connexion}
                 </Link>
               )}
               <Link
                 href="/publier"
                 className="rounded-full border border-accent bg-accent px-5 py-2.5 text-sm font-semibold whitespace-nowrap text-white transition-colors hover:bg-accent-dark hover:border-accent-dark"
               >
-                + Déposer une annonce
+                {t.deposer}
               </Link>
             </div>
           </div>
