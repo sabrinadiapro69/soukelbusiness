@@ -226,7 +226,7 @@ export default function ProfilForm({
               name="photo1"
               accept="image/*"
               required
-              className="mt-1 w-full text-sm text-ink-soft"
+              className="mt-1 w-full cursor-pointer text-sm text-ink-soft file:mr-3 file:cursor-pointer file:rounded-full file:border file:border-accent file:bg-paper file:px-4 file:py-2 file:text-sm file:font-semibold file:text-accent hover:file:bg-dawn-soft"
             />
           </div>
           <div>
@@ -237,7 +237,7 @@ export default function ProfilForm({
               type="file"
               name="photo2"
               accept="image/*"
-              className="mt-1 w-full text-sm text-ink-soft"
+              className="mt-1 w-full cursor-pointer text-sm text-ink-soft file:mr-3 file:cursor-pointer file:rounded-full file:border file:border-accent file:bg-paper file:px-4 file:py-2 file:text-sm file:font-semibold file:text-accent hover:file:bg-dawn-soft"
             />
           </div>
           <div>
@@ -248,7 +248,7 @@ export default function ProfilForm({
               type="file"
               name="photo3"
               accept="image/*"
-              className="mt-1 w-full text-sm text-ink-soft"
+              className="mt-1 w-full cursor-pointer text-sm text-ink-soft file:mr-3 file:cursor-pointer file:rounded-full file:border file:border-accent file:bg-paper file:px-4 file:py-2 file:text-sm file:font-semibold file:text-accent hover:file:bg-dawn-soft"
             />
           </div>
           <button
