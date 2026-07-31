@@ -119,9 +119,20 @@ export default function ProduitsFilters({
                   {listing.seller?.type === "pro" ? "Pro" : "Particulier"}
                 </span>
               </div>
-              <span className="font-mono text-lg font-bold text-accent-dark">
-                {formatDA(listing.price)}
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="font-mono text-lg font-bold text-accent-dark">
+                  {formatDA(listing.price)}
+                </span>
+                <span
+                  className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${
+                    listing.negociable
+                      ? "bg-primary/10 text-primary-dark"
+                      : "bg-bg-alt text-ink-soft"
+                  }`}
+                >
+                  {listing.negociable ? "Négociable" : "Prix ferme"}
+                </span>
+              </div>
               <div className="mt-auto flex items-center justify-between text-xs text-ink-soft">
                 <span>{listing.seller?.name}</span>
                 <span>📍 {listing.location}</span>

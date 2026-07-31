@@ -1,6 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 
 export async function signOutAction() {
@@ -30,6 +31,7 @@ export async function createListingAction(
   const location = formData.get("location")?.toString().trim() ?? "";
   const emoji = formData.get("emoji")?.toString() || "🛍️";
   const description = formData.get("description")?.toString().trim() ?? "";
+  const negociable = formData.get("negociable") === "on";
 
   const price = Number(priceRaw);
 
@@ -48,6 +50,7 @@ export async function createListingAction(
     location,
     emoji,
     description,
+    negociable,
   });
 
   if (error) {
@@ -135,4 +138,105 @@ export async function rejectListingAction(formData: FormData) {
     .update({ status: "rejected" })
     .eq("id", listingId);
   redirect("/admin");
+}
+
+// --- Négociation (offres persistantes) ---
+
+export async function makeOfferAction(formData: FormData) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) redirect("/connexion");
+
+  const listingId = Number(formData.get("listingId"));
+  const montant = Number(formData.get("montant"));
+
+  if (!Number.isFinite(listingId) || !Number.isFinite(montant) || montant <= 0) {
+    return;
+  }
+
+  await supabase.from("offers").upsert(
+    {
+      listing_id: listingId,
+      buyer_id: user.id,
+      montant_propose: montant,
+      statut: "en_attente",
+      conclue_par_acheteur: false,
+      conclue_le: null,
+    },
+    { onConflict: "listing_id,buyer_id" }
+  );
+
+  revalidatePath(`/produits/${listingId}`);
+}
+
+export async function acceptCounterAction(formData: FormData) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) redirect("/connexion");
+
+  const offerId = Number(formData.get("offerId"));
+  const listingId = Number(formData.get("listingId"));
+
+  await supabase
+    .from("offers")
+    .update({ statut: "acceptee" })
+    .eq("id", offerId)
+    .eq("buyer_id", user.id);
+
+  revalidatePath(`/produits/${listingId}`);
+}
+
+export async function concludeTransactionAction(formData: FormData) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) redirect("/connexion");
+
+  const offerId = Number(formData.get("offerId"));
+  const listingId = Number(formData.get("listingId"));
+
+  await supabase
+    .from("offers")
+    .update({ conclue_par_acheteur: true, conclue_le: new Date().toISOString() })
+    .eq("id", offerId)
+    .eq("buyer_id", user.id);
+
+  revalidatePath(`/produits/${listingId}`);
+}
+
+export async function sellerRespondOfferAction(formData: FormData) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) redirect("/connexion");
+
+  const offerId = Number(formData.get("offerId"));
+  const decision = formData.get("decision")?.toString();
+  const counterRaw = formData.get("montant")?.toString();
+
+  if (decision === "accepter") {
+    await supabase.from("offers").update({ statut: "acceptee" }).eq("id", offerId);
+  } else if (decision === "refuser") {
+    await supabase.from("offers").update({ statut: "refusee" }).eq("id", offerId);
+  } else if (decision === "contre_offre") {
+    const counter = Number(counterRaw);
+    if (Number.isFinite(counter) && counter > 0) {
+      await supabase
+        .from("offers")
+        .update({ statut: "contre_offre", montant_propose: counter })
+        .eq("id", offerId);
+    }
+  }
+
+  revalidatePath("/offres");
 }

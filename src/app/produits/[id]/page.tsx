@@ -5,7 +5,9 @@ import {
   formatRelativeTime,
   getListingById,
   getListingsByCategory,
+  type Offer,
 } from "@/lib/queries";
+import { createClient } from "@/lib/supabase/server";
 import NegotiationPanel from "@/components/NegotiationPanel";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
@@ -28,6 +30,22 @@ export default async function ProduitPage({
     listing.category,
     listing.id
   );
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  let offer: Offer | null = null;
+  if (user) {
+    const { data } = await supabase
+      .from("offers")
+      .select("*")
+      .eq("listing_id", listing.id)
+      .eq("buyer_id", user.id)
+      .maybeSingle();
+    offer = data ? { ...data, montant_propose: Number(data.montant_propose) } : null;
+  }
 
   return (
     <div className="flex flex-1 flex-col">
@@ -60,9 +78,20 @@ export default async function ProduitPage({
               </span>
             </div>
 
-            <span className="font-mono text-3xl font-bold text-accent-dark">
-              {formatDA(listing.price)}
-            </span>
+            <div className="flex items-center gap-3">
+              <span className="font-mono text-3xl font-bold text-accent-dark">
+                {formatDA(listing.price)}
+              </span>
+              <span
+                className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
+                  listing.negociable
+                    ? "bg-primary/10 text-primary-dark"
+                    : "bg-bg-alt text-ink-soft"
+                }`}
+              >
+                {listing.negociable ? "Négociable" : "Prix ferme"}
+              </span>
+            </div>
 
             <p className="leading-relaxed text-ink-soft">
               {listing.description}
@@ -91,8 +120,12 @@ export default async function ProduitPage({
             </div>
 
             <NegotiationPanel
+              listingId={listing.id}
               askingPrice={listing.price}
+              negociable={listing.negociable}
               sellerName={listing.seller?.name ?? "le vendeur"}
+              userId={user?.id ?? null}
+              offer={offer}
             />
           </div>
         </div>

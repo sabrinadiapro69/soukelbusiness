@@ -90,6 +90,15 @@ export default function PublierForm() {
             required
             className="mt-1 w-full rounded-xl border border-line px-4 py-2 text-sm text-ink outline-none focus:border-accent"
           />
+          <label className="mt-2 flex items-center gap-2 text-sm text-ink-soft">
+            <input
+              type="checkbox"
+              name="negociable"
+              defaultChecked
+              className="h-4 w-4 rounded border-line accent-accent"
+            />
+            Prix négociable
+          </label>
         </div>
         <div>
           <label className="text-sm font-medium text-ink">Catégorie</label>

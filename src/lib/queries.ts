@@ -23,6 +23,7 @@ export type Listing = {
   location: string;
   emoji: string;
   description: string;
+  negociable: boolean;
   created_at: string;
   seller?: Seller;
 };
@@ -33,6 +34,19 @@ export type Review = {
   author: string;
   rating: number;
   comment: string;
+  created_at: string;
+};
+
+export type OfferStatus = "en_attente" | "acceptee" | "refusee" | "contre_offre";
+
+export type Offer = {
+  id: number;
+  listing_id: number;
+  buyer_id: string;
+  montant_propose: number;
+  statut: OfferStatus;
+  conclue_par_acheteur: boolean;
+  conclue_le: string | null;
   created_at: string;
 };
 
