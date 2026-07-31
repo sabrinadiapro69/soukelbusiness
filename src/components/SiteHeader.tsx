@@ -30,7 +30,11 @@ export default async function SiteHeader() {
           <Link href="/contact" className="hover:text-orange-700">
             Contact
           </Link>
-          {!user && (
+          {user ? (
+            <Link href="/publier" className="hover:text-orange-700">
+              Publier une annonce
+            </Link>
+          ) : (
             <Link href="/#vendre" className="hover:text-orange-700">
               Devenir vendeur
             </Link>
