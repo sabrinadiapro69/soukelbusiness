@@ -99,12 +99,20 @@ export default async function SiteHeader() {
                 Confiance
               </Link>
               {user && (
-                <Link
-                  href="/offres"
-                  className="border-b-2 border-transparent py-1.5 hover:border-accent"
-                >
-                  Mes offres
-                </Link>
+                <>
+                  <Link
+                    href="/mes-offres"
+                    className="border-b-2 border-transparent py-1.5 hover:border-accent"
+                  >
+                    Offres envoyées
+                  </Link>
+                  <Link
+                    href="/offres"
+                    className="border-b-2 border-transparent py-1.5 hover:border-accent"
+                  >
+                    Offres reçues
+                  </Link>
+                </>
               )}
               {isAdmin && (
                 <Link

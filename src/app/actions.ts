@@ -170,6 +170,7 @@ export async function makeOfferAction(formData: FormData) {
   );
 
   revalidatePath(`/produits/${listingId}`);
+  revalidatePath("/mes-offres");
 }
 
 export async function acceptCounterAction(formData: FormData) {
@@ -190,6 +191,7 @@ export async function acceptCounterAction(formData: FormData) {
     .eq("buyer_id", user.id);
 
   revalidatePath(`/produits/${listingId}`);
+  revalidatePath("/mes-offres");
 }
 
 export async function concludeTransactionAction(formData: FormData) {
@@ -210,6 +212,7 @@ export async function concludeTransactionAction(formData: FormData) {
     .eq("buyer_id", user.id);
 
   revalidatePath(`/produits/${listingId}`);
+  revalidatePath("/mes-offres");
 }
 
 export async function sellerRespondOfferAction(formData: FormData) {
@@ -225,21 +228,42 @@ export async function sellerRespondOfferAction(formData: FormData) {
   const decision = formData.get("decision")?.toString();
   const counterRaw = formData.get("montant")?.toString();
 
-  if (decision === "accepter") {
-    await supabase.from("offers").update({ statut: "acceptee" }).eq("id", offerId);
-  } else if (decision === "refuser") {
-    await supabase.from("offers").update({ statut: "refusee" }).eq("id", offerId);
-  } else if (decision === "contre_offre") {
-    const counter = Number(counterRaw);
-    if (Number.isFinite(counter) && counter > 0) {
+  // Filtrer explicitement sur les annonces du vendeur connecté (en plus des
+  // policies RLS) pour être sûr que la mise à jour cible bien la bonne ligne.
+  const { data: listing } = await supabase
+    .from("listings")
+    .select("id")
+    .eq("id", listingId)
+    .eq("seller_id", user.id)
+    .maybeSingle();
+
+  if (listing) {
+    if (decision === "accepter") {
       await supabase
         .from("offers")
-        .update({ statut: "contre_offre", montant_propose: counter })
-        .eq("id", offerId);
+        .update({ statut: "acceptee" })
+        .eq("id", offerId)
+        .eq("listing_id", listingId);
+    } else if (decision === "refuser") {
+      await supabase
+        .from("offers")
+        .update({ statut: "refusee" })
+        .eq("id", offerId)
+        .eq("listing_id", listingId);
+    } else if (decision === "contre_offre") {
+      const counter = Number(counterRaw);
+      if (Number.isFinite(counter) && counter > 0) {
+        await supabase
+          .from("offers")
+          .update({ statut: "contre_offre", montant_propose: counter })
+          .eq("id", offerId)
+          .eq("listing_id", listingId);
+      }
     }
   }
 
   revalidatePath("/offres");
+  revalidatePath("/mes-offres");
   if (Number.isFinite(listingId)) {
     revalidatePath(`/produits/${listingId}`);
   }
