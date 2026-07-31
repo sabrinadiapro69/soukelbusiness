@@ -31,6 +31,16 @@ export default function PublierForm() {
   );
   const [emoji, setEmoji] = useState(emojiOptions[0]);
 
+  if (state.success) {
+    return (
+      <div className="mt-6 rounded-xl bg-green-50 px-4 py-4 text-sm text-green-700">
+        Votre annonce a été soumise avec succès et est en attente de
+        validation par notre équipe. Elle apparaîtra dans le catalogue une
+        fois approuvée.
+      </div>
+    );
+  }
+
   return (
     <form action={formAction} className="mt-6 flex flex-col gap-4">
       {state.error && (

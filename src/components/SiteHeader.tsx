@@ -11,6 +11,16 @@ export default async function SiteHeader() {
   const displayName =
     (user?.user_metadata?.name as string | undefined) ?? user?.email;
 
+  let isAdmin = false;
+  if (user) {
+    const { data: seller } = await supabase
+      .from("sellers")
+      .select("is_admin")
+      .eq("id", user.id)
+      .maybeSingle();
+    isAdmin = seller?.is_admin ?? false;
+  }
+
   return (
     <header className="sticky top-0 z-10 border-b border-orange-100 bg-white/90 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
@@ -37,6 +47,11 @@ export default async function SiteHeader() {
           ) : (
             <Link href="/#vendre" className="hover:text-orange-700">
               Devenir vendeur
+            </Link>
+          )}
+          {isAdmin && (
+            <Link href="/admin" className="hover:text-orange-700">
+              Modération
             </Link>
           )}
         </nav>
