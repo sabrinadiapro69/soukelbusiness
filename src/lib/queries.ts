@@ -38,12 +38,15 @@ export type Review = {
 
 export const categories = [
   "Toutes catégories",
-  "Artisanat",
-  "Mode & Textile",
-  "Épicerie fine",
-  "Maison & Déco",
-  "Bijoux",
-  "Beauté",
+  "Véhicules",
+  "Immobilier",
+  "Multimédia",
+  "Maison & Jardin",
+  "Emploi",
+  "Services",
+  "Animaux",
+  "Dressing",
+  "Artisanat & Métiers",
 ];
 
 // Postgres "numeric" columns (price, rating) come back as strings from
@@ -132,6 +135,10 @@ export async function getReviewsBySeller(
 
   if (error) throw error;
   return data ?? [];
+}
+
+export function formatDA(price: number): string {
+  return `${new Intl.NumberFormat("fr-FR").format(Math.round(price))} DA`;
 }
 
 export function formatMemberSince(dateStr: string): string {

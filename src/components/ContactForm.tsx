@@ -36,81 +36,81 @@ export default function ContactForm() {
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
-              <label className="text-sm font-medium text-stone-700">
+              <label className="text-sm font-medium text-ink">
                 Nom
               </label>
               <input
                 type="text"
                 name="name"
                 required
-                className="mt-1 w-full rounded-xl border border-orange-100 px-4 py-2 text-sm text-stone-900 outline-none focus:border-orange-400"
+                className="mt-1 w-full rounded-xl border border-line px-4 py-2 text-sm text-ink outline-none focus:border-accent"
               />
             </div>
             <div>
-              <label className="text-sm font-medium text-stone-700">
+              <label className="text-sm font-medium text-ink">
                 Email
               </label>
               <input
                 type="email"
                 name="email"
                 required
-                className="mt-1 w-full rounded-xl border border-orange-100 px-4 py-2 text-sm text-stone-900 outline-none focus:border-orange-400"
+                className="mt-1 w-full rounded-xl border border-line px-4 py-2 text-sm text-ink outline-none focus:border-accent"
               />
             </div>
           </div>
           <div>
-            <label className="text-sm font-medium text-stone-700">
+            <label className="text-sm font-medium text-ink">
               Sujet
             </label>
             <input
               type="text"
               name="subject"
-              className="mt-1 w-full rounded-xl border border-orange-100 px-4 py-2 text-sm text-stone-900 outline-none focus:border-orange-400"
+              className="mt-1 w-full rounded-xl border border-line px-4 py-2 text-sm text-ink outline-none focus:border-accent"
             />
           </div>
           <div>
-            <label className="text-sm font-medium text-stone-700">
+            <label className="text-sm font-medium text-ink">
               Message
             </label>
             <textarea
               name="message"
               required
               rows={6}
-              className="mt-1 w-full rounded-xl border border-orange-100 px-4 py-2 text-sm text-stone-900 outline-none focus:border-orange-400"
+              className="mt-1 w-full rounded-xl border border-line px-4 py-2 text-sm text-ink outline-none focus:border-accent"
             />
           </div>
           <button
             type="submit"
-            className="mt-2 self-start rounded-full bg-orange-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-orange-700"
+            className="mt-2 self-start rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-accent-dark"
           >
             Envoyer le message
           </button>
         </form>
       </div>
 
-      <div className="flex flex-col gap-4 rounded-2xl border border-orange-100 bg-white p-6 h-fit">
+      <div className="flex flex-col gap-4 rounded-2xl border border-line bg-paper p-6 h-fit">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-stone-400">
+          <p className="text-xs font-semibold uppercase tracking-wide text-ink-soft/70">
             Email
           </p>
           <a
             href={`mailto:${CONTACT_EMAIL}`}
-            className="text-sm font-medium text-orange-700 hover:underline"
+            className="text-sm font-medium text-accent hover:underline"
           >
             {CONTACT_EMAIL}
           </a>
         </div>
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-stone-400">
+          <p className="text-xs font-semibold uppercase tracking-wide text-ink-soft/70">
             Localisation
           </p>
-          <p className="text-sm text-stone-700">Vaulx-en-Velin, France</p>
+          <p className="text-sm text-ink">Vaulx-en-Velin, France</p>
         </div>
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-stone-400">
+          <p className="text-xs font-semibold uppercase tracking-wide text-ink-soft/70">
             Éditeur
           </p>
-          <p className="text-sm text-stone-700">One Concept</p>
+          <p className="text-sm text-ink">One Concept</p>
         </div>
       </div>
     </div>

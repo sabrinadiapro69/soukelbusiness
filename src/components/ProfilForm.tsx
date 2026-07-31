@@ -2,6 +2,7 @@
 
 import { useActionState, useState } from "react";
 import { updateProfileAction, type UpdateProfileState } from "@/app/actions";
+import { wilayas } from "@/lib/wilayas";
 
 const emojiOptions = [
   "🙂",
@@ -51,7 +52,7 @@ export default function ProfilForm({
 
       <input type="hidden" name="avatar_emoji" value={avatar} />
       <div>
-        <label className="text-sm font-medium text-stone-700">
+        <label className="text-sm font-medium text-ink">
           Choisir un avatar
         </label>
         <div className="mt-1 flex flex-wrap gap-2">
@@ -62,8 +63,8 @@ export default function ProfilForm({
               onClick={() => setAvatar(option)}
               className={`flex h-10 w-10 items-center justify-center rounded-full border text-xl transition-colors ${
                 avatar === option
-                  ? "border-orange-600 bg-orange-100"
-                  : "border-orange-100 bg-white hover:bg-orange-50"
+                  ? "border-accent bg-dawn-soft"
+                  : "border-line bg-paper hover:bg-bg-alt"
               }`}
             >
               {option}
@@ -73,43 +74,51 @@ export default function ProfilForm({
       </div>
 
       <div>
-        <label className="text-sm font-medium text-stone-700">Nom</label>
+        <label className="text-sm font-medium text-ink">Nom</label>
         <input
           type="text"
           name="name"
           required
           defaultValue={seller.name}
-          className="mt-1 w-full rounded-xl border border-orange-100 px-4 py-2 text-sm text-stone-900 outline-none focus:border-orange-400"
+          className="mt-1 w-full rounded-xl border border-line px-4 py-2 text-sm text-ink outline-none focus:border-accent"
         />
       </div>
 
       <div>
-        <label className="text-sm font-medium text-stone-700">Ville</label>
-        <input
-          type="text"
+        <label className="text-sm font-medium text-ink">Wilaya</label>
+        <select
           name="city"
           required
           defaultValue={seller.city}
-          className="mt-1 w-full rounded-xl border border-orange-100 px-4 py-2 text-sm text-stone-900 outline-none focus:border-orange-400"
-        />
+          className="mt-1 w-full rounded-xl border border-line px-4 py-2 text-sm text-ink outline-none focus:border-accent"
+        >
+          <option value="" disabled>
+            Choisir une wilaya
+          </option>
+          {wilayas.map((w) => (
+            <option key={w} value={w}>
+              {w}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div>
-        <label className="text-sm font-medium text-stone-700">
+        <label className="text-sm font-medium text-ink">
           Bio / description
         </label>
         <textarea
           name="description"
           rows={4}
           defaultValue={seller.description}
-          className="mt-1 w-full rounded-xl border border-orange-100 px-4 py-2 text-sm text-stone-900 outline-none focus:border-orange-400"
+          className="mt-1 w-full rounded-xl border border-line px-4 py-2 text-sm text-ink outline-none focus:border-accent"
         />
       </div>
 
       <button
         type="submit"
         disabled={pending}
-        className="mt-2 self-start rounded-full bg-orange-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-orange-700 disabled:opacity-60"
+        className="mt-2 self-start rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-accent-dark disabled:opacity-60"
       >
         {pending ? "Enregistrement..." : "Enregistrer"}
       </button>

@@ -13,7 +13,7 @@ export default async function ProduitsPage() {
       <SiteHeader />
 
       <main className="mx-auto w-full max-w-6xl flex-1 px-6 py-10">
-        <h1 className="text-2xl font-bold text-stone-900">
+        <h1 className="text-2xl font-bold text-ink">
           Toutes les annonces
         </h1>
         <ProduitsFilters listings={listings} />

@@ -167,7 +167,7 @@ export default function Home() {
                 pour les 58 wilayas.
               </p>
 
-              <form className="mt-8 flex max-w-lg overflow-hidden rounded-2xl border-[1.5px] border-ink bg-paper shadow-[4px_4px_0_var(--ink)]">
+              <form className="mt-8 flex w-full max-w-2xl overflow-hidden rounded-2xl border-[1.5px] border-ink bg-paper shadow-[4px_4px_0_var(--ink)]">
                 <select className="border-r border-line px-4 py-4 text-[15px] text-ink-soft outline-none">
                   <option>Toutes catégories</option>
                   <option>Véhicules</option>

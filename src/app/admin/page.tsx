@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { approveListingAction, rejectListingAction } from "@/app/actions";
+import { formatDA } from "@/lib/queries";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 
@@ -37,10 +38,10 @@ export default async function AdminPage() {
       <SiteHeader />
 
       <main className="mx-auto w-full max-w-4xl flex-1 px-6 py-16">
-        <h1 className="text-2xl font-bold text-stone-900">
+        <h1 className="text-2xl font-bold text-ink">
           Modération des annonces
         </h1>
-        <p className="mt-1 text-sm text-stone-500">
+        <p className="mt-1 text-sm text-ink-soft">
           {pendingListings?.length ?? 0} annonce
           {(pendingListings?.length ?? 0) > 1 ? "s" : ""} en attente
         </p>
@@ -49,22 +50,23 @@ export default async function AdminPage() {
           {pendingListings?.map((listing) => (
             <div
               key={listing.id}
-              className="flex flex-col gap-4 rounded-2xl border border-orange-100 bg-white p-5 sm:flex-row sm:items-center"
+              className="flex flex-col gap-4 rounded-2xl border border-line bg-paper p-5 sm:flex-row sm:items-center"
             >
-              <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-amber-100 to-orange-100 text-3xl">
+              <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl bg-bg-alt text-3xl">
                 {listing.emoji}
               </div>
               <div className="flex-1">
-                <h2 className="font-semibold text-stone-900">
+                <h2 className="font-semibold text-ink">
                   {listing.title}
                 </h2>
-                <p className="text-sm text-stone-500">
-                  {listing.price} € · {listing.category} · {listing.location}
+                <p className="text-sm text-ink-soft">
+                  {formatDA(listing.price)} · {listing.category} ·{" "}
+                  {listing.location}
                 </p>
-                <p className="text-sm text-stone-500">
+                <p className="text-sm text-ink-soft">
                   Par {listing.seller?.name} ({listing.seller?.city})
                 </p>
-                <p className="mt-1 text-sm text-stone-600">
+                <p className="mt-1 text-sm text-ink-soft">
                   {listing.description}
                 </p>
               </div>
@@ -73,7 +75,7 @@ export default async function AdminPage() {
                   <input type="hidden" name="listingId" value={listing.id} />
                   <button
                     type="submit"
-                    className="rounded-full bg-orange-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-orange-700"
+                    className="rounded-full bg-accent px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-accent-dark"
                   >
                     Approuver
                   </button>
@@ -92,7 +94,7 @@ export default async function AdminPage() {
           ))}
 
           {(!pendingListings || pendingListings.length === 0) && (
-            <p className="text-sm text-stone-500">
+            <p className="text-sm text-ink-soft">
               Aucune annonce en attente de modération.
             </p>
           )}

@@ -19,10 +19,10 @@ export default async function PublierPage() {
       <SiteHeader />
 
       <main className="mx-auto w-full max-w-xl flex-1 px-6 py-16">
-        <h1 className="text-2xl font-bold text-stone-900">
+        <h1 className="text-2xl font-bold text-ink">
           Publier une annonce
         </h1>
-        <p className="mt-1 text-sm text-stone-500">
+        <p className="mt-1 text-sm text-ink-soft">
           Elle apparaîtra immédiatement dans le catalogue et sur votre profil.
         </p>
         <PublierForm />

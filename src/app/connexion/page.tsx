@@ -8,7 +8,7 @@ export default function ConnexionPage() {
       <SiteHeader />
 
       <main className="mx-auto w-full max-w-md flex-1 px-6 py-16">
-        <h1 className="text-2xl font-bold text-stone-900">Connexion</h1>
+        <h1 className="text-2xl font-bold text-ink">Connexion</h1>
         <ConnexionForm />
       </main>
 

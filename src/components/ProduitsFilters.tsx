@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import {
   categories,
+  formatDA,
   formatRelativeTime,
   type Listing,
   type SellerType,
@@ -42,7 +43,7 @@ export default function ProduitsFilters({
 
   return (
     <>
-      <p className="mt-1 text-sm text-stone-500">
+      <p className="mt-1 text-sm text-ink-soft">
         {filteredListings.length} annonce
         {filteredListings.length > 1 ? "s" : ""} trouvée
         {filteredListings.length > 1 ? "s" : ""}
@@ -62,8 +63,8 @@ export default function ProduitsFilters({
               onClick={() => setSellerFilter(option.value)}
               className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
                 sellerFilter === option.value
-                  ? "bg-orange-600 text-white"
-                  : "bg-white text-stone-600 border border-orange-100 hover:bg-orange-50"
+                  ? "bg-ink text-bg"
+                  : "border border-line bg-paper text-ink-soft hover:border-ink"
               }`}
             >
               {option.label}
@@ -75,7 +76,7 @@ export default function ProduitsFilters({
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="rounded-full border border-orange-100 bg-white px-4 py-2 text-sm text-stone-700"
+            className="rounded-full border border-line bg-paper px-4 py-2 text-sm text-ink-soft"
           >
             {categories.map((c) => (
               <option key={c} value={c}>
@@ -86,7 +87,7 @@ export default function ProduitsFilters({
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value as SortOrder)}
-            className="rounded-full border border-orange-100 bg-white px-4 py-2 text-sm text-stone-700"
+            className="rounded-full border border-line bg-paper px-4 py-2 text-sm text-ink-soft"
           >
             <option value="recent">Plus récentes</option>
             <option value="price-asc">Prix croissant</option>
@@ -100,34 +101,32 @@ export default function ProduitsFilters({
           <Link
             key={listing.id}
             href={`/produits/${listing.id}`}
-            className="flex flex-col overflow-hidden rounded-2xl border border-orange-100 bg-white shadow-sm transition-shadow hover:shadow-md"
+            className="flex flex-col overflow-hidden rounded-xl border border-line bg-paper transition-shadow hover:shadow-lg"
           >
-            <div className="flex h-36 items-center justify-center bg-gradient-to-br from-amber-100 to-orange-100 text-4xl">
+            <div className="flex h-36 items-center justify-center bg-bg-alt text-4xl">
               {listing.emoji}
             </div>
             <div className="flex flex-1 flex-col gap-2 p-4">
               <div className="flex items-start justify-between gap-2">
-                <h3 className="font-semibold text-stone-900">
-                  {listing.title}
-                </h3>
+                <h3 className="font-semibold text-ink">{listing.title}</h3>
                 <span
                   className={`shrink-0 rounded-full px-2 py-0.5 text-xs font-semibold ${
                     listing.seller?.type === "pro"
-                      ? "bg-orange-100 text-orange-700"
-                      : "bg-stone-100 text-stone-600"
+                      ? "bg-dawn-soft text-accent-dark"
+                      : "bg-bg-alt text-ink-soft"
                   }`}
                 >
                   {listing.seller?.type === "pro" ? "Pro" : "Particulier"}
                 </span>
               </div>
-              <span className="text-lg font-bold text-orange-700">
-                {listing.price} €
+              <span className="font-mono text-lg font-bold text-accent-dark">
+                {formatDA(listing.price)}
               </span>
-              <div className="mt-auto flex items-center justify-between text-xs text-stone-500">
+              <div className="mt-auto flex items-center justify-between text-xs text-ink-soft">
                 <span>{listing.seller?.name}</span>
-                <span>{listing.location}</span>
+                <span>📍 {listing.location}</span>
               </div>
-              <span className="text-xs text-stone-400">
+              <span className="text-xs text-ink-soft/70">
                 {formatRelativeTime(listing.created_at)}
               </span>
             </div>
@@ -136,7 +135,7 @@ export default function ProduitsFilters({
       </div>
 
       {filteredListings.length === 0 && (
-        <p className="mt-16 text-center text-stone-500">
+        <p className="mt-16 text-center text-ink-soft">
           Aucune annonce ne correspond à ces filtres.
         </p>
       )}

@@ -50,17 +50,17 @@ export default async function ProfilPage() {
       <SiteHeader />
 
       <main className="mx-auto w-full max-w-3xl flex-1 px-6 py-16">
-        <h1 className="text-2xl font-bold text-stone-900">Mon profil</h1>
+        <h1 className="text-2xl font-bold text-ink">Mon profil</h1>
 
-        <div className="mt-6 rounded-3xl border border-orange-100 bg-gradient-to-br from-amber-50 to-orange-50 p-6">
+        <div className="mt-6 rounded-3xl border border-line bg-bg-alt p-6">
           <div className="flex flex-col items-center gap-3 text-center">
-            <span className="flex h-24 w-24 items-center justify-center rounded-full bg-white text-5xl shadow-sm">
+            <span className="flex h-24 w-24 items-center justify-center rounded-full bg-paper text-5xl shadow-sm">
               {seller.avatar_emoji}
             </span>
-            <h2 className="text-xl font-bold text-stone-900">
+            <h2 className="text-xl font-bold text-ink">
               {seller.name}
             </h2>
-            <div className="flex items-center gap-2 rounded-full bg-white px-4 py-1.5 text-sm font-semibold text-orange-700 shadow-sm">
+            <div className="flex items-center gap-2 rounded-full bg-paper px-4 py-1.5 text-sm font-semibold text-accent shadow-sm">
               <span className="text-lg">{level.emoji}</span>
               {level.label}
             </div>
@@ -69,7 +69,7 @@ export default async function ProfilPage() {
           <div className="mt-6">
             {next ? (
               <>
-                <div className="flex items-center justify-between text-xs font-medium text-stone-500">
+                <div className="flex items-center justify-between text-xs font-medium text-ink-soft">
                   <span>
                     {transactionsCount} transaction
                     {transactionsCount > 1 ? "s" : ""}
@@ -78,43 +78,43 @@ export default async function ProfilPage() {
                     Prochain niveau : {next.emoji} {next.label} ({next.min})
                   </span>
                 </div>
-                <div className="mt-1 h-3 w-full overflow-hidden rounded-full bg-white">
+                <div className="mt-1 h-3 w-full overflow-hidden rounded-full bg-paper">
                   <div
-                    className="h-full rounded-full bg-gradient-to-r from-amber-400 to-orange-600 transition-all"
+                    className="h-full rounded-full bg-gradient-to-r from-gold to-accent transition-all"
                     style={{ width: `${progress}%` }}
                   />
                 </div>
               </>
             ) : (
-              <p className="text-center text-sm font-semibold text-orange-700">
+              <p className="text-center text-sm font-semibold text-accent">
                 🎊 Niveau maximum atteint, bravo !
               </p>
             )}
           </div>
 
           <div className="mt-6 grid grid-cols-3 gap-3 text-center">
-            <div className="rounded-2xl bg-white p-3 shadow-sm">
-              <p className="text-lg font-bold text-stone-900">
+            <div className="rounded-2xl bg-paper p-3 shadow-sm">
+              <p className="text-lg font-bold text-ink">
                 {transactionsCount}
               </p>
-              <p className="text-xs text-stone-500">Transactions</p>
+              <p className="text-xs text-ink-soft">Transactions</p>
             </div>
-            <div className="rounded-2xl bg-white p-3 shadow-sm">
-              <p className="text-lg font-bold text-stone-900">
+            <div className="rounded-2xl bg-paper p-3 shadow-sm">
+              <p className="text-lg font-bold text-ink">
                 {rating.toFixed(1)} ★
               </p>
-              <p className="text-xs text-stone-500">Note moyenne</p>
+              <p className="text-xs text-ink-soft">Note moyenne</p>
             </div>
-            <div className="rounded-2xl bg-white p-3 shadow-sm">
-              <p className="text-lg font-bold text-stone-900">
+            <div className="rounded-2xl bg-paper p-3 shadow-sm">
+              <p className="text-lg font-bold text-ink">
                 {listingsCount ?? 0}
               </p>
-              <p className="text-xs text-stone-500">Annonces</p>
+              <p className="text-xs text-ink-soft">Annonces</p>
             </div>
           </div>
 
           <div className="mt-6">
-            <p className="text-xs font-semibold uppercase tracking-wide text-stone-400">
+            <p className="text-xs font-semibold uppercase tracking-wide text-ink-soft/70">
               Badges
             </p>
             <div className="mt-2 flex flex-wrap gap-2">
@@ -124,8 +124,8 @@ export default async function ProfilPage() {
                   title={badge.label}
                   className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium ${
                     badge.unlocked
-                      ? "bg-white text-stone-700 shadow-sm"
-                      : "bg-stone-100 text-stone-400"
+                      ? "bg-paper text-ink shadow-sm"
+                      : "bg-bg-alt text-ink-soft/70"
                   }`}
                 >
                   <span className={badge.unlocked ? "" : "grayscale opacity-50"}>
@@ -139,7 +139,7 @@ export default async function ProfilPage() {
         </div>
 
         <div className="mt-10">
-          <h2 className="text-lg font-semibold text-stone-900">
+          <h2 className="text-lg font-semibold text-ink">
             Modifier mon profil
           </h2>
           <ProfilForm seller={seller} />

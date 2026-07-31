@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { formatDA } from "@/lib/queries";
 
 type Message = {
   author: "buyer" | "seller";
@@ -48,7 +49,7 @@ export default function NegotiationPanel({
     const buyerMessage: Message = {
       author: "buyer",
       price,
-      text: `Je propose ${price} €`,
+      text: `Je propose ${formatDA(price)}`,
     };
     setMessages((prev) => [...prev, buyerMessage]);
     setStatus("responding");
@@ -77,7 +78,7 @@ export default function NegotiationPanel({
           {
             author: "seller",
             price,
-            text: `Marché conclu, j'accepte ${price} € !`,
+            text: `Marché conclu, j'accepte ${formatDA(price)} !`,
           },
         ]);
         setFinalPrice(price);
@@ -88,7 +89,7 @@ export default function NegotiationPanel({
           {
             author: "seller",
             price: counter,
-            text: `Je peux descendre à ${counter} €, ça vous va ?`,
+            text: `Je peux descendre à ${formatDA(counter)}, ça vous va ?`,
           },
         ]);
         setOfferInput(String(counter));
@@ -101,19 +102,20 @@ export default function NegotiationPanel({
   const acceptCounter = (price: number) => {
     setMessages((prev) => [
       ...prev,
-      { author: "buyer", price, text: `J'accepte ${price} €` },
+      { author: "buyer", price, text: `J'accepte ${formatDA(price)}` },
     ]);
     setFinalPrice(price);
     setStatus("accepted");
   };
 
   return (
-    <div className="rounded-2xl border border-orange-100 bg-white p-5">
-      <h2 className="font-semibold text-stone-900">Négocier le prix</h2>
-      <p className="mt-1 text-sm text-stone-500">
-        Prix affiché : <span className="font-semibold">{askingPrice} €</span>{" "}
-        — proposez votre prix, {sellerName} pourra l&apos;accepter ou faire
-        une contre-offre.
+    <div className="rounded-2xl border border-line bg-paper p-5">
+      <h2 className="font-semibold text-ink">Négocier le prix</h2>
+      <p className="mt-1 text-sm text-ink-soft">
+        Prix affiché :{" "}
+        <span className="font-semibold">{formatDA(askingPrice)}</span> —
+        proposez votre prix, {sellerName} pourra l&apos;accepter ou faire une
+        contre-offre.
       </p>
 
       {messages.length > 0 && (
@@ -123,15 +125,15 @@ export default function NegotiationPanel({
               key={index}
               className={`max-w-[85%] rounded-2xl px-4 py-2 text-sm ${
                 message.author === "buyer"
-                  ? "ml-auto bg-orange-600 text-white"
-                  : "bg-stone-100 text-stone-700"
+                  ? "ml-auto bg-accent text-white"
+                  : "bg-bg-alt text-ink"
               }`}
             >
               {message.text}
             </div>
           ))}
           {status === "responding" && (
-            <div className="max-w-[85%] rounded-2xl bg-stone-100 px-4 py-2 text-sm text-stone-400">
+            <div className="max-w-[85%] rounded-2xl bg-bg-alt px-4 py-2 text-sm text-ink-soft">
               {sellerName} est en train de répondre...
             </div>
           )}
@@ -140,45 +142,44 @@ export default function NegotiationPanel({
 
       {status === "accepted" && finalPrice !== null && (
         <div className="mt-4 rounded-xl bg-green-50 px-4 py-3 text-sm font-medium text-green-700">
-          🎉 Prix fixé à {finalPrice} € ! Contactez {sellerName} pour
+          🎉 Prix fixé à {formatDA(finalPrice)} ! Contactez {sellerName} pour
           finaliser la transaction.
         </div>
       )}
 
       {status === "closed" && (
-        <div className="mt-4 rounded-xl bg-stone-50 px-4 py-3 text-sm text-stone-600">
+        <div className="mt-4 rounded-xl bg-bg-alt px-4 py-3 text-sm text-ink-soft">
           Négociation terminée pour cette session — contactez le vendeur
           directement pour continuer la discussion.
         </div>
       )}
 
-      {(status === "idle" ||
-        status === "negotiating") && (
+      {(status === "idle" || status === "negotiating") && (
         <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-end">
           <div className="flex-1">
-            <label className="text-xs font-medium text-stone-500">
-              Votre offre (€)
+            <label className="text-xs font-medium text-ink-soft">
+              Votre offre (DA)
             </label>
             <input
               type="number"
               min={1}
               value={offerInput}
               onChange={(e) => setOfferInput(e.target.value)}
-              className="mt-1 w-full rounded-xl border border-orange-100 px-3 py-2 text-sm text-stone-900 outline-none focus:border-orange-400"
+              className="mt-1 w-full rounded-xl border border-line px-3 py-2 text-sm text-ink outline-none focus:border-accent"
             />
           </div>
           <div className="flex gap-2">
             {status === "negotiating" && lastSellerOffer !== null && (
               <button
                 onClick={() => acceptCounter(lastSellerOffer)}
-                className="rounded-full border border-orange-600 px-4 py-2 text-sm font-semibold text-orange-700 transition-colors hover:bg-orange-50"
+                className="rounded-full border border-accent px-4 py-2 text-sm font-semibold text-accent transition-colors hover:bg-dawn-soft"
               >
-                Accepter à {lastSellerOffer} €
+                Accepter à {formatDA(lastSellerOffer)}
               </button>
             )}
             <button
               onClick={() => sendOffer(Number(offerInput))}
-              className="rounded-full bg-orange-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-orange-700"
+              className="rounded-full bg-accent px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-accent-dark"
             >
               {status === "negotiating" ? "Contre-offre" : "Envoyer mon offre"}
             </button>

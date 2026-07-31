@@ -40,18 +40,18 @@ export default function ConnexionForm() {
       )}
 
       <div>
-        <label className="text-sm font-medium text-stone-700">Email</label>
+        <label className="text-sm font-medium text-ink">Email</label>
         <input
           type="email"
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="mt-1 w-full rounded-xl border border-orange-100 px-4 py-2 text-sm text-stone-900 outline-none focus:border-orange-400"
+          className="mt-1 w-full rounded-xl border border-line px-4 py-2 text-sm text-ink outline-none focus:border-accent"
         />
       </div>
 
       <div>
-        <label className="text-sm font-medium text-stone-700">
+        <label className="text-sm font-medium text-ink">
           Mot de passe
         </label>
         <input
@@ -59,21 +59,21 @@ export default function ConnexionForm() {
           required
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="mt-1 w-full rounded-xl border border-orange-100 px-4 py-2 text-sm text-stone-900 outline-none focus:border-orange-400"
+          className="mt-1 w-full rounded-xl border border-line px-4 py-2 text-sm text-ink outline-none focus:border-accent"
         />
       </div>
 
       <button
         type="submit"
         disabled={loading}
-        className="mt-2 rounded-full bg-orange-600 px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-orange-700 disabled:opacity-60"
+        className="mt-2 rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-accent-dark disabled:opacity-60"
       >
         {loading ? "Connexion..." : "Se connecter"}
       </button>
 
-      <p className="text-sm text-stone-500">
+      <p className="text-sm text-ink-soft">
         Pas encore de compte ?{" "}
-        <Link href="/inscription" className="text-orange-700 hover:underline">
+        <Link href="/inscription" className="text-accent hover:underline">
           Inscrivez-vous
         </Link>
       </p>
