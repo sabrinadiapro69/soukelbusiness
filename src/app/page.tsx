@@ -155,7 +155,7 @@ const fallbackTalents = [
 const talentColors = ["bg-primary", "bg-accent", "bg-gold", "bg-primary-dark"];
 
 export default async function Home() {
-  const realTalents = await getTopTalents(4);
+  const realTalents = await getTopTalents(4).catch(() => []);
   const talents =
     realTalents.length > 0
       ? realTalents.map((t, i) => ({

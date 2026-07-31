@@ -38,9 +38,13 @@ export default async function VendeurPage({
 
   const [sellerListings, reviews, proProfile, portfolio] = await Promise.all([
     getListingsBySeller(seller.id),
-    getReviewsBySeller(seller.id),
-    seller.type === "pro" ? getProProfile(seller.id) : Promise.resolve(null),
-    seller.type === "pro" ? getPortfolioBySeller(seller.id) : Promise.resolve([]),
+    getReviewsBySeller(seller.id).catch(() => []),
+    seller.type === "pro"
+      ? getProProfile(seller.id).catch(() => null)
+      : Promise.resolve(null),
+    seller.type === "pro"
+      ? getPortfolioBySeller(seller.id).catch(() => [])
+      : Promise.resolve([]),
   ]);
 
   return (
