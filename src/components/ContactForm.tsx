@@ -1,10 +1,15 @@
 "use client";
 
 import { useState } from "react";
+import type { Dictionary } from "@/lib/i18n/dictionaries/fr";
 
 const CONTACT_EMAIL = "contact@one-concept.fr";
 
-export default function ContactForm() {
+export default function ContactForm({
+  dict,
+}: {
+  dict: Dictionary["contact"];
+}) {
   const [sent, setSent] = useState(false);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -17,7 +22,7 @@ export default function ContactForm() {
 
     const mailtoBody = `${message}\n\n— ${name} (${email})`;
     const mailtoLink = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(
-      subject || "Message depuis Souk El Business"
+      subject || dict.defaultSubject
     )}&body=${encodeURIComponent(mailtoBody)}`;
 
     window.location.href = mailtoLink;
@@ -29,15 +34,14 @@ export default function ContactForm() {
       <div className="lg:col-span-2">
         {sent && (
           <div className="mb-6 rounded-xl bg-green-50 px-4 py-3 text-sm font-medium text-green-700">
-            Votre client email a dû s&apos;ouvrir avec votre message
-            prérempli — il ne reste qu&apos;à l&apos;envoyer.
+            {dict.sentMessage}
           </div>
         )}
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <label className="text-sm font-medium text-ink">
-                Nom
+                {dict.name}
               </label>
               <input
                 type="text"
@@ -48,7 +52,7 @@ export default function ContactForm() {
             </div>
             <div>
               <label className="text-sm font-medium text-ink">
-                Email
+                {dict.email}
               </label>
               <input
                 type="email"
@@ -60,7 +64,7 @@ export default function ContactForm() {
           </div>
           <div>
             <label className="text-sm font-medium text-ink">
-              Sujet
+              {dict.subject}
             </label>
             <input
               type="text"
@@ -70,7 +74,7 @@ export default function ContactForm() {
           </div>
           <div>
             <label className="text-sm font-medium text-ink">
-              Message
+              {dict.message}
             </label>
             <textarea
               name="message"
@@ -83,7 +87,7 @@ export default function ContactForm() {
             type="submit"
             className="mt-2 self-start rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-accent-dark"
           >
-            Envoyer le message
+            {dict.send}
           </button>
         </form>
       </div>
@@ -91,7 +95,7 @@ export default function ContactForm() {
       <div className="flex flex-col gap-4 rounded-2xl border border-line bg-paper p-6 h-fit">
         <div>
           <p className="text-xs font-semibold uppercase tracking-wide text-ink-soft/70">
-            Email
+            {dict.emailLabel}
           </p>
           <a
             href={`mailto:${CONTACT_EMAIL}`}
@@ -102,15 +106,15 @@ export default function ContactForm() {
         </div>
         <div>
           <p className="text-xs font-semibold uppercase tracking-wide text-ink-soft/70">
-            Localisation
+            {dict.locationLabel}
           </p>
-          <p className="text-sm text-ink">Vaulx-en-Velin, France</p>
+          <p className="text-sm text-ink">{dict.location}</p>
         </div>
         <div>
           <p className="text-xs font-semibold uppercase tracking-wide text-ink-soft/70">
-            Éditeur
+            {dict.publisherLabel}
           </p>
-          <p className="text-sm text-ink">One Concept</p>
+          <p className="text-sm text-ink">{dict.publisher}</p>
         </div>
       </div>
     </div>

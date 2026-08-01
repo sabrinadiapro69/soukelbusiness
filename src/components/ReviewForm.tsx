@@ -2,10 +2,17 @@
 
 import { useActionState } from "react";
 import { submitReviewAction, type SubmitReviewState } from "@/app/actions";
+import type { Dictionary } from "@/lib/i18n/dictionaries/fr";
 
 const initialState: SubmitReviewState = { error: null };
 
-export default function ReviewForm({ offerId }: { offerId: number }) {
+export default function ReviewForm({
+  offerId,
+  dict,
+}: {
+  offerId: number;
+  dict: Dictionary["reviewForm"];
+}) {
   const [state, formAction, pending] = useActionState(
     submitReviewAction,
     initialState
@@ -14,7 +21,7 @@ export default function ReviewForm({ offerId }: { offerId: number }) {
   if (state.success) {
     return (
       <p className="mt-3 text-sm font-medium text-green-700">
-        Merci, votre avis a été publié !
+        {dict.thankYou}
       </p>
     );
   }
@@ -28,7 +35,9 @@ export default function ReviewForm({ offerId }: { offerId: number }) {
       {state.error && (
         <div className="text-sm text-red-700">{state.error}</div>
       )}
-      <label className="text-xs font-medium text-ink-soft">Votre note</label>
+      <label className="text-xs font-medium text-ink-soft">
+        {dict.yourRating}
+      </label>
       <select
         name="rating"
         defaultValue="5"
@@ -41,7 +50,7 @@ export default function ReviewForm({ offerId }: { offerId: number }) {
         ))}
       </select>
       <label className="text-xs font-medium text-ink-soft">
-        Commentaire (facultatif)
+        {dict.commentOptional}
       </label>
       <textarea
         name="comment"
@@ -53,7 +62,7 @@ export default function ReviewForm({ offerId }: { offerId: number }) {
         disabled={pending}
         className="self-start rounded-full bg-accent px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-accent-dark disabled:opacity-60"
       >
-        {pending ? "Envoi..." : "Envoyer mon avis"}
+        {pending ? dict.sending : dict.submit}
       </button>
     </form>
   );

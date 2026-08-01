@@ -4,13 +4,19 @@ import { useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { wilayas } from "@/lib/wilayas";
+import type { Dictionary } from "@/lib/i18n/dictionaries/fr";
 
-export default function InscriptionForm() {
+export default function InscriptionForm({
+  dict,
+}: {
+  dict: Dictionary["inscription"];
+}) {
   const [name, setName] = useState("");
   const [city, setCity] = useState("");
   const [type, setType] = useState<"particulier" | "pro">("particulier");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [accepted, setAccepted] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [confirmationSent, setConfirmationSent] = useState(false);
@@ -18,6 +24,12 @@ export default function InscriptionForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+
+    if (!accepted) {
+      setError(dict.acceptError);
+      return;
+    }
+
     setLoading(true);
 
     const supabase = createClient();
@@ -47,11 +59,9 @@ export default function InscriptionForm() {
   if (confirmationSent) {
     return (
       <div className="mt-6 rounded-xl bg-green-50 px-4 py-4 text-sm text-green-700">
-        Un email de confirmation vous a été envoyé à <strong>{email}</strong>.
-        Cliquez sur le lien qu&apos;il contient pour activer votre compte,
-        puis{" "}
+        {dict.confirmationSent(email)} {dict.confirmationInstructions}{" "}
         <Link href="/connexion" className="underline">
-          connectez-vous
+          {dict.loginLink}
         </Link>
         .
       </div>
@@ -67,7 +77,7 @@ export default function InscriptionForm() {
       )}
 
       <div>
-        <label className="text-sm font-medium text-ink">Nom</label>
+        <label className="text-sm font-medium text-ink">{dict.name}</label>
         <input
           type="text"
           required
@@ -78,7 +88,7 @@ export default function InscriptionForm() {
       </div>
 
       <div>
-        <label className="text-sm font-medium text-ink">Wilaya</label>
+        <label className="text-sm font-medium text-ink">{dict.wilaya}</label>
         <select
           required
           value={city}
@@ -86,7 +96,7 @@ export default function InscriptionForm() {
           className="mt-1 w-full rounded-xl border border-line px-4 py-2 text-sm text-ink outline-none focus:border-accent"
         >
           <option value="" disabled>
-            Choisir une wilaya
+            {dict.chooseWilaya}
           </option>
           {wilayas.map((w) => (
             <option key={w} value={w}>
@@ -97,12 +107,12 @@ export default function InscriptionForm() {
       </div>
 
       <div>
-        <label className="text-sm font-medium text-ink">Vous êtes</label>
+        <label className="text-sm font-medium text-ink">{dict.youAre}</label>
         <div className="mt-1 flex gap-2">
           {(
             [
-              { value: "particulier", label: "Particulier" },
-              { value: "pro", label: "Professionnel" },
+              { value: "particulier", label: dict.particulier },
+              { value: "pro", label: dict.professionnel },
             ] as const
           ).map((option) => (
             <button
@@ -122,7 +132,7 @@ export default function InscriptionForm() {
       </div>
 
       <div>
-        <label className="text-sm font-medium text-ink">Email</label>
+        <label className="text-sm font-medium text-ink">{dict.email}</label>
         <input
           type="email"
           required
@@ -133,7 +143,9 @@ export default function InscriptionForm() {
       </div>
 
       <div>
-        <label className="text-sm font-medium text-ink">Mot de passe</label>
+        <label className="text-sm font-medium text-ink">
+          {dict.password}
+        </label>
         <input
           type="password"
           required
@@ -144,18 +156,39 @@ export default function InscriptionForm() {
         />
       </div>
 
+      <label className="flex items-start gap-2 text-sm text-ink-soft">
+        <input
+          type="checkbox"
+          required
+          checked={accepted}
+          onChange={(e) => setAccepted(e.target.checked)}
+          className="mt-1 h-4 w-4 rounded border-line accent-accent"
+        />
+        <span>
+          {dict.acceptPrefix}{" "}
+          <Link href="/cgu" className="text-accent hover:underline">
+            {dict.cgu}
+          </Link>{" "}
+          {dict.and}{" "}
+          <Link href="/confidentialite" className="text-accent hover:underline">
+            {dict.privacy}
+          </Link>
+          .
+        </span>
+      </label>
+
       <button
         type="submit"
         disabled={loading}
         className="mt-2 rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-accent-dark disabled:opacity-60"
       >
-        {loading ? "Création..." : "Créer mon compte"}
+        {loading ? dict.creating : dict.createAccount}
       </button>
 
       <p className="text-sm text-ink-soft">
-        Déjà inscrit ?{" "}
+        {dict.alreadyRegistered}{" "}
         <Link href="/connexion" className="text-accent hover:underline">
-          Connectez-vous
+          {dict.signIn}
         </Link>
       </p>
     </form>

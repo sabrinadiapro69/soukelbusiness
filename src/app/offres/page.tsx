@@ -5,17 +5,29 @@ import { formatDA } from "@/lib/queries";
 import { sellerRespondOfferAction } from "@/app/actions";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import { getLocale } from "@/lib/i18n/locale";
+import { getDictionary } from "@/lib/i18n/dictionaries";
 
 export const dynamic = "force-dynamic";
 
-const statusLabels: Record<string, { label: string; className: string }> = {
-  en_attente: { label: "En attente de votre réponse", className: "bg-primary/10 text-primary-dark" },
-  contre_offre: { label: "Contre-offre envoyée", className: "bg-dawn-soft text-accent-dark" },
-  acceptee: { label: "Acceptée", className: "bg-green-100 text-green-700" },
-  refusee: { label: "Refusée", className: "bg-bg-alt text-ink-soft" },
-};
-
 export default async function OffresPage() {
+  const locale = await getLocale();
+  const dict = await getDictionary(locale);
+  const t = dict.offresRecues;
+
+  const statusLabels: Record<string, { label: string; className: string }> = {
+    en_attente: {
+      label: t.statusPending,
+      className: "bg-primary/10 text-primary-dark",
+    },
+    contre_offre: {
+      label: t.statusCounter,
+      className: "bg-dawn-soft text-accent-dark",
+    },
+    acceptee: { label: t.statusAccepted, className: "bg-green-100 text-green-700" },
+    refusee: { label: t.statusRefused, className: "bg-bg-alt text-ink-soft" },
+  };
+
   const supabase = await createClient();
   const {
     data: { user },
@@ -36,11 +48,8 @@ export default async function OffresPage() {
       <SiteHeader />
 
       <main className="mx-auto w-full max-w-4xl flex-1 px-6 py-16">
-        <h1 className="text-2xl font-bold text-ink">Mes offres reçues</h1>
-        <p className="mt-1 text-sm text-ink-soft">
-          Les propositions de prix envoyées par des acheteurs sur vos
-          annonces.
-        </p>
+        <h1 className="text-2xl font-bold text-ink">{t.pageTitle}</h1>
+        <p className="mt-1 text-sm text-ink-soft">{t.pageSubtitle}</p>
 
         <div className="mt-8 flex flex-col gap-4">
           {offers?.map((offer) => {
@@ -59,7 +68,7 @@ export default async function OffresPage() {
                       {offer.listings.title}
                     </Link>
                     <p className="text-sm text-ink-soft">
-                      Par {offer.buyer?.name} · Prix affiché :{" "}
+                      {t.by} {offer.buyer?.name} · {t.displayedPrice}{" "}
                       {formatDA(offer.listings.price)}
                     </p>
                   </div>
@@ -71,7 +80,7 @@ export default async function OffresPage() {
                 </div>
 
                 <p className="mt-3 font-mono text-lg font-bold text-accent-dark">
-                  Offre : {formatDA(Number(offer.montant_propose))}
+                  {t.offer} {formatDA(Number(offer.montant_propose))}
                 </p>
 
                 {offer.statut === "en_attente" && (
@@ -88,7 +97,7 @@ export default async function OffresPage() {
                         type="submit"
                         className="rounded-full bg-accent px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-accent-dark"
                       >
-                        Accepter
+                        {t.accept}
                       </button>
                     </form>
                     <form action={sellerRespondOfferAction}>
@@ -103,7 +112,7 @@ export default async function OffresPage() {
                         type="submit"
                         className="rounded-full border border-line px-4 py-2 text-sm font-semibold text-ink-soft transition-colors hover:border-ink"
                       >
-                        Refuser
+                        {t.refuse}
                       </button>
                     </form>
                     <form
@@ -123,7 +132,7 @@ export default async function OffresPage() {
                       />
                       <div>
                         <label className="text-xs font-medium text-ink-soft">
-                          Contre-offre (DA)
+                          {t.counterOfferLabel}
                         </label>
                         <input
                           type="number"
@@ -137,7 +146,7 @@ export default async function OffresPage() {
                         type="submit"
                         className="rounded-full border border-accent px-4 py-2 text-sm font-semibold text-accent transition-colors hover:bg-dawn-soft"
                       >
-                        Envoyer
+                        {t.send}
                       </button>
                     </form>
                   </div>
@@ -145,7 +154,7 @@ export default async function OffresPage() {
 
                 {offer.statut === "acceptee" && offer.conclue_par_acheteur && (
                   <p className="mt-3 text-sm font-medium text-green-700">
-                    ✅ L&apos;acheteur a confirmé la transaction.
+                    {t.buyerConfirmed}
                   </p>
                 )}
               </div>
@@ -153,9 +162,7 @@ export default async function OffresPage() {
           })}
 
           {(!offers || offers.length === 0) && (
-            <p className="text-sm text-ink-soft">
-              Vous n&apos;avez reçu aucune offre pour l&apos;instant.
-            </p>
+            <p className="text-sm text-ink-soft">{t.noOffers}</p>
           )}
         </div>
       </main>

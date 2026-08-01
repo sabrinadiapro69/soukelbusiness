@@ -3,8 +3,13 @@
 import { useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import type { Dictionary } from "@/lib/i18n/dictionaries/fr";
 
-export default function ConnexionForm() {
+export default function ConnexionForm({
+  dict,
+}: {
+  dict: Dictionary["connexion"];
+}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -40,7 +45,7 @@ export default function ConnexionForm() {
       )}
 
       <div>
-        <label className="text-sm font-medium text-ink">Email</label>
+        <label className="text-sm font-medium text-ink">{dict.email}</label>
         <input
           type="email"
           required
@@ -52,7 +57,7 @@ export default function ConnexionForm() {
 
       <div>
         <label className="text-sm font-medium text-ink">
-          Mot de passe
+          {dict.password}
         </label>
         <input
           type="password"
@@ -68,13 +73,13 @@ export default function ConnexionForm() {
         disabled={loading}
         className="mt-2 rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-accent-dark disabled:opacity-60"
       >
-        {loading ? "Connexion..." : "Se connecter"}
+        {loading ? dict.connecting : dict.signIn}
       </button>
 
       <p className="text-sm text-ink-soft">
-        Pas encore de compte ?{" "}
+        {dict.noAccount}{" "}
         <Link href="/inscription" className="text-accent hover:underline">
-          Inscrivez-vous
+          {dict.signUp}
         </Link>
       </p>
     </form>
