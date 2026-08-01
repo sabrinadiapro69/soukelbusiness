@@ -16,7 +16,7 @@ export default async function InscriptionPage() {
         <h1 className="text-2xl font-bold text-ink">
           {dict.inscription.pageTitle}
         </h1>
-        <InscriptionForm dict={dict.inscription} />
+        <InscriptionForm dict={dict.inscription} locale={locale} />
       </main>
 
       <SiteFooter />

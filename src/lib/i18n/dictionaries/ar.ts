@@ -154,7 +154,6 @@ const ar: Dictionary = {
   },
   produits: {
     pageTitle: "جميع الإعلانات",
-    resultsCount: (n: number) => `تم العثور على ${n} إعلان`,
     filterAll: "جميع البائعين",
     filterParticuliers: "أفراد",
     filterPro: "محترفون",
@@ -277,7 +276,6 @@ const ar: Dictionary = {
   },
   inscription: {
     pageTitle: "إنشاء حساب",
-    confirmationSent: (email: string) => `تم إرسال بريد تأكيد إلى ${email}.`,
     confirmationInstructions:
       "انقر على الرابط الموجود فيه لتفعيل حسابك، ثم",
     loginLink: "سجل الدخول",

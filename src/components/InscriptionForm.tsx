@@ -5,11 +5,15 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { wilayas } from "@/lib/wilayas";
 import type { Dictionary } from "@/lib/i18n/dictionaries/fr";
+import type { Locale } from "@/lib/i18n/locale";
+import { formatConfirmationSent } from "@/lib/i18n/format";
 
 export default function InscriptionForm({
   dict,
+  locale,
 }: {
   dict: Dictionary["inscription"];
+  locale: Locale;
 }) {
   const [name, setName] = useState("");
   const [city, setCity] = useState("");
@@ -59,7 +63,7 @@ export default function InscriptionForm({
   if (confirmationSent) {
     return (
       <div className="mt-6 rounded-xl bg-green-50 px-4 py-4 text-sm text-green-700">
-        {dict.confirmationSent(email)} {dict.confirmationInstructions}{" "}
+        {formatConfirmationSent(locale, email)} {dict.confirmationInstructions}{" "}
         <Link href="/connexion" className="underline">
           {dict.loginLink}
         </Link>

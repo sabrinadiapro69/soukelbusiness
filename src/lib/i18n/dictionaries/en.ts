@@ -155,7 +155,6 @@ const en: Dictionary = {
   },
   produits: {
     pageTitle: "All listings",
-    resultsCount: (n: number) => `${n} listing${n > 1 ? "s" : ""} found`,
     filterAll: "All sellers",
     filterParticuliers: "Individuals",
     filterPro: "Professionals",
@@ -284,8 +283,6 @@ const en: Dictionary = {
   },
   inscription: {
     pageTitle: "Create an account",
-    confirmationSent: (email: string) =>
-      `A confirmation email was sent to ${email}.`,
     confirmationInstructions:
       "Click the link inside to activate your account, then",
     loginLink: "sign in",

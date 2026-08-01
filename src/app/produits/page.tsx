@@ -31,7 +31,12 @@ export default async function ProduitsPage() {
         <h1 className="text-2xl font-bold text-ink">
           {dict.produits.pageTitle}
         </h1>
-        <ProduitsFilters listings={listings} taux={taux} dict={dict.produits} />
+        <ProduitsFilters
+          listings={listings}
+          taux={taux}
+          dict={dict.produits}
+          locale={locale}
+        />
       </main>
 
       <SiteFooter />

@@ -11,6 +11,8 @@ import {
   type SellerType,
 } from "@/lib/queries";
 import type { Dictionary } from "@/lib/i18n/dictionaries/fr";
+import type { Locale } from "@/lib/i18n/locale";
+import { formatResultsCount } from "@/lib/i18n/format";
 
 type SortOrder = "recent" | "price-asc" | "price-desc";
 
@@ -18,10 +20,12 @@ export default function ProduitsFilters({
   listings,
   taux,
   dict,
+  locale,
 }: {
   listings: Listing[];
   taux: number;
   dict: Dictionary["produits"];
+  locale: Locale;
 }) {
   const [sellerFilter, setSellerFilter] = useState<"tous" | SellerType>(
     "tous"
@@ -50,7 +54,7 @@ export default function ProduitsFilters({
   return (
     <>
       <p className="mt-1 text-sm text-ink-soft">
-        {dict.resultsCount(filteredListings.length)}
+        {formatResultsCount(locale, filteredListings.length)}
       </p>
 
       <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">

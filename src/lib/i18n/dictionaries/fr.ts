@@ -155,8 +155,6 @@ const fr = {
   },
   produits: {
     pageTitle: "Toutes les annonces",
-    resultsCount: (n: number) =>
-      `${n} annonce${n > 1 ? "s" : ""} trouvée${n > 1 ? "s" : ""}`,
     filterAll: "Tous les vendeurs",
     filterParticuliers: "Particuliers",
     filterPro: "Professionnels",
@@ -287,8 +285,6 @@ const fr = {
   },
   inscription: {
     pageTitle: "Créer un compte",
-    confirmationSent: (email: string) =>
-      `Un email de confirmation vous a été envoyé à ${email}.`,
     confirmationInstructions:
       "Cliquez sur le lien qu'il contient pour activer votre compte, puis",
     loginLink: "connectez-vous",
