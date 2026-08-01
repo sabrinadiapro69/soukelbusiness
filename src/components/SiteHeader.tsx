@@ -72,10 +72,18 @@ export default async function SiteHeader() {
                 action={setWilayaAction}
               />
             </span>
-            <span className="hidden opacity-85 sm:inline">
+            <Link
+              href="/contact"
+              className="hidden opacity-85 hover:opacity-100 sm:inline"
+            >
               {t.assistance}
-            </span>
-            <span className="hidden opacity-85 sm:inline">{t.pro}</span>
+            </Link>
+            <Link
+              href="/publier"
+              className="hidden opacity-85 hover:opacity-100 sm:inline"
+            >
+              {t.pro}
+            </Link>
           </div>
           <div className="flex gap-5">
             {(Object.keys(languageLabels) as Locale[]).map((code) => (
