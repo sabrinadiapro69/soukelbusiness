@@ -4,10 +4,16 @@ import { getLevelProgress, getBadges } from "@/lib/gamification";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import ProfilForm from "@/components/ProfilForm";
+import { getLocale } from "@/lib/i18n/locale";
+import { getDictionary } from "@/lib/i18n/dictionaries";
 
 export const dynamic = "force-dynamic";
 
 export default async function ProfilPage() {
+  const locale = await getLocale();
+  const dict = await getDictionary(locale);
+  const t = dict.profil;
+
   const supabase = await createClient();
   const {
     data: { user },
@@ -51,21 +57,27 @@ export default async function ProfilPage() {
 
   const rating = Number(seller.rating);
   const transactionsCount = seller.transactions_count;
-  const { level, next, progress } = getLevelProgress(transactionsCount);
-  const badges = getBadges({
+  const { level, next, progress } = getLevelProgress(
     transactionsCount,
-    rating,
-    reviewsCount: reviewsCount ?? 0,
-    type: seller.type,
-    listingsCount: listingsCount ?? 0,
-  });
+    t.levels
+  );
+  const badges = getBadges(
+    {
+      transactionsCount,
+      rating,
+      reviewsCount: reviewsCount ?? 0,
+      type: seller.type,
+      listingsCount: listingsCount ?? 0,
+    },
+    t.badges
+  );
 
   return (
     <div className="flex flex-1 flex-col">
       <SiteHeader />
 
       <main className="mx-auto w-full max-w-3xl flex-1 px-6 py-16">
-        <h1 className="text-2xl font-bold text-ink">Mon profil</h1>
+        <h1 className="text-2xl font-bold text-ink">{t.pageTitle}</h1>
 
         <div className="mt-6 rounded-3xl border border-line bg-bg-alt p-6">
           <div className="flex flex-col items-center gap-3 text-center">
@@ -85,12 +97,9 @@ export default async function ProfilPage() {
             {next ? (
               <>
                 <div className="flex items-center justify-between text-xs font-medium text-ink-soft">
+                  <span>{t.transactionsCount(transactionsCount)}</span>
                   <span>
-                    {transactionsCount} transaction
-                    {transactionsCount > 1 ? "s" : ""}
-                  </span>
-                  <span>
-                    Prochain niveau : {next.emoji} {next.label} ({next.min})
+                    {t.nextLevel} {next.emoji} {next.label} ({next.min})
                   </span>
                 </div>
                 <div className="mt-1 h-3 w-full overflow-hidden rounded-full bg-paper">
@@ -102,7 +111,7 @@ export default async function ProfilPage() {
               </>
             ) : (
               <p className="text-center text-sm font-semibold text-accent">
-                🎊 Niveau maximum atteint, bravo !
+                {t.maxLevel}
               </p>
             )}
           </div>
@@ -112,25 +121,25 @@ export default async function ProfilPage() {
               <p className="text-lg font-bold text-ink">
                 {transactionsCount}
               </p>
-              <p className="text-xs text-ink-soft">Transactions</p>
+              <p className="text-xs text-ink-soft">{t.transactionsLabel}</p>
             </div>
             <div className="rounded-2xl bg-paper p-3 shadow-sm">
               <p className="text-lg font-bold text-ink">
                 {rating.toFixed(1)} ★
               </p>
-              <p className="text-xs text-ink-soft">Note moyenne</p>
+              <p className="text-xs text-ink-soft">{t.averageRating}</p>
             </div>
             <div className="rounded-2xl bg-paper p-3 shadow-sm">
               <p className="text-lg font-bold text-ink">
                 {listingsCount ?? 0}
               </p>
-              <p className="text-xs text-ink-soft">Annonces</p>
+              <p className="text-xs text-ink-soft">{t.listingsLabel}</p>
             </div>
           </div>
 
           <div className="mt-6">
             <p className="text-xs font-semibold uppercase tracking-wide text-ink-soft/70">
-              Badges
+              {t.badgesLabel}
             </p>
             <div className="mt-2 flex flex-wrap gap-2">
               {badges.map((badge) => (
@@ -154,13 +163,12 @@ export default async function ProfilPage() {
         </div>
 
         <div className="mt-10">
-          <h2 className="text-lg font-semibold text-ink">
-            Modifier mon profil
-          </h2>
+          <h2 className="text-lg font-semibold text-ink">{t.editTitle}</h2>
           <ProfilForm
             seller={seller}
             metier={proProfile?.metier ?? ""}
             portfolio={portfolio ?? []}
+            dict={dict.profilForm}
           />
         </div>
       </main>

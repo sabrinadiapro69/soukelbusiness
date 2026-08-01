@@ -9,6 +9,7 @@ import {
 } from "@/app/actions";
 import { wilayas } from "@/lib/wilayas";
 import { getPortfolioPhotoUrl, type PortfolioItem } from "@/lib/queries";
+import type { Dictionary } from "@/lib/i18n/dictionaries/fr";
 
 const emojiOptions = [
   "🙂",
@@ -31,6 +32,7 @@ export default function ProfilForm({
   seller,
   metier,
   portfolio,
+  dict,
 }: {
   seller: {
     name: string;
@@ -41,6 +43,7 @@ export default function ProfilForm({
   };
   metier: string;
   portfolio: PortfolioItem[];
+  dict: Dictionary["profilForm"];
 }) {
   const [state, formAction, pending] = useActionState(
     updateProfileAction,
@@ -58,14 +61,14 @@ export default function ProfilForm({
       )}
       {state.success && (
         <div className="rounded-xl bg-green-50 px-4 py-3 text-sm text-green-700">
-          Profil mis à jour avec succès !
+          {dict.successMessage}
         </div>
       )}
 
       <input type="hidden" name="avatar_emoji" value={avatar} />
       <div>
         <label className="text-sm font-medium text-ink">
-          Choisir un avatar
+          {dict.chooseAvatar}
         </label>
         <div className="mt-1 flex flex-wrap gap-2">
           {emojiOptions.map((option) => (
@@ -86,7 +89,7 @@ export default function ProfilForm({
       </div>
 
       <div>
-        <label className="text-sm font-medium text-ink">Nom</label>
+        <label className="text-sm font-medium text-ink">{dict.name}</label>
         <input
           type="text"
           name="name"
@@ -97,7 +100,7 @@ export default function ProfilForm({
       </div>
 
       <div>
-        <label className="text-sm font-medium text-ink">Wilaya</label>
+        <label className="text-sm font-medium text-ink">{dict.wilaya}</label>
         <select
           name="city"
           required
@@ -105,7 +108,7 @@ export default function ProfilForm({
           className="mt-1 w-full rounded-xl border border-line px-4 py-2 text-sm text-ink outline-none focus:border-accent"
         >
           <option value="" disabled>
-            Choisir une wilaya
+            {dict.chooseWilaya}
           </option>
           {wilayas.map((w) => (
             <option key={w} value={w}>
@@ -116,9 +119,7 @@ export default function ProfilForm({
       </div>
 
       <div>
-        <label className="text-sm font-medium text-ink">
-          Bio / description
-        </label>
+        <label className="text-sm font-medium text-ink">{dict.bio}</label>
         <textarea
           name="description"
           rows={4}
@@ -129,11 +130,13 @@ export default function ProfilForm({
 
       {seller.type === "pro" && (
         <div>
-          <label className="text-sm font-medium text-ink">Métier</label>
+          <label className="text-sm font-medium text-ink">
+            {dict.metier}
+          </label>
           <input
             type="text"
             name="metier"
-            placeholder="Ex : Plombier, Couturière, Photographe..."
+            placeholder={dict.metierPlaceholder}
             defaultValue={metier}
             className="mt-1 w-full rounded-xl border border-line px-4 py-2 text-sm text-ink outline-none focus:border-accent"
           />
@@ -145,17 +148,14 @@ export default function ProfilForm({
         disabled={pending}
         className="mt-2 self-start rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-accent-dark disabled:opacity-60"
       >
-        {pending ? "Enregistrement..." : "Enregistrer"}
+        {pending ? dict.saving : dict.save}
       </button>
     </form>
 
     {seller.type === "pro" && (
       <div className="mt-10">
-        <h2 className="text-lg font-semibold text-ink">Mon portfolio</h2>
-        <p className="mt-1 text-sm text-ink-soft">
-          Chaque réalisation doit avoir entre 1 et 3 photos pour être visible
-          des visiteurs sur votre fiche vendeur.
-        </p>
+        <h2 className="text-lg font-semibold text-ink">{dict.myPortfolio}</h2>
+        <p className="mt-1 text-sm text-ink-soft">{dict.portfolioHint}</p>
 
         <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
           {portfolio.map((item) => (
@@ -168,7 +168,7 @@ export default function ProfilForm({
                 <button
                   type="submit"
                   className="absolute top-2 right-2 text-xs text-ink-soft hover:text-accent-dark"
-                  aria-label="Retirer cette réalisation"
+                  aria-label={dict.removeItem}
                 >
                   ✕
                 </button>
@@ -195,7 +195,7 @@ export default function ProfilForm({
           ))}
           {portfolio.length === 0 && (
             <p className="col-span-full text-sm text-ink-soft">
-              Aucune réalisation ajoutée pour l&apos;instant.
+              {dict.noPortfolioItems}
             </p>
           )}
         </div>
@@ -208,18 +208,18 @@ export default function ProfilForm({
             type="text"
             name="title"
             required
-            placeholder="Titre de la réalisation"
+            placeholder={dict.titlePlaceholder}
             className="w-full rounded-xl border border-line px-4 py-2 text-sm text-ink outline-none focus:border-accent"
           />
           <input
             type="text"
             name="description"
-            placeholder="Description courte (facultatif)"
+            placeholder={dict.descriptionPlaceholder}
             className="w-full rounded-xl border border-line px-4 py-2 text-sm text-ink outline-none focus:border-accent"
           />
           <div>
             <label className="text-xs font-medium text-ink-soft">
-              Photo 1 (obligatoire)
+              {dict.photo1}
             </label>
             <input
               type="file"
@@ -231,7 +231,7 @@ export default function ProfilForm({
           </div>
           <div>
             <label className="text-xs font-medium text-ink-soft">
-              Photo 2 (facultative)
+              {dict.photo2}
             </label>
             <input
               type="file"
@@ -242,7 +242,7 @@ export default function ProfilForm({
           </div>
           <div>
             <label className="text-xs font-medium text-ink-soft">
-              Photo 3 (facultative)
+              {dict.photo3}
             </label>
             <input
               type="file"
@@ -255,7 +255,7 @@ export default function ProfilForm({
             type="submit"
             className="self-start rounded-full border border-accent px-5 py-2 text-sm font-semibold text-accent transition-colors hover:bg-dawn-soft"
           >
-            Ajouter au portfolio
+            {dict.addToPortfolio}
           </button>
         </form>
       </div>

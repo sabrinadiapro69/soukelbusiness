@@ -4,6 +4,7 @@ import { useActionState, useState } from "react";
 import { createListingAction, type CreateListingState } from "@/app/actions";
 import { categories } from "@/lib/queries";
 import { wilayas } from "@/lib/wilayas";
+import type { Dictionary } from "@/lib/i18n/dictionaries/fr";
 
 const postableCategories = categories.filter((c) => c !== "Toutes catégories");
 
@@ -21,7 +22,11 @@ const emojiOptions = [
 
 const initialState: CreateListingState = { error: null };
 
-export default function PublierForm() {
+export default function PublierForm({
+  dict,
+}: {
+  dict: Dictionary["publier"];
+}) {
   const [state, formAction, pending] = useActionState(
     createListingAction,
     initialState
@@ -31,9 +36,7 @@ export default function PublierForm() {
   if (state.success) {
     return (
       <div className="mt-6 rounded-xl bg-green-50 px-4 py-4 text-sm text-green-700">
-        Votre annonce a été soumise avec succès et est en attente de
-        validation par notre équipe. Elle apparaîtra dans le catalogue une
-        fois approuvée.
+        {dict.successMessage}
       </div>
     );
   }
@@ -49,7 +52,7 @@ export default function PublierForm() {
       <input type="hidden" name="emoji" value={emoji} />
       <div>
         <label className="text-sm font-medium text-ink">
-          Choisir une icône
+          {dict.chooseIcon}
         </label>
         <div className="mt-1 flex flex-wrap gap-2">
           {emojiOptions.map((option) => (
@@ -70,7 +73,7 @@ export default function PublierForm() {
       </div>
 
       <div>
-        <label className="text-sm font-medium text-ink">Titre</label>
+        <label className="text-sm font-medium text-ink">{dict.title}</label>
         <input
           type="text"
           name="title"
@@ -81,7 +84,7 @@ export default function PublierForm() {
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
-          <label className="text-sm font-medium text-ink">Prix (DA)</label>
+          <label className="text-sm font-medium text-ink">{dict.price}</label>
           <input
             type="number"
             name="price"
@@ -97,11 +100,13 @@ export default function PublierForm() {
               defaultChecked
               className="h-4 w-4 rounded border-line accent-accent"
             />
-            Prix négociable
+            {dict.negociable}
           </label>
         </div>
         <div>
-          <label className="text-sm font-medium text-ink">Catégorie</label>
+          <label className="text-sm font-medium text-ink">
+            {dict.category}
+          </label>
           <select
             name="category"
             required
@@ -117,7 +122,7 @@ export default function PublierForm() {
       </div>
 
       <div>
-        <label className="text-sm font-medium text-ink">Wilaya</label>
+        <label className="text-sm font-medium text-ink">{dict.wilaya}</label>
         <select
           name="location"
           required
@@ -125,7 +130,7 @@ export default function PublierForm() {
           className="mt-1 w-full rounded-xl border border-line px-4 py-2 text-sm text-ink outline-none focus:border-accent"
         >
           <option value="" disabled>
-            Choisir une wilaya
+            {dict.chooseWilaya}
           </option>
           {wilayas.map((w) => (
             <option key={w} value={w}>
@@ -136,7 +141,9 @@ export default function PublierForm() {
       </div>
 
       <div>
-        <label className="text-sm font-medium text-ink">Description</label>
+        <label className="text-sm font-medium text-ink">
+          {dict.description}
+        </label>
         <textarea
           name="description"
           required
@@ -150,7 +157,7 @@ export default function PublierForm() {
         disabled={pending}
         className="mt-2 self-start rounded-full bg-accent px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-accent-dark disabled:opacity-60"
       >
-        {pending ? "Publication..." : "Publier l'annonce"}
+        {pending ? dict.publishing : dict.publish}
       </button>
     </form>
   );
