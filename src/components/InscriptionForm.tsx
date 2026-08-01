@@ -21,6 +21,7 @@ export default function InscriptionForm({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [accepted, setAccepted] = useState(false);
+  const [honeypot, setHoneypot] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [confirmationSent, setConfirmationSent] = useState(false);
@@ -28,6 +29,13 @@ export default function InscriptionForm({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+
+    if (honeypot) {
+      // Rempli uniquement par des robots (champ invisible pour un humain) :
+      // on fait semblant que ça a marché, sans rien créer.
+      setConfirmationSent(true);
+      return;
+    }
 
     if (!accepted) {
       setError(dict.acceptError);
@@ -74,6 +82,17 @@ export default function InscriptionForm({
 
   return (
     <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
+      <input
+        type="text"
+        name="company"
+        value={honeypot}
+        onChange={(e) => setHoneypot(e.target.value)}
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        className="absolute left-[-9999px] h-0 w-0 opacity-0"
+      />
+
       {error && (
         <div className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700">
           {error}

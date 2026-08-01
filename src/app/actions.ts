@@ -124,6 +124,20 @@ export async function createListingAction(
     return { error: "Le prix doit être un nombre positif." };
   }
 
+  const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
+  const { count: recentCount } = await supabase
+    .from("listings")
+    .select("id", { count: "exact", head: true })
+    .eq("seller_id", user.id)
+    .gte("created_at", oneHourAgo);
+
+  if ((recentCount ?? 0) >= 10) {
+    return {
+      error:
+        "Vous avez publié trop d'annonces récemment. Merci de réessayer dans une heure.",
+    };
+  }
+
   const { error } = await supabase.from("listings").insert({
     seller_id: user.id,
     title,
@@ -203,6 +217,7 @@ export async function addPortfolioItemAction(formData: FormData) {
 
   const title = formData.get("title")?.toString().trim() ?? "";
   const description = formData.get("description")?.toString().trim() ?? "";
+  const MAX_PHOTO_SIZE = 5 * 1024 * 1024; // 5 Mo
   const files = [
     formData.get("photo1"),
     formData.get("photo2"),
@@ -213,6 +228,7 @@ export async function addPortfolioItemAction(formData: FormData) {
   );
 
   if (!title || files.length === 0 || files.length > 3) return;
+  if (files.some((f) => f.size > MAX_PHOTO_SIZE)) return;
 
   const paths: string[] = [];
   for (const file of files) {
