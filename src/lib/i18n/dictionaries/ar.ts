@@ -14,6 +14,7 @@ const ar: Dictionary = {
     offresEnvoyees: "العروض المرسلة",
     offresRecues: "العروض المستلمة",
     moderation: "الإشراف",
+    profil: "ملفي الشخصي",
     bonjour: "مرحبا",
     deconnexion: "تسجيل الخروج",
     connexion: "تسجيل الدخول",

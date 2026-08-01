@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { signOutAction, setLocaleAction } from "@/app/actions";
+import { setLocaleAction } from "@/app/actions";
 import { getLocale, type Locale } from "@/lib/i18n/locale";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import MobileMenu from "@/components/MobileMenu";
+import ProfileMenu from "@/components/ProfileMenu";
 
 const languageLabels: Record<Locale, string> = {
   fr: "FR",
@@ -40,6 +41,9 @@ export default async function SiteHeader() {
     { href: "/#dressing", label: t.dressing },
     { href: "/produits", label: t.annonces },
     { href: "/#confiance", label: t.confiance },
+  ];
+
+  const accountLinks = [
     ...(user
       ? [
           { href: "/mes-offres", label: t.offresEnvoyees },
@@ -85,7 +89,7 @@ export default async function SiteHeader() {
         </div>
       </div>
 
-      <header className="sticky top-0 z-10 bg-paper">
+      <header className="sticky top-0 z-20 bg-paper">
         <div
           className="h-[3px]"
           style={{
@@ -115,22 +119,13 @@ export default async function SiteHeader() {
 
             <div className="ml-auto hidden shrink-0 items-center gap-3.5 lg:flex">
               {user ? (
-                <>
-                  <Link
-                    href="/profil"
-                    className="text-sm font-medium text-ink-soft hover:text-ink"
-                  >
-                    {t.bonjour} {displayName}
-                  </Link>
-                  <form action={signOutAction}>
-                    <button
-                      type="submit"
-                      className="rounded-full border border-line px-5 py-2.5 text-sm font-semibold transition-colors hover:border-ink"
-                    >
-                      {t.deconnexion}
-                    </button>
-                  </form>
-                </>
+                <ProfileMenu
+                  displayName={displayName}
+                  accountLinks={accountLinks}
+                  profilLabel={t.profil}
+                  bonjourLabel={t.bonjour}
+                  deconnexionLabel={t.deconnexion}
+                />
               ) : (
                 <Link
                   href="/connexion"
@@ -149,7 +144,7 @@ export default async function SiteHeader() {
 
             <div className="ml-auto lg:hidden">
               <MobileMenu
-                navLinks={navLinks}
+                navLinks={[...navLinks, ...accountLinks]}
                 isLoggedIn={Boolean(user)}
                 displayName={displayName}
                 bonjourLabel={t.bonjour}

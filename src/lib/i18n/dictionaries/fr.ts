@@ -12,6 +12,7 @@ const fr = {
     offresEnvoyees: "Offres envoyées",
     offresRecues: "Offres reçues",
     moderation: "Modération",
+    profil: "Mon profil",
     bonjour: "Bonjour",
     deconnexion: "Se déconnecter",
     connexion: "Se connecter",

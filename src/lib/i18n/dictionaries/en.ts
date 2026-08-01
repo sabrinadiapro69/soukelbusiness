@@ -14,6 +14,7 @@ const en: Dictionary = {
     offresEnvoyees: "Sent offers",
     offresRecues: "Received offers",
     moderation: "Moderation",
+    profil: "My profile",
     bonjour: "Hello",
     deconnexion: "Sign out",
     connexion: "Sign in",

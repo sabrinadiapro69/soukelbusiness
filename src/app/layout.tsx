@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Fraunces, Inter, IBM_Plex_Mono } from "next/font/google";
 import { SITE_URL } from "@/lib/site";
 import { getLocale } from "@/lib/i18n/locale";
+import BackToTopButton from "@/components/BackToTopButton";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -63,6 +64,7 @@ export default async function RootLayout({
     >
       <body className="min-h-full flex flex-col bg-(--bg) text-(--ink) font-sans">
         {children}
+        <BackToTopButton />
       </body>
     </html>
   );
