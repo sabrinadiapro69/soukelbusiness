@@ -15,6 +15,8 @@ import { createClient } from "@/lib/supabase/server";
 import NegotiationPanel from "@/components/NegotiationPanel";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import { getLocale } from "@/lib/i18n/locale";
+import { getDictionary } from "@/lib/i18n/dictionaries";
 
 export const dynamic = "force-dynamic";
 
@@ -56,6 +58,10 @@ export default async function ProduitPage({
     notFound();
   }
 
+  const locale = await getLocale();
+  const dict = await getDictionary(locale);
+  const t = dict.produit;
+
   const similarListings = await getListingsByCategory(
     listing.category,
     listing.id
@@ -95,7 +101,7 @@ export default async function ProduitPage({
           href="/produits"
           className="text-sm font-medium text-ink-soft hover:text-ink"
         >
-          ← Retour aux annonces
+          {t.back}
         </Link>
 
         <div className="mt-6 grid grid-cols-1 gap-10 lg:grid-cols-2">
@@ -113,7 +119,7 @@ export default async function ProduitPage({
                     : "bg-bg-alt text-ink-soft"
                 }`}
               >
-                {listing.seller?.type === "pro" ? "Pro" : "Particulier"}
+                {listing.seller?.type === "pro" ? t.pro : t.particulier}
               </span>
             </div>
 
@@ -128,11 +134,11 @@ export default async function ProduitPage({
                     : "bg-bg-alt text-ink-soft"
                 }`}
               >
-                {listing.negociable ? "Négociable" : "Prix ferme"}
+                {listing.negociable ? t.negociable : t.ferme}
               </span>
             </div>
             <span className="text-xs text-ink-soft">
-              {formatEurApprox(listing.price, taux)} (taux indicatif)
+              {formatEurApprox(listing.price, taux)} {t.tauxIndicatif}
             </span>
 
             <p className="leading-relaxed text-ink-soft">
@@ -148,7 +154,7 @@ export default async function ProduitPage({
             </div>
 
             <div className="mt-4 rounded-2xl border border-line bg-paper p-5">
-              <p className="text-sm text-ink-soft">Vendu par</p>
+              <p className="text-sm text-ink-soft">{t.soldBy}</p>
               <Link
                 href={`/vendeurs/${listing.seller_id}`}
                 className="mt-1 inline-block font-semibold text-ink hover:text-accent"
@@ -157,7 +163,7 @@ export default async function ProduitPage({
               </Link>
               <p className="text-sm text-ink-soft">📍 {listing.location}</p>
               <button className="mt-4 w-full rounded-full border border-accent px-6 py-3 text-sm font-semibold text-accent transition-colors hover:bg-dawn-soft">
-                Contacter le vendeur
+                {t.contactSeller}
               </button>
               <a
                 href={whatsappHref}
@@ -165,7 +171,7 @@ export default async function ProduitPage({
                 rel="noopener noreferrer"
                 className="mt-2 flex w-full items-center justify-center gap-2 rounded-full bg-[#25D366] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#1ebe57]"
               >
-                Partager sur WhatsApp
+                {t.shareWhatsapp}
               </a>
             </div>
 
@@ -173,7 +179,7 @@ export default async function ProduitPage({
               listingId={listing.id}
               askingPrice={listing.price}
               negociable={listing.negociable}
-              sellerName={listing.seller?.name ?? "le vendeur"}
+              sellerName={listing.seller?.name ?? dict.negotiation.defaultSellerName}
               userId={user?.id ?? null}
               offer={offer}
             />
@@ -182,7 +188,7 @@ export default async function ProduitPage({
 
         {similarListings.length > 0 && (
           <section className="mt-16">
-            <h2 className="text-xl font-bold text-ink">Annonces similaires</h2>
+            <h2 className="text-xl font-bold text-ink">{t.similarListings}</h2>
             <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-3">
               {similarListings.map((item) => (
                 <Link

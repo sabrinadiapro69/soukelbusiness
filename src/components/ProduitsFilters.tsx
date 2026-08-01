@@ -10,15 +10,18 @@ import {
   type Listing,
   type SellerType,
 } from "@/lib/queries";
+import type { Dictionary } from "@/lib/i18n/dictionaries/fr";
 
 type SortOrder = "recent" | "price-asc" | "price-desc";
 
 export default function ProduitsFilters({
   listings,
   taux,
+  dict,
 }: {
   listings: Listing[];
   taux: number;
+  dict: Dictionary["produits"];
 }) {
   const [sellerFilter, setSellerFilter] = useState<"tous" | SellerType>(
     "tous"
@@ -47,18 +50,16 @@ export default function ProduitsFilters({
   return (
     <>
       <p className="mt-1 text-sm text-ink-soft">
-        {filteredListings.length} annonce
-        {filteredListings.length > 1 ? "s" : ""} trouvée
-        {filteredListings.length > 1 ? "s" : ""}
+        {dict.resultsCount(filteredListings.length)}
       </p>
 
       <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex gap-2">
           {(
             [
-              { value: "tous", label: "Tous les vendeurs" },
-              { value: "particulier", label: "Particuliers" },
-              { value: "pro", label: "Professionnels" },
+              { value: "tous", label: dict.filterAll },
+              { value: "particulier", label: dict.filterParticuliers },
+              { value: "pro", label: dict.filterPro },
             ] as const
           ).map((option) => (
             <button
@@ -92,9 +93,9 @@ export default function ProduitsFilters({
             onChange={(e) => setSort(e.target.value as SortOrder)}
             className="rounded-full border border-line bg-paper px-4 py-2 text-sm text-ink-soft"
           >
-            <option value="recent">Plus récentes</option>
-            <option value="price-asc">Prix croissant</option>
-            <option value="price-desc">Prix décroissant</option>
+            <option value="recent">{dict.sortRecent}</option>
+            <option value="price-asc">{dict.sortPriceAsc}</option>
+            <option value="price-desc">{dict.sortPriceDesc}</option>
           </select>
         </div>
       </div>
@@ -119,7 +120,9 @@ export default function ProduitsFilters({
                       : "bg-bg-alt text-ink-soft"
                   }`}
                 >
-                  {listing.seller?.type === "pro" ? "Pro" : "Particulier"}
+                  {listing.seller?.type === "pro"
+                    ? dict.cardPro
+                    : dict.cardParticulier}
                 </span>
               </div>
               <div className="flex items-center gap-2">
@@ -133,7 +136,7 @@ export default function ProduitsFilters({
                       : "bg-bg-alt text-ink-soft"
                   }`}
                 >
-                  {listing.negociable ? "Négociable" : "Prix ferme"}
+                  {listing.negociable ? dict.cardNegociable : dict.cardFerme}
                 </span>
               </div>
               <span className="text-[11px] text-ink-soft/70">
@@ -152,9 +155,7 @@ export default function ProduitsFilters({
       </div>
 
       {filteredListings.length === 0 && (
-        <p className="mt-16 text-center text-ink-soft">
-          Aucune annonce ne correspond à ces filtres.
-        </p>
+        <p className="mt-16 text-center text-ink-soft">{dict.noResults}</p>
       )}
     </>
   );

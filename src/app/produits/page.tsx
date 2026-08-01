@@ -3,6 +3,8 @@ import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import ProduitsFilters from "@/components/ProduitsFilters";
 import { getListings, getTauxChange } from "@/lib/queries";
+import { getLocale } from "@/lib/i18n/locale";
+import { getDictionary } from "@/lib/i18n/dictionaries";
 
 export const dynamic = "force-dynamic";
 
@@ -13,6 +15,9 @@ export const metadata: Metadata = {
 };
 
 export default async function ProduitsPage() {
+  const locale = await getLocale();
+  const dict = await getDictionary(locale);
+
   const [listings, taux] = await Promise.all([
     getListings(),
     getTauxChange().catch(() => 260),
@@ -24,9 +29,9 @@ export default async function ProduitsPage() {
 
       <main className="mx-auto w-full max-w-6xl flex-1 px-6 py-10">
         <h1 className="text-2xl font-bold text-ink">
-          Toutes les annonces
+          {dict.produits.pageTitle}
         </h1>
-        <ProduitsFilters listings={listings} taux={taux} />
+        <ProduitsFilters listings={listings} taux={taux} dict={dict.produits} />
       </main>
 
       <SiteFooter />

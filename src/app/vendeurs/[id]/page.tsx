@@ -13,6 +13,8 @@ import {
 } from "@/lib/queries";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import { getLocale } from "@/lib/i18n/locale";
+import { getDictionary } from "@/lib/i18n/dictionaries";
 
 export const dynamic = "force-dynamic";
 
@@ -64,6 +66,10 @@ export default async function VendeurPage({
     notFound();
   }
 
+  const locale = await getLocale();
+  const dict = await getDictionary(locale);
+  const t = dict.vendeur;
+
   const [sellerListings, reviews, proProfile, portfolio] = await Promise.all([
     getListingsBySeller(seller.id),
     getReviewsBySeller(seller.id).catch(() => []),
@@ -84,7 +90,7 @@ export default async function VendeurPage({
           href="/produits"
           className="text-sm font-medium text-ink-soft hover:text-ink"
         >
-          ← Retour aux annonces
+          {t.back}
         </Link>
 
         <div className="mt-6 flex flex-col gap-6 rounded-2xl border border-line bg-paper p-6 sm:flex-row sm:items-center">
@@ -101,11 +107,11 @@ export default async function VendeurPage({
                     : "bg-bg-alt text-ink-soft"
                 }`}
               >
-                {seller.type === "pro" ? "Professionnel" : "Particulier"}
+                {seller.type === "pro" ? t.professionnel : t.particulier}
               </span>
               {proProfile?.verified && (
                 <span className="flex items-center gap-1 rounded-full bg-gold px-3 py-1 text-xs font-bold text-[#3A2C05]">
-                  🏅 Talentueux
+                  {t.talentueux}
                 </span>
               )}
             </div>
@@ -118,11 +124,15 @@ export default async function VendeurPage({
               {seller.description}
             </p>
             <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm text-ink-soft">
-              <span>📍 Wilaya de {seller.city}</span>
               <span>
-                📅 Membre depuis {formatMemberSince(seller.member_since)}
+                {t.wilayaDe} {seller.city}
               </span>
-              <span>🤝 {seller.transactions_count} transactions</span>
+              <span>
+                {t.memberSince} {formatMemberSince(seller.member_since)}
+              </span>
+              <span>
+                🤝 {seller.transactions_count} {t.transactions}
+              </span>
               <span>
                 <StarRating rating={seller.rating} />{" "}
                 {seller.rating.toFixed(1)}/5
@@ -133,7 +143,7 @@ export default async function VendeurPage({
 
         <section className="mt-12">
           <h2 className="text-xl font-bold text-ink">
-            Produits de {seller.name}
+            {t.productsOf} {seller.name}
           </h2>
           {sellerListings.length > 0 ? (
             <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -158,15 +168,13 @@ export default async function VendeurPage({
               ))}
             </div>
           ) : (
-            <p className="mt-4 text-sm text-ink-soft">
-              Ce vendeur n&apos;a pas d&apos;annonce en ligne actuellement.
-            </p>
+            <p className="mt-4 text-sm text-ink-soft">{t.noListings}</p>
           )}
         </section>
 
         {seller.type === "pro" && portfolio.length > 0 && (
           <section className="mt-12">
-            <h2 className="text-xl font-bold text-ink">Portfolio</h2>
+            <h2 className="text-xl font-bold text-ink">{t.portfolio}</h2>
             <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {portfolio.map((item) => (
                 <div
@@ -199,7 +207,7 @@ export default async function VendeurPage({
 
         <section className="mt-12">
           <h2 className="text-xl font-bold text-ink">
-            Avis ({reviews.length})
+            {t.reviews} ({reviews.length})
           </h2>
           {reviews.length > 0 ? (
             <div className="mt-6 flex flex-col gap-4">
@@ -210,7 +218,7 @@ export default async function VendeurPage({
                 >
                   <div className="flex items-center justify-between">
                     <span className="font-semibold text-ink">
-                      {review.buyer?.avatar_emoji} {review.buyer?.name ?? "Acheteur"}
+                      {review.buyer?.avatar_emoji} {review.buyer?.name ?? t.buyer}
                     </span>
                     <StarRating rating={review.rating} />
                   </div>
@@ -224,9 +232,7 @@ export default async function VendeurPage({
               ))}
             </div>
           ) : (
-            <p className="mt-4 text-sm text-ink-soft">
-              Ce vendeur n&apos;a pas encore reçu d&apos;avis.
-            </p>
+            <p className="mt-4 text-sm text-ink-soft">{t.noReviews}</p>
           )}
         </section>
       </main>
