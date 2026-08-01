@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { signOutAction, setLocaleAction } from "@/app/actions";
 import { getLocale, type Locale } from "@/lib/i18n/locale";
 import { getDictionary } from "@/lib/i18n/dictionaries";
+import MobileMenu from "@/components/MobileMenu";
 
 const languageLabels: Record<Locale, string> = {
   fr: "FR",
@@ -32,6 +33,21 @@ export default async function SiteHeader() {
       .maybeSingle();
     isAdmin = seller?.is_admin ?? false;
   }
+
+  const navLinks = [
+    { href: "/#rayons", label: t.rayons },
+    { href: "/#artisanat", label: t.artisanat },
+    { href: "/#dressing", label: t.dressing },
+    { href: "/produits", label: t.annonces },
+    { href: "/#confiance", label: t.confiance },
+    ...(user
+      ? [
+          { href: "/mes-offres", label: t.offresEnvoyees },
+          { href: "/offres", label: t.offresRecues },
+        ]
+      : []),
+    ...(isAdmin ? [{ href: "/admin", label: t.moderation }] : []),
+  ];
 
   return (
     <>
@@ -85,69 +101,24 @@ export default async function SiteHeader() {
               </span>
             </Link>
 
-            <nav className="hidden shrink-0 gap-6 text-[14.5px] font-medium sm:flex">
-              <Link
-                href="/#rayons"
-                className="border-b-2 border-transparent py-1.5 hover:border-accent"
-              >
-                {t.rayons}
-              </Link>
-              <Link
-                href="/#artisanat"
-                className="border-b-2 border-transparent py-1.5 hover:border-accent"
-              >
-                {t.artisanat}
-              </Link>
-              <Link
-                href="/#dressing"
-                className="border-b-2 border-transparent py-1.5 hover:border-accent"
-              >
-                {t.dressing}
-              </Link>
-              <Link
-                href="/produits"
-                className="border-b-2 border-transparent py-1.5 hover:border-accent"
-              >
-                {t.annonces}
-              </Link>
-              <Link
-                href="/#confiance"
-                className="border-b-2 border-transparent py-1.5 hover:border-accent"
-              >
-                {t.confiance}
-              </Link>
-              {user && (
-                <>
-                  <Link
-                    href="/mes-offres"
-                    className="border-b-2 border-transparent py-1.5 hover:border-accent"
-                  >
-                    {t.offresEnvoyees}
-                  </Link>
-                  <Link
-                    href="/offres"
-                    className="border-b-2 border-transparent py-1.5 hover:border-accent"
-                  >
-                    {t.offresRecues}
-                  </Link>
-                </>
-              )}
-              {isAdmin && (
+            <nav className="hidden shrink-0 gap-6 text-[14.5px] font-medium lg:flex">
+              {navLinks.map((link) => (
                 <Link
-                  href="/admin"
+                  key={link.href}
+                  href={link.href}
                   className="border-b-2 border-transparent py-1.5 hover:border-accent"
                 >
-                  {t.moderation}
+                  {link.label}
                 </Link>
-              )}
+              ))}
             </nav>
 
-            <div className="ml-auto flex shrink-0 items-center gap-3.5">
+            <div className="ml-auto hidden shrink-0 items-center gap-3.5 lg:flex">
               {user ? (
                 <>
                   <Link
                     href="/profil"
-                    className="hidden text-sm font-medium text-ink-soft hover:text-ink sm:inline"
+                    className="text-sm font-medium text-ink-soft hover:text-ink"
                   >
                     {t.bonjour} {displayName}
                   </Link>
@@ -174,6 +145,18 @@ export default async function SiteHeader() {
               >
                 {t.deposer}
               </Link>
+            </div>
+
+            <div className="ml-auto lg:hidden">
+              <MobileMenu
+                navLinks={navLinks}
+                isLoggedIn={Boolean(user)}
+                displayName={displayName}
+                bonjourLabel={t.bonjour}
+                deconnexionLabel={t.deconnexion}
+                connexionLabel={t.connexion}
+                deposerLabel={t.deposer}
+              />
             </div>
           </div>
         </div>

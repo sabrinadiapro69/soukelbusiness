@@ -114,8 +114,8 @@ export default async function Home() {
                 {t.heroSubtitle}
               </p>
 
-              <form className="mt-8 flex w-full max-w-2xl overflow-hidden rounded-2xl border-[1.5px] border-ink bg-paper shadow-[4px_4px_0_var(--ink)]">
-                <select className="border-r border-line px-4 py-4 text-[15px] text-ink-soft outline-none">
+              <form className="mt-8 flex w-full max-w-2xl flex-col overflow-hidden rounded-2xl border-[1.5px] border-ink bg-paper shadow-[4px_4px_0_var(--ink)] sm:flex-row">
+                <select className="w-full border-b border-line px-4 py-4 text-[15px] text-ink-soft outline-none sm:w-auto sm:border-r sm:border-b-0">
                   <option>{t.searchAllCategories}</option>
                   {t.rayons.slice(0, 4).map((r) => (
                     <option key={r.title}>{r.title}</option>
@@ -124,11 +124,11 @@ export default async function Home() {
                 <input
                   type="text"
                   placeholder={t.searchPlaceholder}
-                  className="min-w-0 flex-1 px-4 py-4 text-[15px] outline-none placeholder:text-[#9C9587]"
+                  className="w-full min-w-0 flex-1 px-4 py-4 text-[15px] outline-none placeholder:text-[#9C9587]"
                 />
                 <button
                   type="button"
-                  className="flex items-center gap-2 bg-primary px-7 font-semibold text-white transition-colors hover:bg-primary-dark"
+                  className="flex items-center justify-center gap-2 bg-primary px-7 py-4 font-semibold text-white transition-colors hover:bg-primary-dark"
                 >
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4">
                     <circle cx="11" cy="11" r="7" />
@@ -199,7 +199,7 @@ export default async function Home() {
         </section>
 
         {/* Rayons */}
-        <section id="rayons" className="py-12">
+        <section id="rayons" className="scroll-mt-[7.5rem] py-12">
           <div className="mx-auto max-w-6xl px-6">
             <div className="mb-6">
               <span className="mb-1.5 block font-mono text-[11.5px] tracking-wide text-dawn-dark uppercase">
@@ -233,7 +233,7 @@ export default async function Home() {
         </section>
 
         {/* Artisanat & Les Talentueux */}
-        <section id="artisanat" className="py-12">
+        <section id="artisanat" className="scroll-mt-[7.5rem] py-12">
           <div className="mx-auto max-w-6xl px-6">
             <div className="mb-6">
               <span className="mb-1.5 block font-mono text-[11.5px] tracking-wide text-dawn-dark uppercase">
@@ -363,7 +363,7 @@ export default async function Home() {
         </section>
 
         {/* Dressing */}
-        <section id="dressing" className="bg-bg-alt py-12">
+        <section id="dressing" className="scroll-mt-[7.5rem] bg-bg-alt py-12">
           <div className="mx-auto max-w-6xl px-6">
             <div className="mb-6 flex items-end justify-between">
               <div>
@@ -383,7 +383,7 @@ export default async function Home() {
         </section>
 
         {/* Annonces récentes */}
-        <section id="annonces" className="py-12">
+        <section id="annonces" className="scroll-mt-[7.5rem] py-12">
           <div className="mx-auto max-w-6xl px-6">
             <div className="mb-6 flex items-end justify-between">
               <div>
@@ -406,7 +406,7 @@ export default async function Home() {
         </section>
 
         {/* Confiance */}
-        <section id="confiance" className="bg-bg-alt py-12">
+        <section id="confiance" className="scroll-mt-[7.5rem] bg-bg-alt py-12">
           <div className="mx-auto max-w-6xl px-6">
             <div className="mb-6">
               <span className="mb-1.5 block font-mono text-[11.5px] tracking-wide text-dawn-dark uppercase">
@@ -418,9 +418,18 @@ export default async function Home() {
             </div>
             <div className="grid grid-cols-1 gap-[22px] sm:grid-cols-3">
               <div className="rounded-xl border border-line bg-paper p-[26px]">
-                <span className="mb-3 block font-mono text-xs font-semibold text-accent">
-                  01
-                </span>
+                <div className="mb-3.5 flex h-11 w-11 items-center justify-center rounded-full bg-bg-alt">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                    className="h-5 w-5 text-accent"
+                  >
+                    <path d="M12 3 5 6v5c0 5 3 8.5 7 10 4-1.5 7-5 7-10V6l-7-3Z" />
+                    <path d="M9 12l2 2 4-4" />
+                  </svg>
+                </div>
                 <h3 className="mb-2 text-[16.5px] font-semibold">
                   {t.trust1Title}
                 </h3>
@@ -429,9 +438,18 @@ export default async function Home() {
                 </p>
               </div>
               <div className="rounded-xl border border-line bg-paper p-[26px]">
-                <span className="mb-3 block font-mono text-xs font-semibold text-accent">
-                  02
-                </span>
+                <div className="mb-3.5 flex h-11 w-11 items-center justify-center rounded-full bg-bg-alt">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                    className="h-5 w-5 text-accent"
+                  >
+                    <path d="M12 21s7-7.5 7-13a7 7 0 1 0-14 0c0 5.5 7 13 7 13Z" />
+                    <path d="M9.5 8.5l2 2 3-3" />
+                  </svg>
+                </div>
                 <h3 className="mb-2 text-[16.5px] font-semibold">
                   {t.trust2Title}
                 </h3>
@@ -440,9 +458,18 @@ export default async function Home() {
                 </p>
               </div>
               <div className="rounded-xl border border-line bg-paper p-[26px]">
-                <span className="mb-3 block font-mono text-xs font-semibold text-accent">
-                  03
-                </span>
+                <div className="mb-3.5 flex h-11 w-11 items-center justify-center rounded-full bg-bg-alt">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                    className="h-5 w-5 text-accent"
+                  >
+                    <path d="M4 5h16v11H9l-4 4V5Z" />
+                    <path d="M8 9.5h8M8 12.5h5" />
+                  </svg>
+                </div>
                 <h3 className="mb-2 text-[16.5px] font-semibold">
                   {t.trust3Title}
                 </h3>
