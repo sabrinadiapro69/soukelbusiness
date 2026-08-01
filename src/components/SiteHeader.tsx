@@ -1,10 +1,13 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { setLocaleAction } from "@/app/actions";
+import { setLocaleAction, setWilayaAction } from "@/app/actions";
 import { getLocale, type Locale } from "@/lib/i18n/locale";
 import { getDictionary } from "@/lib/i18n/dictionaries";
+import { getWilayaPref } from "@/lib/wilaya-pref";
+import { wilayas } from "@/lib/wilayas";
 import MobileMenu from "@/components/MobileMenu";
 import ProfileMenu from "@/components/ProfileMenu";
+import WilayaSwitcher from "@/components/WilayaSwitcher";
 
 const languageLabels: Record<Locale, string> = {
   fr: "FR",
@@ -21,6 +24,9 @@ export default async function SiteHeader() {
   const locale = await getLocale();
   const dict = await getDictionary(locale);
   const t = dict.header;
+
+  const wilayaPref = await getWilayaPref();
+  const locationLabel = wilayaPref ? `📍 ${wilayaPref}` : t.location;
 
   const displayName =
     (user?.user_metadata?.name as string | undefined) ?? user?.email;
@@ -58,11 +64,13 @@ export default async function SiteHeader() {
       <div className="bg-ink text-[13px] text-[#EFE9DA]">
         <div className="mx-auto flex h-[34px] max-w-6xl items-center justify-between px-6">
           <div className="flex gap-5">
-            <span className="cursor-pointer opacity-100">
-              {t.location}{" "}
-              <em className="text-xs opacity-60 underline decoration-1 underline-offset-2 not-italic">
-                · {t.change}
-              </em>
+            <span className="opacity-100">
+              {locationLabel}{" "}
+              <WilayaSwitcher
+                wilayas={wilayas}
+                changeLabel={t.change}
+                action={setWilayaAction}
+              />
             </span>
             <span className="hidden opacity-85 sm:inline">
               {t.assistance}
