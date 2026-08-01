@@ -19,6 +19,7 @@ const en: Dictionary = {
     bonjour: "Hello",
     deconnexion: "Sign out",
     connexion: "Sign in",
+    inscription: "Sign up",
     deposer: "+ Post a listing",
   },
   footer: {
@@ -487,6 +488,29 @@ const en: Dictionary = {
       "We implement reasonable measures to protect your data, without being able to guarantee absolute security.",
     mentionsLink: "Legal Notice",
     cguLink: "Terms of Service",
+  },
+  pro: {
+    pageTitle: "Souk El Business Pro",
+    heroTitle: "Sell as a professional on Souk El Business",
+    heroSubtitle:
+      "Verified badge, portfolio of work, enhanced visibility: give your business the place it deserves.",
+    benefit1Title: "Verified badge",
+    benefit1Text:
+      "A visible badge on all your listings to reassure buyers.",
+    benefit2Title: "Portfolio of work",
+    benefit2Text:
+      "Showcase your best work with photos, right on your profile.",
+    benefit3Title: "Featured in Les Talentueux",
+    benefit3Text:
+      "Verified professional profiles are highlighted on the homepage.",
+    benefit4Title: "Customer reviews",
+    benefit4Text: "Collect verified reviews tied to your real transactions.",
+    ctaTitle: "Ready to grow your business?",
+    ctaButtonSignup: "Create a professional account",
+    ctaButtonManage: "Manage my pro profile",
+    alreadyParticulier: "Your account is currently an individual account.",
+    contactToUpgrade: "Contact us to switch to a professional account.",
+    contactLink: "Contact us",
   },
 };
 

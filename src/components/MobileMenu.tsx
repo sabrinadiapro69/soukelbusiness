@@ -13,6 +13,7 @@ export default function MobileMenu({
   bonjourLabel,
   deconnexionLabel,
   connexionLabel,
+  inscriptionLabel,
   deposerLabel,
 }: {
   navLinks: NavLink[];
@@ -21,6 +22,7 @@ export default function MobileMenu({
   bonjourLabel: string;
   deconnexionLabel: string;
   connexionLabel: string;
+  inscriptionLabel: string;
   deposerLabel: string;
 }) {
   const [open, setOpen] = useState(false);
@@ -86,13 +88,22 @@ export default function MobileMenu({
                 </form>
               </>
             ) : (
-              <Link
-                href="/connexion"
-                onClick={() => setOpen(false)}
-                className="rounded-full border border-line px-5 py-2.5 text-center text-sm font-semibold text-ink"
-              >
-                {connexionLabel}
-              </Link>
+              <>
+                <Link
+                  href="/inscription"
+                  onClick={() => setOpen(false)}
+                  className="rounded-full border border-line px-5 py-2.5 text-center text-sm font-semibold text-ink"
+                >
+                  {inscriptionLabel}
+                </Link>
+                <Link
+                  href="/connexion"
+                  onClick={() => setOpen(false)}
+                  className="px-2 py-1.5 text-center text-sm font-medium text-ink-soft"
+                >
+                  {connexionLabel}
+                </Link>
+              </>
             )}
             <Link
               href="/publier"

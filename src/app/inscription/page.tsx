@@ -4,9 +4,14 @@ import InscriptionForm from "@/components/InscriptionForm";
 import { getLocale } from "@/lib/i18n/locale";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 
-export default async function InscriptionPage() {
+export default async function InscriptionPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ type?: string }>;
+}) {
   const locale = await getLocale();
   const dict = await getDictionary(locale);
+  const { type } = await searchParams;
 
   return (
     <div className="flex flex-1 flex-col">
@@ -16,7 +21,11 @@ export default async function InscriptionPage() {
         <h1 className="text-2xl font-bold text-ink">
           {dict.inscription.pageTitle}
         </h1>
-        <InscriptionForm dict={dict.inscription} locale={locale} />
+        <InscriptionForm
+          dict={dict.inscription}
+          locale={locale}
+          defaultType={type === "pro" ? "pro" : "particulier"}
+        />
       </main>
 
       <SiteFooter />

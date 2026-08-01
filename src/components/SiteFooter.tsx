@@ -46,7 +46,7 @@ export default async function SiteFooter() {
             <Link href="/contact" className="mb-2 block text-[13.5px]">
               {t.presse}
             </Link>
-            <Link href="/publier" className="mb-2 block text-[13.5px]">
+            <Link href="/pro" className="mb-2 block text-[13.5px]">
               {t.pro}
             </Link>
           </div>

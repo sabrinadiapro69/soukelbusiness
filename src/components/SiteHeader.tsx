@@ -80,7 +80,7 @@ export default async function SiteHeader() {
               {t.assistance}
             </Link>
             <Link
-              href="/publier"
+              href="/pro"
               className="hidden opacity-85 hover:opacity-100 sm:inline"
             >
               {t.pro}
@@ -144,12 +144,20 @@ export default async function SiteHeader() {
                   deconnexionLabel={t.deconnexion}
                 />
               ) : (
-                <Link
-                  href="/connexion"
-                  className="rounded-full border border-line px-5 py-2.5 text-sm font-semibold transition-colors hover:border-ink"
-                >
-                  {t.connexion}
-                </Link>
+                <>
+                  <Link
+                    href="/connexion"
+                    className="hidden text-sm font-medium text-ink-soft hover:text-ink xl:inline"
+                  >
+                    {t.connexion}
+                  </Link>
+                  <Link
+                    href="/inscription"
+                    className="rounded-full border border-line px-5 py-2.5 text-sm font-semibold transition-colors hover:border-ink"
+                  >
+                    {t.inscription}
+                  </Link>
+                </>
               )}
               <Link
                 href="/publier"
@@ -167,6 +175,7 @@ export default async function SiteHeader() {
                 bonjourLabel={t.bonjour}
                 deconnexionLabel={t.deconnexion}
                 connexionLabel={t.connexion}
+                inscriptionLabel={t.inscription}
                 deposerLabel={t.deposer}
               />
             </div>

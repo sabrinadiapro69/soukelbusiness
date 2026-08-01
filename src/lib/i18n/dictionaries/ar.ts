@@ -19,6 +19,7 @@ const ar: Dictionary = {
     bonjour: "مرحبا",
     deconnexion: "تسجيل الخروج",
     connexion: "تسجيل الدخول",
+    inscription: "إنشاء حساب",
     deposer: "+ أضف إعلانا",
   },
   footer: {
@@ -477,6 +478,26 @@ const ar: Dictionary = {
       "نطبق تدابير معقولة لحماية بياناتك، دون أن نتمكن من ضمان أمان مطلق.",
     mentionsLink: "الإشعار القانوني",
     cguLink: "الشروط والأحكام",
+  },
+  pro: {
+    pageTitle: "سوق البيزنس برو",
+    heroTitle: "بع كمحترف على سوق البيزنس",
+    heroSubtitle:
+      "شارة موثقة، معرض أعمال، ظهور معزز: امنح نشاطك المكانة التي يستحقها.",
+    benefit1Title: "شارة موثقة",
+    benefit1Text: "شارة ظاهرة على جميع إعلاناتك لطمأنة المشترين.",
+    benefit2Title: "معرض الأعمال",
+    benefit2Text: "اعرض أفضل أعمالك بالصور مباشرة على ملفك الشخصي.",
+    benefit3Title: "الظهور في قسم الموهوبون",
+    benefit3Text: "يتم إبراز الملفات الاحترافية الموثقة في الصفحة الرئيسية.",
+    benefit4Title: "آراء العملاء",
+    benefit4Text: "اجمع آراء موثقة مرتبطة بمعاملاتك الحقيقية.",
+    ctaTitle: "مستعد لتطوير نشاطك؟",
+    ctaButtonSignup: "إنشاء حساب احترافي",
+    ctaButtonManage: "إدارة ملفي الاحترافي",
+    alreadyParticulier: "حسابك حاليا حساب فردي.",
+    contactToUpgrade: "تواصل معنا للتحويل إلى حساب احترافي.",
+    contactLink: "تواصل معنا",
   },
 };
 

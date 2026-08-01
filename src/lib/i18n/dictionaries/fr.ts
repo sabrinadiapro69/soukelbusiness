@@ -17,6 +17,7 @@ const fr = {
     bonjour: "Bonjour",
     deconnexion: "Se déconnecter",
     connexion: "Se connecter",
+    inscription: "S'inscrire",
     deposer: "+ Déposer une annonce",
   },
   footer: {
@@ -491,6 +492,30 @@ const fr = {
       "Nous mettons en œuvre des mesures raisonnables pour protéger vos données, sans pouvoir garantir une sécurité absolue.",
     mentionsLink: "Mentions légales",
     cguLink: "Conditions générales d'utilisation",
+  },
+  pro: {
+    pageTitle: "Souk El Business Pro",
+    heroTitle: "Vendez comme un professionnel sur Souk El Business",
+    heroSubtitle:
+      "Badge vérifié, portfolio de réalisations, visibilité renforcée : donnez toute sa place à votre activité.",
+    benefit1Title: "Badge vérifié",
+    benefit1Text:
+      "Un badge visible sur toutes vos annonces pour rassurer vos acheteurs.",
+    benefit2Title: "Portfolio de réalisations",
+    benefit2Text:
+      "Montrez vos plus belles réalisations en photos, directement sur votre profil.",
+    benefit3Title: "Visibilité dans Les Talentueux",
+    benefit3Text:
+      "Les profils professionnels vérifiés sont mis en avant sur la page d'accueil.",
+    benefit4Title: "Avis clients",
+    benefit4Text:
+      "Récoltez des avis vérifiés liés à vos transactions réelles.",
+    ctaTitle: "Prêt à développer votre activité ?",
+    ctaButtonSignup: "Créer un compte professionnel",
+    ctaButtonManage: "Gérer mon profil pro",
+    alreadyParticulier: "Votre compte est actuellement un compte particulier.",
+    contactToUpgrade: "Contactez-nous pour passer en compte professionnel.",
+    contactLink: "Nous contacter",
   },
 };
 

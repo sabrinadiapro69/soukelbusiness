@@ -11,13 +11,15 @@ import { formatConfirmationSent } from "@/lib/i18n/format";
 export default function InscriptionForm({
   dict,
   locale,
+  defaultType = "particulier",
 }: {
   dict: Dictionary["inscription"];
   locale: Locale;
+  defaultType?: "particulier" | "pro";
 }) {
   const [name, setName] = useState("");
   const [city, setCity] = useState("");
-  const [type, setType] = useState<"particulier" | "pro">("particulier");
+  const [type, setType] = useState<"particulier" | "pro">(defaultType);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [accepted, setAccepted] = useState(false);
