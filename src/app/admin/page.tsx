@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { approveListingAction, rejectListingAction } from "@/app/actions";
-import { formatDA } from "@/lib/queries";
+import { formatDA, getListingPhotoUrl } from "@/lib/queries";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 
@@ -52,8 +52,16 @@ export default async function AdminPage() {
               key={listing.id}
               className="flex flex-col gap-4 rounded-2xl border border-line bg-paper p-5 sm:flex-row sm:items-center"
             >
-              <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl bg-bg-alt text-3xl">
-                {listing.emoji}
+              <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-bg-alt text-3xl">
+                {listing.photos?.length > 0 ? (
+                  <img
+                    src={getListingPhotoUrl(listing.photos[0])}
+                    alt={listing.title}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  listing.emoji
+                )}
               </div>
               <div className="flex-1">
                 <h2 className="font-semibold text-ink">

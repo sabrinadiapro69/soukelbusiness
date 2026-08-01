@@ -7,6 +7,7 @@ import {
   formatEurApprox,
   formatRelativeTime,
   getListingById,
+  getListingPhotoUrl,
   getListingsByCategory,
   getTauxChange,
   type Offer,
@@ -105,8 +106,30 @@ export default async function ProduitPage({
         </Link>
 
         <div className="mt-6 grid grid-cols-1 gap-10 lg:grid-cols-2">
-          <div className="flex h-80 items-center justify-center rounded-2xl bg-bg-alt text-8xl">
-            {listing.emoji}
+          <div>
+            <div className="flex h-80 items-center justify-center overflow-hidden rounded-2xl bg-bg-alt text-8xl">
+              {listing.photos.length > 0 ? (
+                <img
+                  src={getListingPhotoUrl(listing.photos[0])}
+                  alt={listing.title}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                listing.emoji
+              )}
+            </div>
+            {listing.photos.length > 1 && (
+              <div className="mt-3 flex gap-3">
+                {listing.photos.slice(1).map((path) => (
+                  <img
+                    key={path}
+                    src={getListingPhotoUrl(path)}
+                    alt={listing.title}
+                    className="h-20 w-20 rounded-xl object-cover"
+                  />
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="flex flex-col gap-4">
@@ -196,8 +219,16 @@ export default async function ProduitPage({
                   href={`/produits/${item.id}`}
                   className="flex flex-col overflow-hidden rounded-xl border border-line bg-paper transition-shadow hover:shadow-lg"
                 >
-                  <div className="flex h-28 items-center justify-center bg-bg-alt text-3xl">
-                    {item.emoji}
+                  <div className="flex h-28 items-center justify-center overflow-hidden bg-bg-alt text-3xl">
+                    {item.photos.length > 0 ? (
+                      <img
+                        src={getListingPhotoUrl(item.photos[0])}
+                        alt={item.title}
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      item.emoji
+                    )}
                   </div>
                   <div className="flex flex-col gap-1 p-4">
                     <h3 className="font-semibold text-ink">{item.title}</h3>

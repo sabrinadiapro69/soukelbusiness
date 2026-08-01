@@ -8,6 +8,8 @@ import { createClient } from "@/lib/supabase/server";
 import { locales, type Locale } from "@/lib/i18n/locale";
 import { wilayas } from "@/lib/wilayas";
 
+const MAX_PHOTO_SIZE = 5 * 1024 * 1024; // 5 Mo
+
 export async function signOutAction() {
   const supabase = await createClient();
   await supabase.auth.signOut();
@@ -114,6 +116,14 @@ export async function createListingAction(
   const emoji = formData.get("emoji")?.toString() || "🛍️";
   const description = formData.get("description")?.toString().trim() ?? "";
   const negociable = formData.get("negociable") === "on";
+  const photoFiles = [
+    formData.get("photo1"),
+    formData.get("photo2"),
+    formData.get("photo3"),
+  ].filter(
+    (f): f is File =>
+      f instanceof File && f.size > 0 && f.type.startsWith("image/")
+  );
 
   const price = Number(priceRaw);
 
@@ -122,6 +132,15 @@ export async function createListingAction(
   }
   if (!Number.isFinite(price) || price <= 0) {
     return { error: "Le prix doit être un nombre positif." };
+  }
+  if (photoFiles.length === 0) {
+    return { error: "Merci d'ajouter au moins une photo." };
+  }
+  if (photoFiles.length > 3) {
+    return { error: "Vous ne pouvez ajouter que 3 photos maximum." };
+  }
+  if (photoFiles.some((f) => f.size > MAX_PHOTO_SIZE)) {
+    return { error: "Chaque photo doit faire moins de 5 Mo." };
   }
 
   const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
@@ -138,6 +157,19 @@ export async function createListingAction(
     };
   }
 
+  const photoPaths: string[] = [];
+  for (const file of photoFiles) {
+    const ext = file.name.split(".").pop() || "jpg";
+    const path = `${user.id}/${randomUUID()}.${ext}`;
+    const { error: uploadError } = await supabase.storage
+      .from("listing-photos")
+      .upload(path, file, { contentType: file.type });
+    if (uploadError) {
+      return { error: "L'envoi d'une photo a échoué. Merci de réessayer." };
+    }
+    photoPaths.push(path);
+  }
+
   const { error } = await supabase.from("listings").insert({
     seller_id: user.id,
     title,
@@ -146,6 +178,7 @@ export async function createListingAction(
     location,
     commune,
     emoji,
+    photos: photoPaths,
     description,
     negociable,
   });
@@ -217,7 +250,6 @@ export async function addPortfolioItemAction(formData: FormData) {
 
   const title = formData.get("title")?.toString().trim() ?? "";
   const description = formData.get("description")?.toString().trim() ?? "";
-  const MAX_PHOTO_SIZE = 5 * 1024 * 1024; // 5 Mo
   const files = [
     formData.get("photo1"),
     formData.get("photo2"),

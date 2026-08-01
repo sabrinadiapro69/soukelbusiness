@@ -279,7 +279,9 @@ const fr = {
       "Elle apparaîtra immédiatement dans le catalogue et sur votre profil.",
     successMessage:
       "Votre annonce a été soumise avec succès et est en attente de validation par notre équipe. Elle apparaîtra dans le catalogue une fois approuvée.",
-    chooseIcon: "Choisir une icône",
+    photo1: "Photo 1 (obligatoire)",
+    photo2: "Photo 2 (facultative)",
+    photo3: "Photo 3 (facultative)",
     title: "Titre",
     price: "Prix (DA)",
     negociable: "Prix négociable",

@@ -9,18 +9,6 @@ import type { Dictionary } from "@/lib/i18n/dictionaries/fr";
 
 const postableCategories = categories.filter((c) => c !== "Toutes catégories");
 
-const emojiOptions = [
-  "🛍️",
-  "🚗",
-  "🏠",
-  "📱",
-  "🛋️",
-  "💼",
-  "🐾",
-  "👗",
-  "🔧",
-];
-
 const initialState: CreateListingState = { error: null };
 
 export default function PublierForm({
@@ -32,7 +20,6 @@ export default function PublierForm({
     createListingAction,
     initialState
   );
-  const [emoji, setEmoji] = useState(emojiOptions[0]);
   const [selectedWilaya, setSelectedWilaya] = useState("");
   const communeOptions = communesByWilaya[selectedWilaya] ?? [];
 
@@ -52,27 +39,33 @@ export default function PublierForm({
         </div>
       )}
 
-      <input type="hidden" name="emoji" value={emoji} />
       <div>
-        <label className="text-sm font-medium text-ink">
-          {dict.chooseIcon}
-        </label>
-        <div className="mt-1 flex flex-wrap gap-2">
-          {emojiOptions.map((option) => (
-            <button
-              key={option}
-              type="button"
-              onClick={() => setEmoji(option)}
-              className={`flex h-10 w-10 items-center justify-center rounded-xl border text-xl transition-colors ${
-                emoji === option
-                  ? "border-accent bg-dawn-soft"
-                  : "border-line bg-paper hover:bg-bg-alt"
-              }`}
-            >
-              {option}
-            </button>
-          ))}
-        </div>
+        <label className="text-sm font-medium text-ink">{dict.photo1}</label>
+        <input
+          type="file"
+          name="photo1"
+          accept="image/*"
+          required
+          className="mt-1 w-full cursor-pointer text-sm text-ink-soft file:mr-3 file:cursor-pointer file:rounded-full file:border file:border-accent file:bg-paper file:px-4 file:py-2 file:text-sm file:font-semibold file:text-accent hover:file:bg-dawn-soft"
+        />
+      </div>
+      <div>
+        <label className="text-sm font-medium text-ink">{dict.photo2}</label>
+        <input
+          type="file"
+          name="photo2"
+          accept="image/*"
+          className="mt-1 w-full cursor-pointer text-sm text-ink-soft file:mr-3 file:cursor-pointer file:rounded-full file:border file:border-accent file:bg-paper file:px-4 file:py-2 file:text-sm file:font-semibold file:text-accent hover:file:bg-dawn-soft"
+        />
+      </div>
+      <div>
+        <label className="text-sm font-medium text-ink">{dict.photo3}</label>
+        <input
+          type="file"
+          name="photo3"
+          accept="image/*"
+          className="mt-1 w-full cursor-pointer text-sm text-ink-soft file:mr-3 file:cursor-pointer file:rounded-full file:border file:border-accent file:bg-paper file:px-4 file:py-2 file:text-sm file:font-semibold file:text-accent hover:file:bg-dawn-soft"
+        />
       </div>
 
       <div>

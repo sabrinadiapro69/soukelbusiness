@@ -277,7 +277,9 @@ const en: Dictionary = {
     pageSubtitle: "It will appear immediately in the catalog and on your profile.",
     successMessage:
       "Your listing has been submitted successfully and is awaiting review by our team. It will appear in the catalog once approved.",
-    chooseIcon: "Choose an icon",
+    photo1: "Photo 1 (required)",
+    photo2: "Photo 2 (optional)",
+    photo3: "Photo 3 (optional)",
     title: "Title",
     price: "Price (DA)",
     negociable: "Negotiable price",

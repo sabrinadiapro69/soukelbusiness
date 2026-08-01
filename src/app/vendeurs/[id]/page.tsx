@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import {
   formatDA,
   formatMemberSince,
+  getListingPhotoUrl,
   getListingsBySeller,
   getPortfolioBySeller,
   getPortfolioPhotoUrl,
@@ -153,8 +154,16 @@ export default async function VendeurPage({
                   href={`/produits/${listing.id}`}
                   className="flex flex-col overflow-hidden rounded-xl border border-line bg-paper transition-shadow hover:shadow-lg"
                 >
-                  <div className="flex h-28 items-center justify-center bg-bg-alt text-3xl">
-                    {listing.emoji}
+                  <div className="flex h-28 items-center justify-center overflow-hidden bg-bg-alt text-3xl">
+                    {listing.photos.length > 0 ? (
+                      <img
+                        src={getListingPhotoUrl(listing.photos[0])}
+                        alt={listing.title}
+                        className="h-full w-full object-cover"
+                      />
+                    ) : (
+                      listing.emoji
+                    )}
                   </div>
                   <div className="flex flex-col gap-1 p-4">
                     <h3 className="font-semibold text-ink">

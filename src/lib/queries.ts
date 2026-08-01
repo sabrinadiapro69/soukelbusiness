@@ -23,6 +23,7 @@ export type Listing = {
   location: string;
   commune?: string | null;
   emoji: string;
+  photos: string[];
   description: string;
   negociable: boolean;
   created_at: string;
@@ -59,6 +60,13 @@ const PORTFOLIO_BUCKET = "portfolio-photos";
 
 export function getPortfolioPhotoUrl(path: string): string {
   return supabase.storage.from(PORTFOLIO_BUCKET).getPublicUrl(path).data
+    .publicUrl;
+}
+
+const LISTING_PHOTOS_BUCKET = "listing-photos";
+
+export function getListingPhotoUrl(path: string): string {
+  return supabase.storage.from(LISTING_PHOTOS_BUCKET).getPublicUrl(path).data
     .publicUrl;
 }
 
@@ -116,6 +124,7 @@ function normalizeListing(listing: Listing): Listing {
   return {
     ...listing,
     price: Number(listing.price),
+    photos: listing.photos ?? [],
     seller: listing.seller ? normalizeSeller(listing.seller) : listing.seller,
   };
 }

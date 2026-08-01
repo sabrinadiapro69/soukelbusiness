@@ -7,6 +7,7 @@ import {
   formatDA,
   formatEurApprox,
   formatRelativeTime,
+  getListingPhotoUrl,
   type Listing,
   type SellerType,
 } from "@/lib/queries";
@@ -206,8 +207,16 @@ export default function ProduitsFilters({
             href={`/produits/${listing.id}`}
             className="flex flex-col overflow-hidden rounded-xl border border-line bg-paper transition-shadow hover:shadow-lg"
           >
-            <div className="flex h-36 items-center justify-center bg-bg-alt text-4xl">
-              {listing.emoji}
+            <div className="flex h-36 items-center justify-center overflow-hidden bg-bg-alt text-4xl">
+              {listing.photos.length > 0 ? (
+                <img
+                  src={getListingPhotoUrl(listing.photos[0])}
+                  alt={listing.title}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                listing.emoji
+              )}
             </div>
             <div className="flex flex-1 flex-col gap-2 p-4">
               <div className="flex items-start justify-between gap-2">
