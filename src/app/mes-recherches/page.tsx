@@ -38,7 +38,13 @@ export default async function MesRecherchesPage() {
             const params = new URLSearchParams();
             if (search.query) params.set("q", search.query);
             if (search.category) params.set("categorie", search.category);
+            if (search.wilaya) params.set("wilaya", search.wilaya);
+            if (search.commune) params.set("commune", search.commune);
             const href = `/produits?${params.toString()}`;
+
+            const location = search.commune
+              ? `${search.commune}, ${search.wilaya}`
+              : search.wilaya;
 
             return (
               <div
@@ -51,6 +57,9 @@ export default async function MesRecherchesPage() {
                   </p>
                   {search.query && search.category !== "Toutes catégories" && (
                     <p className="text-sm text-ink-soft">{search.category}</p>
+                  )}
+                  {location && (
+                    <p className="text-sm text-ink-soft">📍 {location}</p>
                   )}
                   <p className="mt-1 text-xs text-ink-soft/70">
                     {t.savedOn}{" "}

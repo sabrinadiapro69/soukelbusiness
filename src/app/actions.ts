@@ -53,11 +53,15 @@ export async function saveSearchAction(formData: FormData) {
 
   const query = formData.get("query")?.toString() ?? "";
   const category = formData.get("category")?.toString() ?? "Toutes catégories";
+  const wilaya = formData.get("wilaya")?.toString() || null;
+  const commune = formData.get("commune")?.toString() || null;
 
   await supabase.from("saved_searches").insert({
     user_id: user.id,
     query,
     category,
+    wilaya,
+    commune,
   });
 
   revalidatePath("/mes-recherches");
@@ -106,6 +110,7 @@ export async function createListingAction(
   const priceRaw = formData.get("price")?.toString() ?? "";
   const category = formData.get("category")?.toString() ?? "";
   const location = formData.get("location")?.toString().trim() ?? "";
+  const commune = formData.get("commune")?.toString().trim() || null;
   const emoji = formData.get("emoji")?.toString() || "🛍️";
   const description = formData.get("description")?.toString().trim() ?? "";
   const negociable = formData.get("negociable") === "on";
@@ -125,6 +130,7 @@ export async function createListingAction(
     price,
     category,
     location,
+    commune,
     emoji,
     description,
     negociable,

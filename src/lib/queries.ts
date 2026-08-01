@@ -21,6 +21,7 @@ export type Listing = {
   price: number;
   category: string;
   location: string;
+  commune?: string | null;
   emoji: string;
   description: string;
   negociable: boolean;
@@ -86,6 +87,8 @@ export type SavedSearch = {
   user_id: string;
   query: string;
   category: string;
+  wilaya?: string | null;
+  commune?: string | null;
   created_at: string;
 };
 

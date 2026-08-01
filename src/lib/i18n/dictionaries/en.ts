@@ -171,6 +171,8 @@ const en: Dictionary = {
     noResults: "No listing matches these filters.",
     saveSearchButton: "Save this search",
     searchSavedToast: "Search saved to \"My searches\".",
+    filterWilayaAll: "All wilayas",
+    filterCommuneAll: "All communes",
   },
   produit: {
     back: "← Back to listings",
@@ -282,6 +284,8 @@ const en: Dictionary = {
     category: "Category",
     wilaya: "Wilaya",
     chooseWilaya: "Choose a wilaya",
+    commune: "Commune (optional)",
+    chooseCommune: "Choose a commune",
     description: "Description",
     publishing: "Publishing...",
     publish: "Publish listing",

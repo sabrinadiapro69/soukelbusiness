@@ -170,6 +170,8 @@ const ar: Dictionary = {
     noResults: "لا يوجد إعلان يطابق هذه الفلاتر.",
     saveSearchButton: "احفظ هذا البحث",
     searchSavedToast: "تم حفظ البحث في «بحثاتي».",
+    filterWilayaAll: "جميع الولايات",
+    filterCommuneAll: "جميع البلديات",
   },
   produit: {
     back: "← العودة إلى الإعلانات",
@@ -275,6 +277,8 @@ const ar: Dictionary = {
     category: "الفئة",
     wilaya: "الولاية",
     chooseWilaya: "اختر ولاية",
+    commune: "البلدية (اختياري)",
+    chooseCommune: "اختر بلدية",
     description: "الوصف",
     publishing: "جارٍ النشر...",
     publish: "نشر الإعلان",

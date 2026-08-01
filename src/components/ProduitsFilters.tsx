@@ -10,6 +10,8 @@ import {
   type Listing,
   type SellerType,
 } from "@/lib/queries";
+import { wilayas } from "@/lib/wilayas";
+import { communesByWilaya } from "@/lib/communes";
 import type { Dictionary } from "@/lib/i18n/dictionaries/fr";
 import type { Locale } from "@/lib/i18n/locale";
 import { formatResultsCount } from "@/lib/i18n/format";
@@ -23,6 +25,8 @@ export default function ProduitsFilters({
   locale,
   initialQuery = "",
   initialCategory = "Toutes catégories",
+  initialWilaya = "",
+  initialCommune = "",
   justSaved = false,
   isLoggedIn = false,
   saveSearchAction,
@@ -33,6 +37,8 @@ export default function ProduitsFilters({
   locale: Locale;
   initialQuery?: string;
   initialCategory?: string;
+  initialWilaya?: string;
+  initialCommune?: string;
   justSaved?: boolean;
   isLoggedIn?: boolean;
   saveSearchAction?: (formData: FormData) => void;
@@ -42,7 +48,11 @@ export default function ProduitsFilters({
   );
   const [category, setCategory] = useState(initialCategory);
   const [query, setQuery] = useState(initialQuery);
+  const [wilayaFilter, setWilayaFilter] = useState(initialWilaya);
+  const [communeFilter, setCommuneFilter] = useState(initialCommune);
   const [sort, setSort] = useState<SortOrder>("recent");
+
+  const communeOptions = wilayaFilter ? (communesByWilaya[wilayaFilter] ?? []) : [];
 
   const filteredListings = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
@@ -56,7 +66,17 @@ export default function ProduitsFilters({
         normalizedQuery === "" ||
         listing.title.toLowerCase().includes(normalizedQuery) ||
         listing.description.toLowerCase().includes(normalizedQuery);
-      return matchesSeller && matchesCategory && matchesQuery;
+      const matchesWilaya =
+        wilayaFilter === "" || listing.location === wilayaFilter;
+      const matchesCommune =
+        communeFilter === "" || listing.commune === communeFilter;
+      return (
+        matchesSeller &&
+        matchesCategory &&
+        matchesQuery &&
+        matchesWilaya &&
+        matchesCommune
+      );
     });
 
     if (sort === "price-asc") {
@@ -66,7 +86,7 @@ export default function ProduitsFilters({
     }
 
     return result;
-  }, [listings, sellerFilter, category, query, sort]);
+  }, [listings, sellerFilter, category, query, wilayaFilter, communeFilter, sort]);
 
   return (
     <>
@@ -84,10 +104,40 @@ export default function ProduitsFilters({
           placeholder={dict.searchPlaceholder}
           className="w-full rounded-full border border-line bg-paper px-4 py-2.5 text-sm outline-none focus:border-ink sm:max-w-sm"
         />
+        <select
+          value={wilayaFilter}
+          onChange={(e) => {
+            setWilayaFilter(e.target.value);
+            setCommuneFilter("");
+          }}
+          className="rounded-full border border-line bg-paper px-4 py-2.5 text-sm text-ink-soft"
+        >
+          <option value="">{dict.filterWilayaAll}</option>
+          {wilayas.map((w) => (
+            <option key={w} value={w}>
+              {w}
+            </option>
+          ))}
+        </select>
+        <select
+          value={communeFilter}
+          onChange={(e) => setCommuneFilter(e.target.value)}
+          disabled={!wilayaFilter}
+          className="rounded-full border border-line bg-paper px-4 py-2.5 text-sm text-ink-soft disabled:bg-bg-alt disabled:text-ink-soft/60"
+        >
+          <option value="">{dict.filterCommuneAll}</option>
+          {communeOptions.map((c) => (
+            <option key={c} value={c}>
+              {c}
+            </option>
+          ))}
+        </select>
         {isLoggedIn && saveSearchAction && (
           <form action={saveSearchAction}>
             <input type="hidden" name="query" value={query} />
             <input type="hidden" name="category" value={category} />
+            <input type="hidden" name="wilaya" value={wilayaFilter} />
+            <input type="hidden" name="commune" value={communeFilter} />
             <button
               type="submit"
               className="w-full rounded-full border border-line px-4 py-2.5 text-sm font-medium text-ink-soft transition-colors hover:border-ink sm:w-auto"
@@ -193,7 +243,10 @@ export default function ProduitsFilters({
               </span>
               <div className="mt-auto flex items-center justify-between text-xs text-ink-soft">
                 <span>{listing.seller?.name}</span>
-                <span>📍 {listing.location}</span>
+                <span>
+                  📍 {listing.commune ? `${listing.commune}, ` : ""}
+                  {listing.location}
+                </span>
               </div>
               <span className="text-xs text-ink-soft/70">
                 {formatRelativeTime(listing.created_at)}

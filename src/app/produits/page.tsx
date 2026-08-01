@@ -19,11 +19,17 @@ export const metadata: Metadata = {
 export default async function ProduitsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string; categorie?: string; saved?: string }>;
+  searchParams: Promise<{
+    q?: string;
+    categorie?: string;
+    wilaya?: string;
+    commune?: string;
+    saved?: string;
+  }>;
 }) {
   const locale = await getLocale();
   const dict = await getDictionary(locale);
-  const { q, categorie, saved } = await searchParams;
+  const { q, categorie, wilaya, commune, saved } = await searchParams;
 
   const supabase = await createClient();
   const {
@@ -50,6 +56,8 @@ export default async function ProduitsPage({
           locale={locale}
           initialQuery={q ?? ""}
           initialCategory={categorie ?? "Toutes catégories"}
+          initialWilaya={wilaya ?? ""}
+          initialCommune={commune ?? ""}
           justSaved={saved === "1"}
           isLoggedIn={Boolean(user)}
           saveSearchAction={saveSearchAction}

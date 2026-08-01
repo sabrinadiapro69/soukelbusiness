@@ -171,6 +171,8 @@ const fr = {
     noResults: "Aucune annonce ne correspond à ces filtres.",
     saveSearchButton: "Enregistrer cette recherche",
     searchSavedToast: "Recherche enregistrée dans « Mes recherches ».",
+    filterWilayaAll: "Toutes les wilayas",
+    filterCommuneAll: "Toutes les communes",
   },
   produit: {
     back: "← Retour aux annonces",
@@ -284,6 +286,8 @@ const fr = {
     category: "Catégorie",
     wilaya: "Wilaya",
     chooseWilaya: "Choisir une wilaya",
+    commune: "Commune (facultatif)",
+    chooseCommune: "Choisir une commune",
     description: "Description",
     publishing: "Publication...",
     publish: "Publier l'annonce",

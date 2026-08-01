@@ -4,6 +4,7 @@ import { useActionState, useState } from "react";
 import { createListingAction, type CreateListingState } from "@/app/actions";
 import { categories } from "@/lib/queries";
 import { wilayas } from "@/lib/wilayas";
+import { communesByWilaya } from "@/lib/communes";
 import type { Dictionary } from "@/lib/i18n/dictionaries/fr";
 
 const postableCategories = categories.filter((c) => c !== "Toutes catégories");
@@ -32,6 +33,8 @@ export default function PublierForm({
     initialState
   );
   const [emoji, setEmoji] = useState(emojiOptions[0]);
+  const [selectedWilaya, setSelectedWilaya] = useState("");
+  const communeOptions = communesByWilaya[selectedWilaya] ?? [];
 
   if (state.success) {
     return (
@@ -126,7 +129,8 @@ export default function PublierForm({
         <select
           name="location"
           required
-          defaultValue=""
+          value={selectedWilaya}
+          onChange={(e) => setSelectedWilaya(e.target.value)}
           className="mt-1 w-full rounded-xl border border-line px-4 py-2 text-sm text-ink outline-none focus:border-accent"
         >
           <option value="" disabled>
@@ -135,6 +139,23 @@ export default function PublierForm({
           {wilayas.map((w) => (
             <option key={w} value={w}>
               {w}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div>
+        <label className="text-sm font-medium text-ink">{dict.commune}</label>
+        <select
+          name="commune"
+          defaultValue=""
+          disabled={!selectedWilaya}
+          className="mt-1 w-full rounded-xl border border-line px-4 py-2 text-sm text-ink outline-none focus:border-accent disabled:bg-bg-alt disabled:text-ink-soft"
+        >
+          <option value="">{dict.chooseCommune}</option>
+          {communeOptions.map((c) => (
+            <option key={c} value={c}>
+              {c}
             </option>
           ))}
         </select>
