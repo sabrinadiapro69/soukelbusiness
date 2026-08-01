@@ -5,6 +5,8 @@ import ProduitsFilters from "@/components/ProduitsFilters";
 import { getListings, getTauxChange } from "@/lib/queries";
 import { getLocale } from "@/lib/i18n/locale";
 import { getDictionary } from "@/lib/i18n/dictionaries";
+import { createClient } from "@/lib/supabase/server";
+import { saveSearchAction } from "@/app/actions";
 
 export const dynamic = "force-dynamic";
 
@@ -14,9 +16,19 @@ export const metadata: Metadata = {
     "Parcourez les annonces de véhicules, immobilier, mode, électronique et services partout en Algérie.",
 };
 
-export default async function ProduitsPage() {
+export default async function ProduitsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string; categorie?: string; saved?: string }>;
+}) {
   const locale = await getLocale();
   const dict = await getDictionary(locale);
+  const { q, categorie, saved } = await searchParams;
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   const [listings, taux] = await Promise.all([
     getListings(),
@@ -36,6 +48,11 @@ export default async function ProduitsPage() {
           taux={taux}
           dict={dict.produits}
           locale={locale}
+          initialQuery={q ?? ""}
+          initialCategory={categorie ?? "Toutes catégories"}
+          justSaved={saved === "1"}
+          isLoggedIn={Boolean(user)}
+          saveSearchAction={saveSearchAction}
         />
       </main>
 

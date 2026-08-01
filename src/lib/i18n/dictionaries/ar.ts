@@ -15,6 +15,7 @@ const ar: Dictionary = {
     offresRecues: "العروض المستلمة",
     moderation: "الإشراف",
     profil: "ملفي الشخصي",
+    mesRecherches: "بحثاتي",
     bonjour: "مرحبا",
     deconnexion: "تسجيل الخروج",
     connexion: "تسجيل الدخول",
@@ -155,6 +156,7 @@ const ar: Dictionary = {
   },
   produits: {
     pageTitle: "جميع الإعلانات",
+    searchPlaceholder: "ابحث بكلمة مفتاحية",
     filterAll: "جميع البائعين",
     filterParticuliers: "أفراد",
     filterPro: "محترفون",
@@ -166,6 +168,8 @@ const ar: Dictionary = {
     cardNegociable: "قابل للتفاوض",
     cardFerme: "سعر ثابت",
     noResults: "لا يوجد إعلان يطابق هذه الفلاتر.",
+    saveSearchButton: "احفظ هذا البحث",
+    searchSavedToast: "تم حفظ البحث في «بحثاتي».",
   },
   produit: {
     back: "← العودة إلى الإعلانات",
@@ -355,6 +359,14 @@ const ar: Dictionary = {
     concluded: "✅ تم وضع علامة على المعاملة كمكتملة.",
     markConcluded: "وضع علامة على هذه المعاملة كمكتملة",
     noOffers: "لم تقدم أي عرض بعد.",
+  },
+  mesRecherches: {
+    pageTitle: "بحثاتي المحفوظة",
+    empty: "لم تحفظ أي بحث حتى الآن.",
+    emptyHint: "من صفحة الإعلانات، انقر على «احفظ هذا البحث» لتجده هنا.",
+    savedOn: "تم الحفظ في",
+    viewButton: "عرض النتائج",
+    deleteButton: "حذف",
   },
   reviewForm: {
     thankYou: "شكرا، تم نشر رأيك!",

@@ -13,6 +13,7 @@ const fr = {
     offresRecues: "Offres reçues",
     moderation: "Modération",
     profil: "Mon profil",
+    mesRecherches: "Mes recherches",
     bonjour: "Bonjour",
     deconnexion: "Se déconnecter",
     connexion: "Se connecter",
@@ -156,6 +157,7 @@ const fr = {
   },
   produits: {
     pageTitle: "Toutes les annonces",
+    searchPlaceholder: "Rechercher par mot-clé",
     filterAll: "Tous les vendeurs",
     filterParticuliers: "Particuliers",
     filterPro: "Professionnels",
@@ -167,6 +169,8 @@ const fr = {
     cardNegociable: "Négociable",
     cardFerme: "Prix ferme",
     noResults: "Aucune annonce ne correspond à ces filtres.",
+    saveSearchButton: "Enregistrer cette recherche",
+    searchSavedToast: "Recherche enregistrée dans « Mes recherches ».",
   },
   produit: {
     back: "← Retour aux annonces",
@@ -367,6 +371,15 @@ const fr = {
     concluded: "✅ Transaction marquée comme conclue.",
     markConcluded: "Marquer cette transaction comme conclue",
     noOffers: "Vous n'avez fait aucune offre pour l'instant.",
+  },
+  mesRecherches: {
+    pageTitle: "Mes recherches enregistrées",
+    empty: "Vous n'avez enregistré aucune recherche pour le moment.",
+    emptyHint:
+      "Depuis la page des annonces, cliquez sur « Enregistrer cette recherche » pour la retrouver ici.",
+    savedOn: "Enregistrée le",
+    viewButton: "Voir les résultats",
+    deleteButton: "Supprimer",
   },
   reviewForm: {
     thankYou: "Merci, votre avis a été publié !",

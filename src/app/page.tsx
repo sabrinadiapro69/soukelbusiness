@@ -114,8 +114,16 @@ export default async function Home() {
                 {t.heroSubtitle}
               </p>
 
-              <form className="mt-8 flex w-full max-w-2xl flex-col overflow-hidden rounded-2xl border-[1.5px] border-ink bg-paper shadow-[4px_4px_0_var(--ink)] sm:flex-row">
-                <select className="w-full border-b border-line px-4 py-4 text-[15px] text-ink-soft outline-none sm:w-auto sm:border-r sm:border-b-0">
+              <form
+                action="/produits"
+                method="GET"
+                className="mt-8 flex w-full max-w-2xl flex-col overflow-hidden rounded-2xl border-[1.5px] border-ink bg-paper shadow-[4px_4px_0_var(--ink)] sm:flex-row"
+              >
+                <select
+                  name="categorie"
+                  defaultValue={t.searchAllCategories}
+                  className="w-full border-b border-line px-4 py-4 text-[15px] text-ink-soft outline-none sm:w-auto sm:border-r sm:border-b-0"
+                >
                   <option>{t.searchAllCategories}</option>
                   {t.rayons.slice(0, 4).map((r) => (
                     <option key={r.title}>{r.title}</option>
@@ -123,11 +131,12 @@ export default async function Home() {
                 </select>
                 <input
                   type="text"
+                  name="q"
                   placeholder={t.searchPlaceholder}
                   className="w-full min-w-0 flex-1 px-4 py-4 text-[15px] outline-none placeholder:text-[#9C9587]"
                 />
                 <button
-                  type="button"
+                  type="submit"
                   className="flex items-center justify-center gap-2 bg-primary px-7 py-4 font-semibold text-white transition-colors hover:bg-primary-dark"
                 >
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4">

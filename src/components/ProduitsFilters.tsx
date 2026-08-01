@@ -21,25 +21,42 @@ export default function ProduitsFilters({
   taux,
   dict,
   locale,
+  initialQuery = "",
+  initialCategory = "Toutes catégories",
+  justSaved = false,
+  isLoggedIn = false,
+  saveSearchAction,
 }: {
   listings: Listing[];
   taux: number;
   dict: Dictionary["produits"];
   locale: Locale;
+  initialQuery?: string;
+  initialCategory?: string;
+  justSaved?: boolean;
+  isLoggedIn?: boolean;
+  saveSearchAction?: (formData: FormData) => void;
 }) {
   const [sellerFilter, setSellerFilter] = useState<"tous" | SellerType>(
     "tous"
   );
-  const [category, setCategory] = useState("Toutes catégories");
+  const [category, setCategory] = useState(initialCategory);
+  const [query, setQuery] = useState(initialQuery);
   const [sort, setSort] = useState<SortOrder>("recent");
 
   const filteredListings = useMemo(() => {
+    const normalizedQuery = query.trim().toLowerCase();
+
     let result = listings.filter((listing) => {
       const matchesSeller =
         sellerFilter === "tous" || listing.seller?.type === sellerFilter;
       const matchesCategory =
         category === "Toutes catégories" || listing.category === category;
-      return matchesSeller && matchesCategory;
+      const matchesQuery =
+        normalizedQuery === "" ||
+        listing.title.toLowerCase().includes(normalizedQuery) ||
+        listing.description.toLowerCase().includes(normalizedQuery);
+      return matchesSeller && matchesCategory && matchesQuery;
     });
 
     if (sort === "price-asc") {
@@ -49,11 +66,39 @@ export default function ProduitsFilters({
     }
 
     return result;
-  }, [listings, sellerFilter, category, sort]);
+  }, [listings, sellerFilter, category, query, sort]);
 
   return (
     <>
-      <p className="mt-1 text-sm text-ink-soft">
+      {justSaved && (
+        <p className="mt-4 rounded-lg border border-line bg-bg-alt px-4 py-2.5 text-sm text-ink">
+          {dict.searchSavedToast}
+        </p>
+      )}
+
+      <div className="mt-4 flex flex-col gap-3 sm:flex-row">
+        <input
+          type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder={dict.searchPlaceholder}
+          className="w-full rounded-full border border-line bg-paper px-4 py-2.5 text-sm outline-none focus:border-ink sm:max-w-sm"
+        />
+        {isLoggedIn && saveSearchAction && (
+          <form action={saveSearchAction}>
+            <input type="hidden" name="query" value={query} />
+            <input type="hidden" name="category" value={category} />
+            <button
+              type="submit"
+              className="w-full rounded-full border border-line px-4 py-2.5 text-sm font-medium text-ink-soft transition-colors hover:border-ink sm:w-auto"
+            >
+              {dict.saveSearchButton}
+            </button>
+          </form>
+        )}
+      </div>
+
+      <p className="mt-4 text-sm text-ink-soft">
         {formatResultsCount(locale, filteredListings.length)}
       </p>
 

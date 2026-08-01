@@ -54,6 +54,7 @@ export default async function SiteHeader() {
       ? [
           { href: "/mes-offres", label: t.offresEnvoyees },
           { href: "/offres", label: t.offresRecues },
+          { href: "/mes-recherches", label: t.mesRecherches },
         ]
       : []),
     ...(isAdmin ? [{ href: "/admin", label: t.moderation }] : []),

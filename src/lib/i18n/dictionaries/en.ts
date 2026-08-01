@@ -15,6 +15,7 @@ const en: Dictionary = {
     offresRecues: "Received offers",
     moderation: "Moderation",
     profil: "My profile",
+    mesRecherches: "My searches",
     bonjour: "Hello",
     deconnexion: "Sign out",
     connexion: "Sign in",
@@ -156,6 +157,7 @@ const en: Dictionary = {
   },
   produits: {
     pageTitle: "All listings",
+    searchPlaceholder: "Search by keyword",
     filterAll: "All sellers",
     filterParticuliers: "Individuals",
     filterPro: "Professionals",
@@ -167,6 +169,8 @@ const en: Dictionary = {
     cardNegociable: "Negotiable",
     cardFerme: "Fixed price",
     noResults: "No listing matches these filters.",
+    saveSearchButton: "Save this search",
+    searchSavedToast: "Search saved to \"My searches\".",
   },
   produit: {
     back: "← Back to listings",
@@ -363,6 +367,15 @@ const en: Dictionary = {
     concluded: "✅ Transaction marked as completed.",
     markConcluded: "Mark this transaction as completed",
     noOffers: "You haven't made any offers yet.",
+  },
+  mesRecherches: {
+    pageTitle: "My saved searches",
+    empty: "You haven't saved any search yet.",
+    emptyHint:
+      "From the listings page, click \"Save this search\" to find it here.",
+    savedOn: "Saved on",
+    viewButton: "View results",
+    deleteButton: "Delete",
   },
   reviewForm: {
     thankYou: "Thank you, your review has been published!",

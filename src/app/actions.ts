@@ -44,6 +44,49 @@ export async function setWilayaAction(formData: FormData) {
   redirect(referer || "/");
 }
 
+export async function saveSearchAction(formData: FormData) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) redirect("/connexion");
+
+  const query = formData.get("query")?.toString() ?? "";
+  const category = formData.get("category")?.toString() ?? "Toutes catégories";
+
+  await supabase.from("saved_searches").insert({
+    user_id: user.id,
+    query,
+    category,
+  });
+
+  revalidatePath("/mes-recherches");
+
+  const referer = (await headers()).get("referer") || "/produits";
+  const separator = referer.includes("?") ? "&" : "?";
+  redirect(`${referer}${separator}saved=1`);
+}
+
+export async function deleteSavedSearchAction(formData: FormData) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) redirect("/connexion");
+
+  const id = formData.get("id")?.toString();
+  if (id) {
+    await supabase
+      .from("saved_searches")
+      .delete()
+      .eq("id", id)
+      .eq("user_id", user.id);
+  }
+
+  revalidatePath("/mes-recherches");
+  redirect("/mes-recherches");
+}
+
 export type CreateListingState = { error: string | null; success?: boolean };
 
 export async function createListingAction(

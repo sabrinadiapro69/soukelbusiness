@@ -81,6 +81,14 @@ export type Offer = {
   created_at: string;
 };
 
+export type SavedSearch = {
+  id: number;
+  user_id: string;
+  query: string;
+  category: string;
+  created_at: string;
+};
+
 export const categories = [
   "Toutes catégories",
   "Véhicules",
@@ -167,6 +175,19 @@ export async function getListingsBySeller(
 
   if (error) throw error;
   return (data ?? []).map(normalizeListing);
+}
+
+export async function getSavedSearches(
+  userId: string
+): Promise<SavedSearch[]> {
+  const { data, error } = await supabase
+    .from("saved_searches")
+    .select("*")
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false });
+
+  if (error) throw error;
+  return data ?? [];
 }
 
 export async function getReviewsBySeller(
