@@ -370,6 +370,104 @@ const en: Dictionary = {
     sending: "Sending...",
     submit: "Submit my review",
   },
+  mentionsLegales: {
+    pageTitle: "Legal Notice",
+    editorTitle: "Site publisher",
+    editorBody:
+      "Souk El Business is published by One Concept, registered under SIRET number 919 951 848 00028, headquartered in Vaulx-en-Velin (France).",
+    directorTitle: "Publication director",
+    directorBody: "Madame B.",
+    contactTitle: "Contact",
+    contactBody: "For any question about the site, you can write to us at",
+    contactOr: "or via our",
+    contactPageLink: "contact page",
+    hostingTitle: "Hosting",
+    hostingBody:
+      "This site is hosted by Vercel Inc., 340 S Lemon Ave #4133, Walnut, CA 91789, USA.",
+    ipTitle: "Intellectual property",
+    ipBody:
+      "All elements of the site (text, layout, visuals) are protected by copyright. Any reproduction without prior authorization is prohibited.",
+    cguLink: "Terms of Service",
+    privacyLink: "Privacy Policy",
+  },
+  cgu: {
+    pageTitle: "Terms of Service",
+    lastUpdated: "Last updated:",
+    sections: [
+      {
+        title: "1. Purpose",
+        body: "Souk El Business is a classifieds platform connecting individuals and professionals in Algeria and the diaspora. The platform allows posting listings, negotiating a price, and exchanging reviews. Souk El Business is not an online sales website: no payment goes through the platform. The transaction (payment, handover of the item, or performance of the service) always takes place directly between users, outside the site.",
+      },
+      {
+        title: "2. Registration and user account",
+        body: "Registration is reserved for adults. Each user is responsible for the accuracy of the information provided and for the confidentiality of their login credentials.",
+      },
+      {
+        title: "3. Posting listings",
+        body: "Listings are subject to review before publication. Souk El Business may refuse or remove at any time a listing that does not comply with these terms or applicable law (illegal, misleading content, or goods/services prohibited from sale).",
+      },
+      {
+        title: "4. Negotiation and transactions",
+        body: "The listed price can be negotiated directly on the platform via the offers system. Once an agreement is reached, the sale and its payment take place between users, outside the platform. Souk El Business does not intervene in the transaction and is not responsible for the quality, compliance, delivery, or payment of goods and services exchanged between users.",
+      },
+      {
+        title: "5. Reviews and professional profiles",
+        body: "A review can only be left by a buyer who has actually completed a transaction with the seller concerned. Any attempt to manipulate reviews (fake reviews, bought reviews) is prohibited and may result in account suspension.",
+      },
+      {
+        title: "6. User conduct",
+        body: "Each user agrees to behave fairly and respectfully towards others. Souk El Business reserves the right to suspend or delete any account in case of fraud, abuse, or non-compliance with these terms.",
+      },
+      {
+        title: "7. Liability and availability",
+        body: "The platform is provided as-is, without guarantee of continuous availability. Souk El Business makes reasonable efforts to ensure the site works properly, without absolute guarantee.",
+      },
+      {
+        title: "8. Changes to these terms",
+        body: "These terms may be changed at any time. Users will be informed of any substantial change.",
+      },
+    ],
+    contactSectionTitle: "9. Applicable law",
+    contactSectionPrefix:
+      "For any question about these terms, you can contact us via our",
+    contactPageLink: "contact page",
+    mentionsLink: "Legal Notice",
+    privacyLink: "Privacy Policy",
+  },
+  confidentialite: {
+    pageTitle: "Privacy Policy",
+    lastUpdated: "Last updated:",
+    sections: [
+      {
+        title: "1. Data collected",
+        body: "When creating an account and using the site, we collect: your name, your wilaya, your email address, an optional description and avatar, the listings you post, the offers and negotiations made, reviews left or received, and, where applicable, your professional portfolio photos.",
+      },
+      {
+        title: "2. Use of data",
+        body: "This data is used to create and manage your account, publish your listings, enable negotiation and connection with other users, display public profiles and reviews, and moderate the site's content.",
+      },
+      {
+        title: "3. Hosting and subprocessors",
+        body: "Data is hosted by our technical providers: Supabase (database and authentication) and Vercel Inc. (site hosting), which may process data outside Algeria.",
+      },
+      {
+        title: "4. Retention period",
+        body: "Your data is kept as long as your account is active. You may request its deletion at any time.",
+      },
+    ],
+    rightsSectionTitle: "5. Your rights",
+    rightsSectionPrefix:
+      "You have a right to access, rectify, and delete your data. To exercise it, contact us via our",
+    contactPageLink: "contact page",
+    cookiesSectionTitle: "6. Cookies",
+    cookiesSectionBody:
+      "The site only uses technical cookies necessary for your session and login to work. No advertising cookies are used at this time.",
+    securitySectionTitle: "7. Security",
+    securitySectionBody:
+      "We implement reasonable measures to protect your data, without being able to guarantee absolute security.",
+    mentionsLink: "Legal Notice",
+    cguLink: "Terms of Service",
+  },
 };
 
 export default en;

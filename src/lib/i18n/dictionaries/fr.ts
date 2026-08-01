@@ -374,6 +374,104 @@ const fr = {
     sending: "Envoi...",
     submit: "Envoyer mon avis",
   },
+  mentionsLegales: {
+    pageTitle: "Mentions légales",
+    editorTitle: "Éditeur du site",
+    editorBody:
+      "Le site Souk El Business est édité par la société One Concept, immatriculée sous le numéro SIRET 919 951 848 00028, dont le siège social est situé à Vaulx-en-Velin (France).",
+    directorTitle: "Directrice de la publication",
+    directorBody: "Madame B.",
+    contactTitle: "Contact",
+    contactBody: "Pour toute question relative au site, vous pouvez nous écrire à",
+    contactOr: "ou via notre",
+    contactPageLink: "page de contact",
+    hostingTitle: "Hébergement",
+    hostingBody:
+      "Ce site est hébergé par Vercel Inc., 340 S Lemon Ave #4133, Walnut, CA 91789, États-Unis.",
+    ipTitle: "Propriété intellectuelle",
+    ipBody:
+      "L'ensemble des éléments du site (textes, mises en page, visuels) est protégé par le droit d'auteur. Toute reproduction sans autorisation préalable est interdite.",
+    cguLink: "Conditions générales d'utilisation",
+    privacyLink: "Politique de confidentialité",
+  },
+  cgu: {
+    pageTitle: "Conditions générales d'utilisation",
+    lastUpdated: "Dernière mise à jour :",
+    sections: [
+      {
+        title: "1. Objet",
+        body: "Souk El Business est une plateforme de petites annonces qui met en relation des particuliers et des professionnels en Algérie et dans la diaspora. La plateforme permet de publier des annonces, de négocier un prix et d'échanger des avis. Souk El Business n'est pas un site de vente en ligne : aucun paiement ne transite par la plateforme. La transaction (paiement, remise du bien ou réalisation du service) a toujours lieu directement entre les utilisateurs, en dehors du site.",
+      },
+      {
+        title: "2. Inscription et compte utilisateur",
+        body: "L'inscription est réservée aux personnes majeures. Chaque utilisateur est responsable de l'exactitude des informations fournies et de la confidentialité de ses identifiants de connexion.",
+      },
+      {
+        title: "3. Publication d'annonces",
+        body: "Les annonces sont soumises à une validation avant publication. Souk El Business peut refuser ou retirer à tout moment une annonce ne respectant pas ces conditions ou la loi en vigueur (contenu illicite, trompeur, ou portant sur des biens/services interdits à la vente).",
+      },
+      {
+        title: "4. Négociation et transactions",
+        body: "Le prix affiché peut être négocié directement sur la plateforme via le système d'offres. Une fois un accord trouvé, la conclusion de la vente et son paiement se font entre les utilisateurs, hors de la plateforme. Souk El Business n'intervient pas dans la transaction et n'est pas responsable de la qualité, de la conformité, de la livraison ou du paiement des biens et services échangés entre utilisateurs.",
+      },
+      {
+        title: "5. Avis et profils professionnels",
+        body: "Un avis ne peut être laissé que par un acheteur ayant réellement conclu une transaction avec le vendeur concerné. Toute tentative de manipulation des avis (faux avis, avis achetés) est interdite et peut entraîner la suspension du compte.",
+      },
+      {
+        title: "6. Comportement des utilisateurs",
+        body: "Chaque utilisateur s'engage à se comporter de façon loyale et respectueuse envers les autres. Souk El Business se réserve le droit de suspendre ou supprimer tout compte en cas de fraude, d'abus ou de non-respect de ces conditions.",
+      },
+      {
+        title: "7. Responsabilité et disponibilité",
+        body: "La plateforme est fournie en l'état, sans garantie de disponibilité continue. Souk El Business met en œuvre des moyens raisonnables pour assurer le bon fonctionnement du site, sans garantie absolue.",
+      },
+      {
+        title: "8. Modification des conditions",
+        body: "Ces conditions peuvent être modifiées à tout moment. Les utilisateurs seront informés de toute modification substantielle.",
+      },
+    ],
+    contactSectionTitle: "9. Droit applicable",
+    contactSectionPrefix:
+      "Pour toute question relative à ces conditions, vous pouvez nous contacter via notre",
+    contactPageLink: "page de contact",
+    mentionsLink: "Mentions légales",
+    privacyLink: "Politique de confidentialité",
+  },
+  confidentialite: {
+    pageTitle: "Politique de confidentialité",
+    lastUpdated: "Dernière mise à jour :",
+    sections: [
+      {
+        title: "1. Données collectées",
+        body: "Lors de la création d'un compte et de l'utilisation du site, nous collectons : votre nom, votre wilaya, votre adresse e-mail, une description et un avatar facultatifs, les annonces que vous publiez, les offres et négociations effectuées, les avis laissés ou reçus, et le cas échéant les photos de votre portfolio professionnel.",
+      },
+      {
+        title: "2. Utilisation des données",
+        body: "Ces données sont utilisées pour créer et gérer votre compte, publier vos annonces, permettre la négociation et la mise en relation avec d'autres utilisateurs, afficher les profils et avis publics, et modérer le contenu du site.",
+      },
+      {
+        title: "3. Hébergement et sous-traitants",
+        body: "Les données sont hébergées par nos prestataires techniques : Supabase (base de données et authentification) et Vercel Inc. (hébergement du site), susceptibles de traiter les données en dehors d'Algérie.",
+      },
+      {
+        title: "4. Durée de conservation",
+        body: "Vos données sont conservées tant que votre compte est actif. Vous pouvez demander leur suppression à tout moment.",
+      },
+    ],
+    rightsSectionTitle: "5. Vos droits",
+    rightsSectionPrefix:
+      "Vous disposez d'un droit d'accès, de rectification et de suppression de vos données. Pour l'exercer, contactez-nous via notre",
+    contactPageLink: "page de contact",
+    cookiesSectionTitle: "6. Cookies",
+    cookiesSectionBody:
+      "Le site utilise uniquement des cookies techniques nécessaires au fonctionnement de votre session et de votre connexion. Aucun cookie publicitaire n'est utilisé à ce jour.",
+    securitySectionTitle: "7. Sécurité",
+    securitySectionBody:
+      "Nous mettons en œuvre des mesures raisonnables pour protéger vos données, sans pouvoir garantir une sécurité absolue.",
+    mentionsLink: "Mentions légales",
+    cguLink: "Conditions générales d'utilisation",
+  },
 };
 
 export default fr;
