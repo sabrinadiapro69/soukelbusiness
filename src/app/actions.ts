@@ -4,7 +4,9 @@ import { randomUUID } from "crypto";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { cookies, headers } from "next/headers";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { locales, type Locale } from "@/lib/i18n/locale";
 import { wilayas } from "@/lib/wilayas";
 
@@ -230,9 +232,10 @@ export async function updateProfileAction(
   }
 
   if (metier !== undefined) {
-    await supabase
-      .from("pro_profiles")
-      .upsert({ seller_id: user.id, metier }, { onConflict: "seller_id" });
+    await supabase.from("pro_profiles").upsert(
+      { seller_id: user.id, metier, reviewed_at: null },
+      { onConflict: "seller_id" }
+    );
   }
 
   return { error: null, success: true };
@@ -384,33 +387,209 @@ async function requireAdmin() {
 
   const { data: seller } = await supabase
     .from("sellers")
-    .select("is_admin")
+    .select("role")
     .eq("id", user.id)
     .maybeSingle();
 
-  if (!seller?.is_admin) redirect("/");
+  if (seller?.role !== "admin") redirect("/");
 
-  return supabase;
+  return { supabase, adminId: user.id };
+}
+
+async function logAdminAction(
+  supabase: SupabaseClient,
+  adminId: string,
+  action: string,
+  cibleType: string,
+  cibleId?: string | number | null,
+  details?: Record<string, unknown>
+) {
+  await supabase.from("audit_log").insert({
+    admin_id: adminId,
+    action,
+    cible_type: cibleType,
+    cible_id: cibleId != null ? String(cibleId) : null,
+    details: details ?? null,
+  });
 }
 
 export async function approveListingAction(formData: FormData) {
-  const supabase = await requireAdmin();
+  const { supabase, adminId } = await requireAdmin();
   const listingId = Number(formData.get("listingId"));
   await supabase
     .from("listings")
     .update({ status: "approved" })
     .eq("id", listingId);
-  redirect("/admin");
+  await logAdminAction(supabase, adminId, "approuver_annonce", "annonce", listingId);
+  revalidatePath("/admin/annonces");
+  redirect("/admin/annonces");
 }
 
 export async function rejectListingAction(formData: FormData) {
-  const supabase = await requireAdmin();
+  const { supabase, adminId } = await requireAdmin();
   const listingId = Number(formData.get("listingId"));
   await supabase
     .from("listings")
     .update({ status: "rejected" })
     .eq("id", listingId);
-  redirect("/admin");
+  await logAdminAction(supabase, adminId, "rejeter_annonce", "annonce", listingId);
+  revalidatePath("/admin/annonces");
+  redirect("/admin/annonces");
+}
+
+export async function removeListingAction(formData: FormData) {
+  const { supabase, adminId } = await requireAdmin();
+  const listingId = Number(formData.get("listingId"));
+  const reportId = formData.get("reportId")?.toString();
+
+  await supabase
+    .from("listings")
+    .update({ status: "rejected" })
+    .eq("id", listingId);
+  await logAdminAction(supabase, adminId, "masquer_annonce", "annonce", listingId);
+
+  if (reportId) {
+    await supabase
+      .from("reports")
+      .update({ statut: "traite" })
+      .eq("id", reportId);
+    revalidatePath("/admin/signalements");
+  }
+
+  revalidatePath("/admin/annonces");
+  redirect(reportId ? "/admin/signalements" : "/admin/annonces");
+}
+
+export async function rejectReportAction(formData: FormData) {
+  const { supabase, adminId } = await requireAdmin();
+  const reportId = Number(formData.get("reportId"));
+
+  await supabase
+    .from("reports")
+    .update({ statut: "rejete" })
+    .eq("id", reportId);
+  await logAdminAction(supabase, adminId, "rejeter_signalement", "signalement", reportId);
+
+  revalidatePath("/admin/signalements");
+  redirect("/admin/signalements");
+}
+
+export async function warnUserAction(formData: FormData) {
+  const { supabase, adminId } = await requireAdmin();
+  const sellerId = formData.get("sellerId")?.toString() ?? "";
+  const reportId = formData.get("reportId")?.toString();
+
+  await logAdminAction(supabase, adminId, "avertir_utilisateur", "utilisateur", sellerId);
+
+  if (reportId) {
+    await supabase
+      .from("reports")
+      .update({ statut: "traite" })
+      .eq("id", reportId);
+    revalidatePath("/admin/signalements");
+  }
+
+  redirect("/admin/signalements");
+}
+
+export async function suspendUserAction(formData: FormData) {
+  const { supabase, adminId } = await requireAdmin();
+  const sellerId = formData.get("sellerId")?.toString() ?? "";
+  const reportId = formData.get("reportId")?.toString();
+  const redirectTo = formData.get("redirectTo")?.toString() || "/admin/utilisateurs";
+
+  const adminClient = createAdminClient();
+  await adminClient
+    .from("sellers")
+    .update({ status: "suspendu" })
+    .eq("id", sellerId);
+  await adminClient.auth.admin.updateUserById(sellerId, {
+    ban_duration: "876000h",
+  });
+
+  await logAdminAction(supabase, adminId, "suspendre_utilisateur", "utilisateur", sellerId);
+
+  if (reportId) {
+    await supabase
+      .from("reports")
+      .update({ statut: "traite" })
+      .eq("id", reportId);
+    revalidatePath("/admin/signalements");
+  }
+
+  revalidatePath("/admin/utilisateurs");
+  redirect(redirectTo);
+}
+
+export async function approveTalentAction(formData: FormData) {
+  const { supabase, adminId } = await requireAdmin();
+  const sellerId = formData.get("sellerId")?.toString() ?? "";
+
+  await supabase
+    .from("pro_profiles")
+    .update({ verified: true, reviewed_at: new Date().toISOString() })
+    .eq("seller_id", sellerId);
+  await logAdminAction(supabase, adminId, "approuver_talentueux", "utilisateur", sellerId);
+
+  revalidatePath("/admin/talentueux");
+  redirect("/admin/talentueux");
+}
+
+export async function rejectTalentAction(formData: FormData) {
+  const { supabase, adminId } = await requireAdmin();
+  const sellerId = formData.get("sellerId")?.toString() ?? "";
+
+  await supabase
+    .from("pro_profiles")
+    .update({ verified: false, reviewed_at: new Date().toISOString() })
+    .eq("seller_id", sellerId);
+  await logAdminAction(supabase, adminId, "rejeter_talentueux", "utilisateur", sellerId);
+
+  revalidatePath("/admin/talentueux");
+  redirect("/admin/talentueux");
+}
+
+export async function createReportAction(formData: FormData) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) redirect("/connexion");
+
+  const type = formData.get("type")?.toString();
+  const targetId = formData.get("targetId")?.toString();
+  const motif = formData.get("motif")?.toString().trim();
+  const description = formData.get("description")?.toString().trim() ?? "";
+  const redirectTo = formData.get("redirectTo")?.toString() || "/";
+
+  if (
+    (type !== "annonce" && type !== "utilisateur") ||
+    !targetId ||
+    !motif
+  ) {
+    redirect(redirectTo);
+  }
+
+  const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+  const { count } = await supabase
+    .from("reports")
+    .select("id", { count: "exact", head: true })
+    .eq("reporter_id", user.id)
+    .gte("created_at", oneDayAgo);
+
+  if ((count ?? 0) >= 5) {
+    redirect(`${redirectTo}${redirectTo.includes("?") ? "&" : "?"}report_error=limit`);
+  }
+
+  await supabase.from("reports").insert({
+    type,
+    target_id: targetId,
+    reporter_id: user.id,
+    motif,
+    description,
+  });
+
+  redirect(`${redirectTo}${redirectTo.includes("?") ? "&" : "?"}reported=1`);
 }
 
 // --- Négociation (offres persistantes) ---

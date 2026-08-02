@@ -12,6 +12,8 @@ import {
   getReviewsBySeller,
   getSellerById,
 } from "@/lib/queries";
+import { createClient } from "@/lib/supabase/server";
+import ReportButton from "@/components/ReportButton";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import { getLocale } from "@/lib/i18n/locale";
@@ -57,10 +59,13 @@ export async function generateMetadata({
 
 export default async function VendeurPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ reported?: string; report_error?: string }>;
 }) {
   const { id } = await params;
+  const { reported, report_error } = await searchParams;
   const seller = await getSellerById(id);
 
   if (!seller) {
@@ -70,6 +75,12 @@ export default async function VendeurPage({
   const locale = await getLocale();
   const dict = await getDictionary(locale);
   const t = dict.vendeur;
+  const reportDict = dict.report;
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   const [sellerListings, reviews, proProfile, portfolio] = await Promise.all([
     getListingsBySeller(seller.id),
@@ -140,6 +151,31 @@ export default async function VendeurPage({
               </span>
             </div>
           </div>
+        </div>
+
+        {reported === "1" && (
+          <p className="mt-4 rounded-lg border border-line bg-bg-alt px-4 py-2.5 text-sm text-ink">
+            {reportDict.sentToast}
+          </p>
+        )}
+        {report_error === "limit" && (
+          <p className="mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-2.5 text-sm text-red-700">
+            {reportDict.limitErrorToast}
+          </p>
+        )}
+
+        <div className="mt-3">
+          <ReportButton
+            type="utilisateur"
+            targetId={seller.id}
+            redirectTo={`/vendeurs/${seller.id}`}
+            isLoggedIn={Boolean(user)}
+            label={reportDict.buttonSeller}
+            motifLabel={reportDict.motifLabel}
+            descriptionLabel={reportDict.descriptionLabel}
+            submitLabel={reportDict.submit}
+            cancelLabel={reportDict.cancel}
+          />
         </div>
 
         <section className="mt-12">

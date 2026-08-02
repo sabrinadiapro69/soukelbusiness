@@ -35,10 +35,10 @@ export default async function SiteHeader() {
   if (user) {
     const { data: seller } = await supabase
       .from("sellers")
-      .select("is_admin")
+      .select("role")
       .eq("id", user.id)
       .maybeSingle();
-    isAdmin = seller?.is_admin ?? false;
+    isAdmin = seller?.role === "admin";
   }
 
   const navLinks = [
@@ -57,7 +57,7 @@ export default async function SiteHeader() {
           { href: "/mes-recherches", label: t.mesRecherches },
         ]
       : []),
-    ...(isAdmin ? [{ href: "/admin", label: t.moderation }] : []),
+    ...(isAdmin ? [{ href: "/admin/dashboard", label: t.moderation }] : []),
   ];
 
   return (

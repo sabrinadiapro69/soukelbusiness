@@ -14,6 +14,7 @@ import {
 } from "@/lib/queries";
 import { createClient } from "@/lib/supabase/server";
 import NegotiationPanel from "@/components/NegotiationPanel";
+import ReportButton from "@/components/ReportButton";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import { getLocale } from "@/lib/i18n/locale";
@@ -49,10 +50,13 @@ export async function generateMetadata({
 
 export default async function ProduitPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ reported?: string; report_error?: string }>;
 }) {
   const { id } = await params;
+  const { reported, report_error } = await searchParams;
   const listing = await getListingById(Number(id));
 
   if (!listing) {
@@ -62,6 +66,7 @@ export default async function ProduitPage({
   const locale = await getLocale();
   const dict = await getDictionary(locale);
   const t = dict.produit;
+  const reportDict = dict.report;
 
   const similarListings = await getListingsByCategory(
     listing.category,
@@ -175,6 +180,29 @@ export default async function ProduitPage({
               <span>•</span>
               <span>{formatRelativeTime(listing.created_at)}</span>
             </div>
+
+            {reported === "1" && (
+              <p className="rounded-lg border border-line bg-bg-alt px-4 py-2.5 text-sm text-ink">
+                {reportDict.sentToast}
+              </p>
+            )}
+            {report_error === "limit" && (
+              <p className="rounded-lg border border-red-200 bg-red-50 px-4 py-2.5 text-sm text-red-700">
+                {reportDict.limitErrorToast}
+              </p>
+            )}
+
+            <ReportButton
+              type="annonce"
+              targetId={listing.id}
+              redirectTo={`/produits/${listing.id}`}
+              isLoggedIn={Boolean(user)}
+              label={reportDict.buttonListing}
+              motifLabel={reportDict.motifLabel}
+              descriptionLabel={reportDict.descriptionLabel}
+              submitLabel={reportDict.submit}
+              cancelLabel={reportDict.cancel}
+            />
 
             <div className="mt-4 rounded-2xl border border-line bg-paper p-5">
               <p className="text-sm text-ink-soft">{t.soldBy}</p>

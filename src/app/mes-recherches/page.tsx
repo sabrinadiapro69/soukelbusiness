@@ -24,7 +24,7 @@ export default async function MesRecherchesPage() {
     redirect("/connexion");
   }
 
-  const savedSearches = await getSavedSearches(user.id);
+  const savedSearches = await getSavedSearches(supabase, user.id);
 
   return (
     <div className="flex flex-1 flex-col">

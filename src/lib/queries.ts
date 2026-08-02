@@ -1,6 +1,10 @@
+import type { SupabaseClient } from "@supabase/supabase-js";
 import { supabase } from "./supabase";
 
 export type SellerType = "particulier" | "pro";
+
+export type SellerRole = "user" | "moderateur" | "admin";
+export type SellerStatus = "actif" | "suspendu";
 
 export type Seller = {
   id: string;
@@ -12,7 +16,11 @@ export type Seller = {
   member_since: string;
   transactions_count: number;
   rating: number;
+  role?: SellerRole;
+  status?: SellerStatus;
 };
+
+export type ListingStatus = "pending" | "approved" | "rejected";
 
 export type Listing = {
   id: number;
@@ -27,6 +35,7 @@ export type Listing = {
   description: string;
   negociable: boolean;
   created_at: string;
+  status?: ListingStatus;
   seller?: Seller;
 };
 
@@ -190,9 +199,10 @@ export async function getListingsBySeller(
 }
 
 export async function getSavedSearches(
+  supabaseClient: SupabaseClient,
   userId: string
 ): Promise<SavedSearch[]> {
-  const { data, error } = await supabase
+  const { data, error } = await supabaseClient
     .from("saved_searches")
     .select("*")
     .eq("user_id", userId)
@@ -200,6 +210,272 @@ export async function getSavedSearches(
 
   if (error) throw error;
   return data ?? [];
+}
+
+// --- Panneau d'administration ---
+// Ces fonctions attendent un client Supabase déjà autorisé (en pratique
+// le client service_role, créé côté serveur uniquement après vérification
+// du rôle admin — voir requireAdmin() dans actions.ts).
+
+export type ReportType = "annonce" | "utilisateur";
+export type ReportStatus = "en_attente" | "traite" | "rejete";
+
+export type Report = {
+  id: number;
+  type: ReportType;
+  target_id: string;
+  reporter_id: string;
+  motif: string;
+  description: string;
+  statut: ReportStatus;
+  created_at: string;
+  reporter?: Seller;
+  // Vendeur concerné par le signalement : le target_id lui-même si
+  // type = "utilisateur", ou le seller_id de l'annonce si type = "annonce"
+  // (résolu ici pour que les actions "avertir"/"bannir" ciblent la bonne
+  // personne).
+  sellerId: string | null;
+};
+
+export type AuditLogEntry = {
+  id: number;
+  admin_id: string | null;
+  action: string;
+  cible_type: string;
+  cible_id: string | null;
+  details: Record<string, unknown> | null;
+  created_at: string;
+  admin?: Seller;
+};
+
+export type PendingTalent = {
+  seller: Seller;
+  pro_profile: ProProfile;
+};
+
+export type DashboardCounts = {
+  newUsers: number;
+  newListings: number;
+  pendingReports: number;
+  pendingTalents: number;
+};
+
+export async function getDashboardCounts(
+  supabaseClient: SupabaseClient
+): Promise<DashboardCounts> {
+  const weekAgo = new Date(
+    Date.now() - 7 * 24 * 60 * 60 * 1000
+  ).toISOString();
+
+  const [newUsers, newListings, pendingReports, pendingTalents] =
+    await Promise.all([
+      supabaseClient
+        .from("sellers")
+        .select("id", { count: "exact", head: true })
+        .gte("created_at", weekAgo),
+      supabaseClient
+        .from("listings")
+        .select("id", { count: "exact", head: true })
+        .gte("created_at", weekAgo),
+      supabaseClient
+        .from("reports")
+        .select("id", { count: "exact", head: true })
+        .eq("statut", "en_attente"),
+      supabaseClient
+        .from("pro_profiles")
+        .select("seller_id", { count: "exact", head: true })
+        .eq("verified", false)
+        .is("reviewed_at", null),
+    ]);
+
+  return {
+    newUsers: newUsers.count ?? 0,
+    newListings: newListings.count ?? 0,
+    pendingReports: pendingReports.count ?? 0,
+    pendingTalents: pendingTalents.count ?? 0,
+  };
+}
+
+export async function getReports(
+  supabaseClient: SupabaseClient
+): Promise<Report[]> {
+  const { data, error } = await supabaseClient
+    .from("reports")
+    .select("*, reporter:sellers(*)")
+    .order("statut", { ascending: true })
+    .order("created_at", { ascending: false });
+
+  if (error) throw error;
+
+  const listingIds = (data ?? [])
+    .filter((r) => r.type === "annonce")
+    .map((r) => Number(r.target_id));
+
+  const sellerIdByListingId = new Map<number, string>();
+  if (listingIds.length > 0) {
+    const { data: listingsData } = await supabaseClient
+      .from("listings")
+      .select("id, seller_id")
+      .in("id", listingIds);
+    for (const listing of listingsData ?? []) {
+      sellerIdByListingId.set(listing.id, listing.seller_id);
+    }
+  }
+
+  return (data ?? []).map((r) => ({
+    ...r,
+    reporter: r.reporter ? normalizeSeller(r.reporter) : undefined,
+    sellerId:
+      r.type === "utilisateur"
+        ? r.target_id
+        : (sellerIdByListingId.get(Number(r.target_id)) ?? null),
+  }));
+}
+
+export async function getPendingTalents(
+  supabaseClient: SupabaseClient
+): Promise<PendingTalent[]> {
+  const { data, error } = await supabaseClient
+    .from("pro_profiles")
+    .select("*, seller:sellers(*)")
+    .eq("verified", false)
+    .is("reviewed_at", null);
+
+  if (error) throw error;
+  return (data ?? []).map((row) => ({
+    seller: normalizeSeller(row.seller),
+    pro_profile: {
+      seller_id: row.seller_id,
+      metier: row.metier,
+      verified: row.verified,
+    },
+  }));
+}
+
+export async function searchAdminUsers(
+  adminClient: SupabaseClient,
+  query: string
+): Promise<Seller[]> {
+  const trimmed = query.trim();
+  if (!trimmed) {
+    const { data, error } = await adminClient
+      .from("sellers")
+      .select("*")
+      .order("member_since", { ascending: false })
+      .limit(50);
+    if (error) throw error;
+    return (data ?? []).map(normalizeSeller);
+  }
+
+  const { data: byName, error: nameError } = await adminClient
+    .from("sellers")
+    .select("*")
+    .ilike("name", `%${trimmed}%`)
+    .limit(50);
+  if (nameError) throw nameError;
+
+  // L'email vit dans auth.users (jamais recopié dans une table publique
+  // pour éviter de l'exposer) : on ne peut le chercher que via l'API
+  // Admin, avec le client service_role.
+  const matchingIds = new Set((byName ?? []).map((s) => s.id));
+  const { data: authUsers } = await adminClient.auth.admin.listUsers({
+    page: 1,
+    perPage: 1000,
+  });
+  for (const authUser of authUsers?.users ?? []) {
+    if (authUser.email?.toLowerCase().includes(trimmed.toLowerCase())) {
+      matchingIds.add(authUser.id);
+    }
+  }
+
+  if (matchingIds.size === 0) return [];
+
+  const { data, error } = await adminClient
+    .from("sellers")
+    .select("*")
+    .in("id", Array.from(matchingIds));
+  if (error) throw error;
+  return (data ?? []).map(normalizeSeller);
+}
+
+export async function getSellerListingsCount(
+  supabaseClient: SupabaseClient,
+  sellerId: string
+): Promise<number> {
+  const { count } = await supabaseClient
+    .from("listings")
+    .select("id", { count: "exact", head: true })
+    .eq("seller_id", sellerId);
+  return count ?? 0;
+}
+
+export async function getSellerReportsCount(
+  supabaseClient: SupabaseClient,
+  sellerId: string
+): Promise<number> {
+  const { count } = await supabaseClient
+    .from("reports")
+    .select("id", { count: "exact", head: true })
+    .eq("type", "utilisateur")
+    .eq("target_id", sellerId);
+  return count ?? 0;
+}
+
+export async function searchAdminListings(
+  supabaseClient: SupabaseClient,
+  filters: {
+    query?: string;
+    category?: string;
+    statut?: string;
+    wilaya?: string;
+  } = {}
+): Promise<Listing[]> {
+  let query = supabaseClient
+    .from("listings")
+    .select("*, seller:sellers(*)")
+    .order("created_at", { ascending: false })
+    .limit(100);
+
+  if (filters.query) query = query.ilike("title", `%${filters.query}%`);
+  if (filters.category) query = query.eq("category", filters.category);
+  if (filters.statut) query = query.eq("status", filters.statut);
+  if (filters.wilaya) query = query.eq("location", filters.wilaya);
+
+  const { data, error } = await query;
+  if (error) throw error;
+  return (data ?? []).map(normalizeListing);
+}
+
+export async function getAdmins(
+  supabaseClient: SupabaseClient
+): Promise<Seller[]> {
+  const { data, error } = await supabaseClient
+    .from("sellers")
+    .select("*")
+    .eq("role", "admin");
+  if (error) throw error;
+  return (data ?? []).map(normalizeSeller);
+}
+
+export async function getAuditLog(
+  supabaseClient: SupabaseClient,
+  filters: { adminId?: string; action?: string } = {}
+): Promise<AuditLogEntry[]> {
+  let query = supabaseClient
+    .from("audit_log")
+    .select("*, admin:sellers(*)")
+    .order("created_at", { ascending: false })
+    .limit(200);
+
+  if (filters.adminId) query = query.eq("admin_id", filters.adminId);
+  if (filters.action) query = query.eq("action", filters.action);
+
+  const { data, error } = await query;
+  if (error) throw error;
+  return (data ?? []).map((entry) => ({
+    ...entry,
+    admin: entry.admin ? normalizeSeller(entry.admin) : undefined,
+  }));
 }
 
 export async function getReviewsBySeller(
