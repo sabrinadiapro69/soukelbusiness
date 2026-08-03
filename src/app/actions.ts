@@ -9,6 +9,20 @@ import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { locales, type Locale } from "@/lib/i18n/locale";
 import { wilayas } from "@/lib/wilayas";
+import {
+  sendListingApprovedEmail,
+  sendListingRejectedEmail,
+  sendTalentApprovedEmail,
+  sendTalentRejectedEmail,
+  sendWarningEmail,
+  sendSuspensionEmail,
+} from "@/lib/email";
+
+async function getUserEmail(userId: string): Promise<string | null> {
+  const adminClient = createAdminClient();
+  const { data } = await adminClient.auth.admin.getUserById(userId);
+  return data?.user?.email ?? null;
+}
 
 const MAX_PHOTO_SIZE = 5 * 1024 * 1024; // 5 Mo
 
@@ -416,11 +430,19 @@ async function logAdminAction(
 export async function approveListingAction(formData: FormData) {
   const { supabase, adminId } = await requireAdmin();
   const listingId = Number(formData.get("listingId"));
-  await supabase
+  const { data: listing } = await supabase
     .from("listings")
     .update({ status: "approved" })
-    .eq("id", listingId);
+    .eq("id", listingId)
+    .select("seller_id, title")
+    .maybeSingle();
   await logAdminAction(supabase, adminId, "approuver_annonce", "annonce", listingId);
+
+  if (listing) {
+    const email = await getUserEmail(listing.seller_id);
+    if (email) await sendListingApprovedEmail(email, listing.title, listingId);
+  }
+
   revalidatePath("/admin/annonces");
   redirect("/admin/annonces");
 }
@@ -428,11 +450,19 @@ export async function approveListingAction(formData: FormData) {
 export async function rejectListingAction(formData: FormData) {
   const { supabase, adminId } = await requireAdmin();
   const listingId = Number(formData.get("listingId"));
-  await supabase
+  const { data: listing } = await supabase
     .from("listings")
     .update({ status: "rejected" })
-    .eq("id", listingId);
+    .eq("id", listingId)
+    .select("seller_id, title")
+    .maybeSingle();
   await logAdminAction(supabase, adminId, "rejeter_annonce", "annonce", listingId);
+
+  if (listing) {
+    const email = await getUserEmail(listing.seller_id);
+    if (email) await sendListingRejectedEmail(email, listing.title);
+  }
+
   revalidatePath("/admin/annonces");
   redirect("/admin/annonces");
 }
@@ -481,13 +511,24 @@ export async function warnUserAction(formData: FormData) {
 
   await logAdminAction(supabase, adminId, "avertir_utilisateur", "utilisateur", sellerId);
 
+  let motif = "Non-respect des règles d'utilisation";
   if (reportId) {
+    const { data: report } = await supabase
+      .from("reports")
+      .select("motif")
+      .eq("id", reportId)
+      .maybeSingle();
+    if (report?.motif) motif = report.motif;
+
     await supabase
       .from("reports")
       .update({ statut: "traite" })
       .eq("id", reportId);
     revalidatePath("/admin/signalements");
   }
+
+  const email = await getUserEmail(sellerId);
+  if (email) await sendWarningEmail(email, motif);
 
   redirect("/admin/signalements");
 }
@@ -503,11 +544,15 @@ export async function suspendUserAction(formData: FormData) {
     .from("sellers")
     .update({ status: "suspendu" })
     .eq("id", sellerId);
-  await adminClient.auth.admin.updateUserById(sellerId, {
+  const { data: bannedUser } = await adminClient.auth.admin.updateUserById(sellerId, {
     ban_duration: "876000h",
   });
 
   await logAdminAction(supabase, adminId, "suspendre_utilisateur", "utilisateur", sellerId);
+
+  if (bannedUser?.user?.email) {
+    await sendSuspensionEmail(bannedUser.user.email);
+  }
 
   if (reportId) {
     await supabase
@@ -531,6 +576,9 @@ export async function approveTalentAction(formData: FormData) {
     .eq("seller_id", sellerId);
   await logAdminAction(supabase, adminId, "approuver_talentueux", "utilisateur", sellerId);
 
+  const email = await getUserEmail(sellerId);
+  if (email) await sendTalentApprovedEmail(email);
+
   revalidatePath("/admin/talentueux");
   redirect("/admin/talentueux");
 }
@@ -544,6 +592,9 @@ export async function rejectTalentAction(formData: FormData) {
     .update({ verified: false, reviewed_at: new Date().toISOString() })
     .eq("seller_id", sellerId);
   await logAdminAction(supabase, adminId, "rejeter_talentueux", "utilisateur", sellerId);
+
+  const email = await getUserEmail(sellerId);
+  if (email) await sendTalentRejectedEmail(email);
 
   revalidatePath("/admin/talentueux");
   redirect("/admin/talentueux");
