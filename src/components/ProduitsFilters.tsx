@@ -154,7 +154,7 @@ export default function ProduitsFilters({
       </p>
 
       <div className="mt-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           {(
             [
               { value: "tous", label: dict.filterAll },
@@ -176,7 +176,7 @@ export default function ProduitsFilters({
           ))}
         </div>
 
-        <div className="flex gap-3">
+        <div className="flex flex-wrap gap-3">
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
