@@ -1,174 +1,173 @@
-import { requireAdminPage } from "@/lib/admin-guard";
-import { searchAdminListings, formatDA, getListingPhotoUrl, categories } from "@/lib/queries";
-import { wilayas } from "@/lib/wilayas";
-import {
-  approveListingAction,
-  rejectListingAction,
-  removeListingAction,
-} from "@/app/actions";
+import { redirect } from "next/navigation";
+import Link from "next/link";
+import { createClient } from "@/lib/supabase/server";
+import { formatEUR } from "@/lib/queries";
+import { sellerRespondOfferAction } from "@/app/actions";
+import SiteHeader from "@/components/SiteHeader";
+import SiteFooter from "@/components/SiteFooter";
 import { getLocale } from "@/lib/i18n/locale";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 
-export default async function AdminAnnoncesPage({
-  searchParams,
-}: {
-  searchParams: Promise<{
-    q?: string;
-    categorie?: string;
-    statut?: string;
-    wilaya?: string;
-  }>;
-}) {
-  const { adminClient } = await requireAdminPage();
+export const dynamic = "force-dynamic";
+
+export default async function OffresPage() {
   const locale = await getLocale();
   const dict = await getDictionary(locale);
-  const t = dict.admin;
-  const { q, categorie, statut, wilaya } = await searchParams;
+  const t = dict.offresRecues;
 
-  const listings = await searchAdminListings(adminClient, {
-    query: q,
-    category: categorie,
-    statut,
-    wilaya,
-  });
-
-  const statutLabels: Record<string, string> = {
-    pending: t.statutPending,
-    approved: t.statutApproved,
-    rejected: t.statutRejected,
+  const statusLabels: Record<string, { label: string; className: string }> = {
+    en_attente: {
+      label: t.statusPending,
+      className: "bg-primary/10 text-primary-dark",
+    },
+    contre_offre: {
+      label: t.statusCounter,
+      className: "bg-dawn-soft text-accent-dark",
+    },
+    acceptee: { label: t.statusAccepted, className: "bg-green-100 text-green-700" },
+    refusee: { label: t.statusRefused, className: "bg-bg-alt text-ink-soft" },
   };
 
-  const postableCategories = categories.filter((c) => c !== "Toutes catégories");
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/connexion");
+  }
+
+  const { data: offers } = await supabase
+    .from("offers")
+    .select("*, listings!inner(*), buyer:sellers(*)")
+    .eq("listings.seller_id", user.id)
+    .order("created_at", { ascending: false });
 
   return (
-    <>
-      <h1 className="text-2xl font-bold text-ink">{t.annoncesTitle}</h1>
+    <div className="flex flex-1 flex-col">
+      <SiteHeader />
 
-      <form className="mt-6 flex flex-wrap gap-3">
-        <input
-          type="text"
-          name="q"
-          defaultValue={q ?? ""}
-          placeholder={t.searchByTitlePlaceholder}
-          className="min-w-[220px] flex-1 rounded-full border border-line bg-paper px-4 py-2.5 text-sm outline-none focus:border-ink"
-        />
-        <select
-          name="categorie"
-          defaultValue={categorie ?? ""}
-          className="rounded-full border border-line bg-paper px-4 py-2.5 text-sm text-ink-soft"
-        >
-          <option value="">{t.filterAllCategories}</option>
-          {postableCategories.map((c) => (
-            <option key={c} value={c}>
-              {c}
-            </option>
-          ))}
-        </select>
-        <select
-          name="statut"
-          defaultValue={statut ?? ""}
-          className="rounded-full border border-line bg-paper px-4 py-2.5 text-sm text-ink-soft"
-        >
-          <option value="">{t.filterAllStatuses}</option>
-          <option value="pending">{t.statutPending}</option>
-          <option value="approved">{t.statutApproved}</option>
-          <option value="rejected">{t.statutRejected}</option>
-        </select>
-        <select
-          name="wilaya"
-          defaultValue={wilaya ?? ""}
-          className="rounded-full border border-line bg-paper px-4 py-2.5 text-sm text-ink-soft"
-        >
-          <option value="">{t.filterAllWilayas}</option>
-          {wilayas.map((w) => (
-            <option key={w} value={w}>
-              {w}
-            </option>
-          ))}
-        </select>
-        <button
-          type="submit"
-          className="rounded-full border border-line px-5 py-2.5 text-sm font-semibold transition-colors hover:border-ink"
-        >
-          {t.searchButton}
-        </button>
-      </form>
+      <main className="mx-auto w-full max-w-4xl flex-1 px-6 py-16">
+        <h1 className="text-2xl font-bold text-ink">{t.pageTitle}</h1>
+        <p className="mt-1 text-sm text-ink-soft">{t.pageSubtitle}</p>
 
-      <div className="mt-8 flex flex-col gap-4">
-        {listings.map((listing) => (
-          <div
-            key={listing.id}
-            className="flex flex-col gap-4 rounded-2xl border border-line bg-paper p-5 sm:flex-row sm:items-center"
-          >
-            <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-bg-alt text-3xl">
-              {listing.photos.length > 0 ? (
-                <img
-                  src={getListingPhotoUrl(listing.photos[0])}
-                  alt={listing.title}
-                  className="h-full w-full object-cover"
-                />
-              ) : (
-                listing.emoji
-              )}
-            </div>
-            <div className="flex-1">
-              <div className="flex flex-wrap items-center gap-2">
-                <h2 className="font-semibold text-ink">{listing.title}</h2>
-                <span className="rounded-full bg-bg-alt px-2 py-0.5 text-xs font-semibold text-ink-soft">
-                  {statutLabels[listing.status ?? "approved"]}
-                </span>
+        <div className="mt-8 flex flex-col gap-4">
+          {offers?.map((offer) => {
+            const status = statusLabels[offer.statut] ?? statusLabels.en_attente;
+            return (
+              <div
+                key={offer.id}
+                className="rounded-2xl border border-line bg-paper p-5"
+              >
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div>
+                    <Link
+                      href={`/produits/${offer.listings.id}`}
+                      className="font-semibold text-ink hover:text-accent"
+                    >
+                      {offer.listings.title}
+                    </Link>
+                    <p className="text-sm text-ink-soft">
+                      {t.by} {offer.buyer?.name} · {t.displayedPrice}{" "}
+                      {formatEUR(offer.listings.price)}
+                    </p>
+                  </div>
+                  <span
+                    className={`rounded-full px-3 py-1 text-xs font-semibold ${status.className}`}
+                  >
+                    {status.label}
+                  </span>
+                </div>
+
+                <p className="mt-3 font-mono text-lg font-bold text-accent-dark">
+                  {t.offer} {formatEUR(Number(offer.montant_propose))}
+                </p>
+
+                {offer.statut === "en_attente" && (
+                  <div className="mt-4 flex flex-wrap items-end gap-2">
+                    <form action={sellerRespondOfferAction}>
+                      <input type="hidden" name="offerId" value={offer.id} />
+                      <input
+                        type="hidden"
+                        name="listingId"
+                        value={offer.listings.id}
+                      />
+                      <input type="hidden" name="decision" value="accepter" />
+                      <button
+                        type="submit"
+                        className="rounded-full bg-accent px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-accent-dark"
+                      >
+                        {t.accept}
+                      </button>
+                    </form>
+                    <form action={sellerRespondOfferAction}>
+                      <input type="hidden" name="offerId" value={offer.id} />
+                      <input
+                        type="hidden"
+                        name="listingId"
+                        value={offer.listings.id}
+                      />
+                      <input type="hidden" name="decision" value="refuser" />
+                      <button
+                        type="submit"
+                        className="rounded-full border border-line px-4 py-2 text-sm font-semibold text-ink-soft transition-colors hover:border-ink"
+                      >
+                        {t.refuse}
+                      </button>
+                    </form>
+                    <form
+                      action={sellerRespondOfferAction}
+                      className="flex items-end gap-2"
+                    >
+                      <input type="hidden" name="offerId" value={offer.id} />
+                      <input
+                        type="hidden"
+                        name="listingId"
+                        value={offer.listings.id}
+                      />
+                      <input
+                        type="hidden"
+                        name="decision"
+                        value="contre_offre"
+                      />
+                      <div>
+                        <label className="text-xs font-medium text-ink-soft">
+                          {t.counterOfferLabel}
+                        </label>
+                        <input
+                          type="number"
+                          name="montant"
+                          min={1}
+                          defaultValue={Number(offer.montant_propose)}
+                          className="mt-1 w-32 rounded-xl border border-line px-3 py-2 text-sm text-ink outline-none focus:border-accent"
+                        />
+                      </div>
+                      <button
+                        type="submit"
+                        className="rounded-full border border-accent px-4 py-2 text-sm font-semibold text-accent transition-colors hover:bg-dawn-soft"
+                      >
+                        {t.send}
+                      </button>
+                    </form>
+                  </div>
+                )}
+
+                {offer.statut === "acceptee" && offer.conclue_par_acheteur && (
+                  <p className="mt-3 text-sm font-medium text-green-700">
+                    {t.buyerConfirmed}
+                  </p>
+                )}
               </div>
-              <p className="text-sm text-ink-soft">
-                {listing.is_don ? dict.produit.don : formatDA(listing.price)} ·{" "}
-                {listing.category} · {listing.location}
-              </p>
-              <p className="text-sm text-ink-soft">
-                {listing.seller?.name}
-              </p>
-            </div>
-            <div className="flex gap-2">
-              {listing.status === "pending" ? (
-                <>
-                  <form action={approveListingAction}>
-                    <input type="hidden" name="listingId" value={listing.id} />
-                    <button
-                      type="submit"
-                      className="rounded-full bg-accent px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-accent-dark"
-                    >
-                      {t.actionApproveListing}
-                    </button>
-                  </form>
-                  <form action={rejectListingAction}>
-                    <input type="hidden" name="listingId" value={listing.id} />
-                    <button
-                      type="submit"
-                      className="rounded-full border border-red-300 px-4 py-2 text-sm font-semibold text-red-600 transition-colors hover:bg-red-50"
-                    >
-                      {t.actionRejectListing}
-                    </button>
-                  </form>
-                </>
-              ) : (
-                listing.status === "approved" && (
-                  <form action={removeListingAction}>
-                    <input type="hidden" name="listingId" value={listing.id} />
-                    <button
-                      type="submit"
-                      className="rounded-full border border-red-300 px-4 py-2 text-sm font-semibold text-red-600 transition-colors hover:bg-red-50"
-                    >
-                      {t.actionRemove}
-                    </button>
-                  </form>
-                )
-              )}
-            </div>
-          </div>
-        ))}
+            );
+          })}
 
-        {listings.length === 0 && (
-          <p className="text-sm text-ink-soft">{t.noListings}</p>
-        )}
-      </div>
-    </>
+          {(!offers || offers.length === 0) && (
+            <p className="text-sm text-ink-soft">{t.noOffers}</p>
+          )}
+        </div>
+      </main>
+
+      <SiteFooter />
+    </div>
   );
 }

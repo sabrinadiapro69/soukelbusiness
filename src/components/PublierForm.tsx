@@ -86,8 +86,8 @@ export default function PublierForm({
           <input
             type="number"
             name="price"
-            min={1}
-            step="1"
+            min={0.01}
+            step="0.01"
             required={!isDon}
             disabled={isDon}
             className="mt-1 w-full rounded-xl border border-line px-4 py-2 text-sm text-ink outline-none focus:border-accent disabled:bg-bg-alt disabled:text-ink-soft"

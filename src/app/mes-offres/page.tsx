@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { formatDA } from "@/lib/queries";
+import { formatEUR } from "@/lib/queries";
 import { acceptCounterAction, concludeTransactionAction } from "@/app/actions";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
@@ -70,7 +70,7 @@ export default async function MesOffresPage() {
                       {offer.listings.title}
                     </Link>
                     <p className="text-sm text-ink-soft">
-                      {t.displayedPrice} {formatDA(Number(offer.listings.price))}
+                      {t.displayedPrice} {formatEUR(Number(offer.listings.price))}
                     </p>
                   </div>
                   <span
@@ -81,7 +81,7 @@ export default async function MesOffresPage() {
                 </div>
 
                 <p className="mt-3 font-mono text-lg font-bold text-accent-dark">
-                  {t.yourOffer} {formatDA(montant)}
+                  {t.yourOffer} {formatEUR(montant)}
                 </p>
 
                 {offer.statut === "contre_offre" && (
@@ -96,7 +96,7 @@ export default async function MesOffresPage() {
                       type="submit"
                       className="rounded-full border border-accent px-4 py-2 text-sm font-semibold text-accent transition-colors hover:bg-dawn-soft"
                     >
-                      {t.acceptAt(formatDA(montant))}
+                      {t.acceptAt(formatEUR(montant))}
                     </button>
                   </form>
                 )}

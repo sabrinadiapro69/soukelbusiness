@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { formatDA, type Offer } from "@/lib/queries";
+import { formatEUR, type Offer } from "@/lib/queries";
 import {
   acceptCounterAction,
   concludeTransactionAction,
@@ -57,13 +57,13 @@ export default async function NegotiationPanel({
       <h2 className="font-semibold text-ink">{t.title}</h2>
       <p className="mt-1 text-sm text-ink-soft">
         {t.displayedPrice}{" "}
-        <span className="font-semibold">{formatDA(askingPrice)}</span>{" "}
+        <span className="font-semibold">{formatEUR(askingPrice)}</span>{" "}
         {t.proposeText(sellerName)}
       </p>
 
       {offer?.statut === "en_attente" && (
         <div className="mt-4 rounded-xl bg-bg-alt px-4 py-3 text-sm text-ink">
-          {t.pending(formatDA(offer.montant_propose))}
+          {t.pending(formatEUR(offer.montant_propose))}
         </div>
       )}
 
@@ -76,7 +76,7 @@ export default async function NegotiationPanel({
       {offer?.statut === "contre_offre" && (
         <div className="mt-4 flex flex-col gap-3">
           <div className="rounded-xl bg-bg-alt px-4 py-3 text-sm text-ink">
-            {t.counterOffer(sellerName, formatDA(offer.montant_propose))}
+            {t.counterOffer(sellerName, formatEUR(offer.montant_propose))}
           </div>
           <form action={acceptCounterAction} className="flex gap-2">
             <input type="hidden" name="offerId" value={offer.id} />
@@ -85,7 +85,7 @@ export default async function NegotiationPanel({
               type="submit"
               className="rounded-full border border-accent px-4 py-2 text-sm font-semibold text-accent transition-colors hover:bg-dawn-soft"
             >
-              {t.acceptAt(formatDA(offer.montant_propose))}
+              {t.acceptAt(formatEUR(offer.montant_propose))}
             </button>
           </form>
         </div>
@@ -93,7 +93,7 @@ export default async function NegotiationPanel({
 
       {offer?.statut === "acceptee" && (
         <div className="mt-4 rounded-xl bg-green-50 px-4 py-3 text-sm font-medium text-green-700">
-          {t.accepted(formatDA(offer.montant_propose))}{" "}
+          {t.accepted(formatEUR(offer.montant_propose))}{" "}
           {offer.conclue_par_acheteur ? (
             t.concluded
           ) : (

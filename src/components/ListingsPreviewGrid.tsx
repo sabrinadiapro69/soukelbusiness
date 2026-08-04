@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { formatDA, getListingPhotoUrl, type Listing } from "@/lib/queries";
+import { formatEUR, getListingPhotoUrl, type Listing } from "@/lib/queries";
 
 export default function ListingsPreviewGrid({
   listings,
@@ -45,7 +45,7 @@ export default function ListingsPreviewGrid({
               </span>
             ) : (
               <span className="font-mono font-bold text-accent-dark">
-                {formatDA(listing.price)}
+                {formatEUR(listing.price)}
               </span>
             )}
           </div>

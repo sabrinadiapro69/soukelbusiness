@@ -13,18 +13,18 @@ import { getPortfolioPhotoUrl, type PortfolioItem } from "@/lib/queries";
 import type { Dictionary } from "@/lib/i18n/dictionaries/fr";
 
 const emojiOptions = [
-  "🙂",
-  "😊",
-  "😎",
-  "🥳",
-  "🤓",
-  "🧕",
-  "🧔",
-  "👩",
-  "👨",
-  "👵",
-  "👴",
-  "🧑",
+  "🧑🏽",
+  "👩🏽",
+  "👨🏽",
+  "🧕🏽",
+  "🧔🏽",
+  "👳🏽",
+  "👱🏼",
+  "🧑🏾‍🦱",
+  "👩🏾‍🦱",
+  "🧑🏻‍🦳",
+  "👵🏽",
+  "👴🏾",
 ];
 
 const initialState: UpdateProfileState = { error: null };

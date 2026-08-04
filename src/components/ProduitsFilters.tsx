@@ -4,8 +4,8 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import {
   categories,
-  formatDA,
-  formatEurApprox,
+  formatEUR,
+  formatDaApprox,
   formatRelativeTime,
   getListingPhotoUrl,
   type Listing,
@@ -253,7 +253,7 @@ export default function ProduitsFilters({
                 <>
                   <div className="flex items-center gap-2">
                     <span className="font-mono text-lg font-bold text-accent-dark">
-                      {formatDA(listing.price)}
+                      {formatEUR(listing.price)}
                     </span>
                     <span
                       className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${
@@ -266,7 +266,7 @@ export default function ProduitsFilters({
                     </span>
                   </div>
                   <span className="text-[11px] text-ink-soft/70">
-                    {formatEurApprox(listing.price, taux)}
+                    {formatDaApprox(listing.price, taux)}
                   </span>
                 </>
               )}
