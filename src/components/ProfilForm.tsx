@@ -8,6 +8,7 @@ import {
   type UpdateProfileState,
 } from "@/app/actions";
 import { wilayas } from "@/lib/wilayas";
+import { wilayasAlgerie } from "@/lib/wilayas-algerie";
 import { getPortfolioPhotoUrl, type PortfolioItem } from "@/lib/queries";
 import type { Dictionary } from "@/lib/i18n/dictionaries/fr";
 
@@ -110,11 +111,20 @@ export default function ProfilForm({
           <option value="" disabled>
             {dict.chooseWilaya}
           </option>
-          {wilayas.map((w) => (
-            <option key={w} value={w}>
-              {w}
-            </option>
-          ))}
+          <optgroup label={dict.franceGroupLabel}>
+            {wilayas.map((w) => (
+              <option key={w} value={w}>
+                {w}
+              </option>
+            ))}
+          </optgroup>
+          <optgroup label={dict.algerieGroupLabel} disabled>
+            {wilayasAlgerie.map((w) => (
+              <option key={w} value={w}>
+                {w}
+              </option>
+            ))}
+          </optgroup>
         </select>
       </div>
 

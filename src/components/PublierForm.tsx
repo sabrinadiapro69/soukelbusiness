@@ -4,6 +4,7 @@ import { useActionState, useState } from "react";
 import { createListingAction, type CreateListingState } from "@/app/actions";
 import { categories } from "@/lib/queries";
 import { wilayas } from "@/lib/wilayas";
+import { wilayasAlgerie } from "@/lib/wilayas-algerie";
 import { communesByWilaya } from "@/lib/communes";
 import type { Dictionary } from "@/lib/i18n/dictionaries/fr";
 
@@ -143,30 +144,41 @@ export default function PublierForm({
           <option value="" disabled>
             {dict.chooseWilaya}
           </option>
-          {wilayas.map((w) => (
-            <option key={w} value={w}>
-              {w}
-            </option>
-          ))}
+          <optgroup label={dict.franceGroupLabel}>
+            {wilayas.map((w) => (
+              <option key={w} value={w}>
+                {w}
+              </option>
+            ))}
+          </optgroup>
+          <optgroup label={dict.algerieGroupLabel} disabled>
+            {wilayasAlgerie.map((w) => (
+              <option key={w} value={w}>
+                {w}
+              </option>
+            ))}
+          </optgroup>
         </select>
       </div>
 
-      <div>
-        <label className="text-sm font-medium text-ink">{dict.commune}</label>
-        <select
-          name="commune"
-          defaultValue=""
-          disabled={!selectedWilaya}
-          className="mt-1 w-full rounded-xl border border-line px-4 py-2 text-sm text-ink outline-none focus:border-accent disabled:bg-bg-alt disabled:text-ink-soft"
-        >
-          <option value="">{dict.chooseCommune}</option>
-          {communeOptions.map((c) => (
-            <option key={c} value={c}>
-              {c}
-            </option>
-          ))}
-        </select>
-      </div>
+      {communeOptions.length > 0 && (
+        <div>
+          <label className="text-sm font-medium text-ink">{dict.commune}</label>
+          <select
+            name="commune"
+            defaultValue=""
+            disabled={!selectedWilaya}
+            className="mt-1 w-full rounded-xl border border-line px-4 py-2 text-sm text-ink outline-none focus:border-accent disabled:bg-bg-alt disabled:text-ink-soft"
+          >
+            <option value="">{dict.chooseCommune}</option>
+            {communeOptions.map((c) => (
+              <option key={c} value={c}>
+                {c}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
 
       <div>
         <label className="text-sm font-medium text-ink">

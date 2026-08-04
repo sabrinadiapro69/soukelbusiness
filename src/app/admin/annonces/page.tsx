@@ -119,8 +119,8 @@ export default async function AdminAnnoncesPage({
                 </span>
               </div>
               <p className="text-sm text-ink-soft">
-                {formatDA(listing.price)} · {listing.category} ·{" "}
-                {listing.location}
+                {listing.is_don ? dict.produit.don : formatDA(listing.price)} ·{" "}
+                {listing.category} · {listing.location}
               </p>
               <p className="text-sm text-ink-soft">
                 {listing.seller?.name}

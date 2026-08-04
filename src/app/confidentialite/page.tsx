@@ -42,6 +42,7 @@ export default async function ConfidentialitePage() {
             </a>
             .
           </p>
+          <p className="mt-2 text-ink-soft">{t.rightsSectionSuffix}</p>
         </section>
 
         <section className="mt-8">
@@ -56,6 +57,20 @@ export default async function ConfidentialitePage() {
             {t.securitySectionTitle}
           </h2>
           <p className="mt-2 text-ink-soft">{t.securitySectionBody}</p>
+        </section>
+
+        <section className="mt-8">
+          <h2 className="text-lg font-semibold text-ink">
+            {t.minorsSectionTitle}
+          </h2>
+          <p className="mt-2 text-ink-soft">{t.minorsSectionBody}</p>
+        </section>
+
+        <section className="mt-8">
+          <h2 className="text-lg font-semibold text-ink">
+            {t.changesSectionTitle}
+          </h2>
+          <p className="mt-2 text-ink-soft">{t.changesSectionBody}</p>
         </section>
 
         <section className="mt-8 flex gap-4 text-sm">

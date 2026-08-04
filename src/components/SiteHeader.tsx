@@ -5,6 +5,7 @@ import { getLocale, type Locale } from "@/lib/i18n/locale";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { getWilayaPref } from "@/lib/wilaya-pref";
 import { wilayas } from "@/lib/wilayas";
+import { wilayasAlgerie } from "@/lib/wilayas-algerie";
 import MobileMenu from "@/components/MobileMenu";
 import ProfileMenu from "@/components/ProfileMenu";
 import WilayaSwitcher from "@/components/WilayaSwitcher";
@@ -70,6 +71,9 @@ export default async function SiteHeader() {
               {locationLabel}{" "}
               <WilayaSwitcher
                 wilayas={wilayas}
+                wilayasAlgerie={wilayasAlgerie}
+                franceGroupLabel={t.franceGroupLabel}
+                algerieGroupLabel={t.algerieGroupLabel}
                 changeLabel={t.change}
                 action={setWilayaAction}
               />

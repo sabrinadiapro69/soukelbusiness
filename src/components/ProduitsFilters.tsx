@@ -12,6 +12,7 @@ import {
   type SellerType,
 } from "@/lib/queries";
 import { wilayas } from "@/lib/wilayas";
+import { wilayasAlgerie } from "@/lib/wilayas-algerie";
 import { communesByWilaya } from "@/lib/communes";
 import type { Dictionary } from "@/lib/i18n/dictionaries/fr";
 import type { Locale } from "@/lib/i18n/locale";
@@ -114,25 +115,36 @@ export default function ProduitsFilters({
           className="rounded-full border border-line bg-paper px-4 py-2.5 text-sm text-ink-soft"
         >
           <option value="">{dict.filterWilayaAll}</option>
-          {wilayas.map((w) => (
-            <option key={w} value={w}>
-              {w}
-            </option>
-          ))}
+          <optgroup label={dict.franceGroupLabel}>
+            {wilayas.map((w) => (
+              <option key={w} value={w}>
+                {w}
+              </option>
+            ))}
+          </optgroup>
+          <optgroup label={dict.algerieGroupLabel} disabled>
+            {wilayasAlgerie.map((w) => (
+              <option key={w} value={w}>
+                {w}
+              </option>
+            ))}
+          </optgroup>
         </select>
-        <select
-          value={communeFilter}
-          onChange={(e) => setCommuneFilter(e.target.value)}
-          disabled={!wilayaFilter}
-          className="rounded-full border border-line bg-paper px-4 py-2.5 text-sm text-ink-soft disabled:bg-bg-alt disabled:text-ink-soft/60"
-        >
-          <option value="">{dict.filterCommuneAll}</option>
-          {communeOptions.map((c) => (
-            <option key={c} value={c}>
-              {c}
-            </option>
-          ))}
-        </select>
+        {communeOptions.length > 0 && (
+          <select
+            value={communeFilter}
+            onChange={(e) => setCommuneFilter(e.target.value)}
+            disabled={!wilayaFilter}
+            className="rounded-full border border-line bg-paper px-4 py-2.5 text-sm text-ink-soft disabled:bg-bg-alt disabled:text-ink-soft/60"
+          >
+            <option value="">{dict.filterCommuneAll}</option>
+            {communeOptions.map((c) => (
+              <option key={c} value={c}>
+                {c}
+              </option>
+            ))}
+          </select>
+        )}
         {isLoggedIn && saveSearchAction && (
           <form action={saveSearchAction}>
             <input type="hidden" name="query" value={query} />

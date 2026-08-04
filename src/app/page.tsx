@@ -1,10 +1,14 @@
 import Link from "next/link";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
-import DressingScroll from "@/components/DressingScroll";
-import AnnoncesFilter from "@/components/AnnoncesFilter";
-import { getDonListings, getPortfolioPhotoUrl, getTopTalents } from "@/lib/queries";
+import ListingsPreviewGrid from "@/components/ListingsPreviewGrid";
 import DonsScroll from "@/components/DonsScroll";
+import {
+  getDonListings,
+  getListings,
+  getPortfolioPhotoUrl,
+  getTopTalents,
+} from "@/lib/queries";
 import { getLocale } from "@/lib/i18n/locale";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 
@@ -36,175 +40,110 @@ type Thumb = { type: "emoji" | "photo"; value: string };
 
 const talentColors = ["bg-primary", "bg-accent", "bg-gold", "bg-primary-dark"];
 
-const fallbackThumbs: Thumb[][] = [
-  [{ type: "emoji", value: "🔧" }, { type: "emoji", value: "🔧" }, { type: "emoji", value: "🔧" }],
-  [{ type: "emoji", value: "✂️" }, { type: "emoji", value: "✂️" }, { type: "emoji", value: "✂️" }],
-  [{ type: "emoji", value: "🏗️" }, { type: "emoji", value: "🏗️" }, { type: "emoji", value: "🏗️" }],
-  [{ type: "emoji", value: "⚡" }, { type: "emoji", value: "⚡" }, { type: "emoji", value: "⚡" }],
-];
-
-const fallbackNames = ["Amine K.", "Lynda B.", "Sofiane R.", "Hakim M."];
-const fallbackMetiers = [
-  "Plombier · Alger",
-  "Couturière · Oran",
-  "Maçon · Constantine",
-  "Électricien · Béjaïa",
-];
-const fallbackRatings = ["4.9", "5.0", "4.8", "4.6"];
-const fallbackReviews = [86, 112, 64, 29];
-
 export default async function Home() {
   const locale = await getLocale();
   const dict = await getDictionary(locale);
   const t = dict.home;
 
   const realTalents = await getTopTalents(4).catch(() => []);
+  const talents = realTalents.map((talent, i) => ({
+    key: talent.seller.id,
+    href: `/vendeurs/${talent.seller.id}`,
+    name: talent.seller.name,
+    metier: `${talent.pro_profile.metier || "Professionnel"} · ${talent.seller.city}`,
+    rating: talent.seller.rating.toFixed(1),
+    reviews: talent.reviewsCount,
+    color: talentColors[i % talentColors.length],
+    thumbs: (talent.portfolio.length > 0
+      ? talent.portfolio
+          .slice(0, 3)
+          .map((p): Thumb => ({
+            type: "photo",
+            value: getPortfolioPhotoUrl(p.photos[0]),
+          }))
+      : [{ type: "emoji", value: "🛠️" } as Thumb]
+    ),
+  }));
+
+  const allListings = await getListings().catch(() => []);
+  const recentListings = allListings.slice(0, 8);
+  const dressingListings = allListings
+    .filter((l) => l.category === "Dressing")
+    .slice(0, 8);
   const donListings = await getDonListings(12).catch(() => []);
-  const talents =
-    realTalents.length > 0
-      ? realTalents.map((talent, i) => ({
-          key: talent.seller.id,
-          href: `/vendeurs/${talent.seller.id}`,
-          name: talent.seller.name,
-          metier: `${talent.pro_profile.metier || "Professionnel"} · ${talent.seller.city}`,
-          rating: talent.seller.rating.toFixed(1),
-          reviews: talent.reviewsCount,
-          badge: true,
-          color: talentColors[i % talentColors.length],
-          thumbs: (talent.portfolio.length > 0
-            ? talent.portfolio
-                .slice(0, 3)
-                .map((p): Thumb => ({
-                  type: "photo",
-                  value: getPortfolioPhotoUrl(p.photos[0]),
-                }))
-            : [{ type: "emoji", value: "🛠️" } as Thumb]
-          ),
-        }))
-      : fallbackNames.map((name, i) => ({
-          key: name,
-          href: "#",
-          name,
-          metier: fallbackMetiers[i],
-          rating: fallbackRatings[i],
-          reviews: fallbackReviews[i],
-          badge: i < 3,
-          color: talentColors[i % talentColors.length],
-          thumbs: fallbackThumbs[i],
-        }));
 
   return (
     <div className="flex flex-1 flex-col">
       <SiteHeader />
 
+      {/* Bandeau diaspora */}
+      <div className="border-b border-line bg-dawn-soft px-6 py-2.5 text-center text-[13px] text-dawn-dark">
+        {t.diasporaBanner}
+      </div>
+
       <main className="flex-1">
         {/* Hero */}
         <section className="relative overflow-hidden border-b border-line bg-bg py-16">
-          <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-10 px-6 lg:grid-cols-[1.15fr_0.85fr]">
-            <div>
-              <span className="mb-5 inline-flex items-center gap-2 rounded-full border border-line bg-dawn-soft px-3.5 py-1.5 text-[12.5px] font-semibold text-dawn-dark">
-                <span className="h-1.5 w-1.5 rounded-full bg-dawn-dark" />
-                {t.badge}
-              </span>
-              <h1 className="max-w-xl font-serif text-4xl leading-tight font-bold tracking-tight sm:text-5xl">
-                {t.heroTitle}{" "}
-                <em className="text-primary not-italic font-medium italic">
-                  {t.heroTitleEmphasis}
-                </em>
-              </h1>
-              <p className="mt-4 max-w-md text-base leading-relaxed text-ink-soft">
-                {t.heroSubtitle}
-              </p>
+          <div className="mx-auto max-w-3xl px-6 text-center">
+            <span className="mb-5 inline-flex items-center gap-2 rounded-full border border-line bg-dawn-soft px-3.5 py-1.5 text-[12.5px] font-semibold text-dawn-dark">
+              <span className="h-1.5 w-1.5 rounded-full bg-dawn-dark" />
+              {t.badge}
+            </span>
+            <h1 className="font-serif text-4xl leading-tight font-bold tracking-tight sm:text-5xl">
+              {t.heroTitle}{" "}
+              <em className="text-primary not-italic font-medium italic">
+                {t.heroTitleEmphasis}
+              </em>
+            </h1>
+            <p className="mx-auto mt-4 max-w-md text-base leading-relaxed text-ink-soft">
+              {t.heroSubtitle}
+            </p>
 
-              <form
-                action="/produits"
-                method="GET"
-                className="mt-8 flex w-full max-w-2xl flex-col overflow-hidden rounded-2xl border-[1.5px] border-ink bg-paper shadow-[4px_4px_0_var(--ink)] sm:flex-row"
+            <form
+              action="/produits"
+              method="GET"
+              className="mx-auto mt-8 flex w-full max-w-2xl flex-col overflow-hidden rounded-2xl border-[1.5px] border-ink bg-paper shadow-[4px_4px_0_var(--ink)] sm:flex-row"
+            >
+              <select
+                name="categorie"
+                defaultValue={t.searchAllCategories}
+                className="w-full border-b border-line px-4 py-4 text-[15px] text-ink-soft outline-none sm:w-auto sm:border-r sm:border-b-0"
               >
-                <select
-                  name="categorie"
-                  defaultValue={t.searchAllCategories}
-                  className="w-full border-b border-line px-4 py-4 text-[15px] text-ink-soft outline-none sm:w-auto sm:border-r sm:border-b-0"
-                >
-                  <option>{t.searchAllCategories}</option>
-                  {t.rayons.slice(0, 4).map((r) => (
-                    <option key={r.title}>{r.title}</option>
-                  ))}
-                </select>
-                <input
-                  type="text"
-                  name="q"
-                  placeholder={t.searchPlaceholder}
-                  className="w-full min-w-0 flex-1 px-4 py-4 text-[15px] outline-none placeholder:text-[#9C9587]"
-                />
-                <button
-                  type="submit"
-                  className="flex items-center justify-center gap-2 bg-primary px-7 py-4 font-semibold text-white transition-colors hover:bg-primary-dark"
-                >
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4">
-                    <circle cx="11" cy="11" r="7" />
-                    <path d="m21 21-4.3-4.3" />
-                  </svg>
-                  {t.searchButton}
-                </button>
-              </form>
-
-              <div className="mt-[18px] flex flex-wrap items-center gap-2.5">
-                <span className="mr-1 text-[13px] text-ink-soft">
-                  {t.popularSearches}
-                </span>
-                {t.popularChips.map((chip) => (
-                  <span
-                    key={chip}
-                    className="rounded-full border border-line bg-paper px-3.5 py-1.5 text-[13px] text-ink-soft"
-                  >
-                    {chip}
-                  </span>
+                <option>{t.searchAllCategories}</option>
+                {t.rayons.slice(0, 4).map((r) => (
+                  <option key={r.title}>{r.title}</option>
                 ))}
-              </div>
-
-              <div className="mt-8 flex flex-wrap gap-8">
-                <div className="flex items-center gap-2 text-[12.5px] text-ink-soft">
-                  <b className="font-mono text-[13px] text-ink">1,2M</b>
-                  {t.statsListings}
-                </div>
-                <div className="flex items-center gap-2 text-[12.5px] text-ink-soft">
-                  <b className="font-mono text-[13px] text-ink">58</b>
-                  {t.statsWilayas}
-                </div>
-                <div className="flex items-center gap-2 text-[12.5px] text-ink-soft">
-                  <b className="font-mono text-[13px] text-ink">340K</b>
-                  {t.statsSellers}
-                </div>
-              </div>
-            </div>
-
-            <div className="relative hidden items-center justify-center lg:flex">
-              <div className="absolute -top-3.5 -left-[18px] z-10 flex -rotate-3 items-center gap-1.5 rounded-xl bg-primary px-4 py-2.5 text-xs font-semibold text-white shadow-lg">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4">
-                  <path d="M20 6 9 17l-5-5" />
+              </select>
+              <input
+                type="text"
+                name="q"
+                placeholder={t.searchPlaceholder}
+                className="w-full min-w-0 flex-1 px-4 py-4 text-[15px] outline-none placeholder:text-[#9C9587]"
+              />
+              <button
+                type="submit"
+                className="flex items-center justify-center gap-2 bg-primary px-7 py-4 font-semibold text-white transition-colors hover:bg-primary-dark"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4">
+                  <circle cx="11" cy="11" r="7" />
+                  <path d="m21 21-4.3-4.3" />
                 </svg>
-                {t.heroCardVerified}
-              </div>
-              <div className="w-full max-w-[320px] rotate-[2deg] rounded-[20px] border border-line bg-paper p-[22px] shadow-xl">
-                <div className="mb-3.5 flex aspect-[4/3] items-center justify-center rounded-xl bg-gradient-to-br from-bg-alt to-[#EDE0C4]">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4" className="w-[34%] text-primary-dark opacity-40">
-                    <path d="M3 11 12 3l9 8M5 10v10h14V10" />
-                  </svg>
-                </div>
-                <h4 className="mb-1.5 text-[14.5px] font-semibold">
-                  {t.heroCardTitle}
-                </h4>
-                <span className="font-mono text-[15px] font-semibold text-accent-dark">
-                  {t.heroCardPrice}
+                {t.searchButton}
+              </button>
+            </form>
+
+            <div className="mt-[18px] flex flex-wrap items-center justify-center gap-2.5">
+              <span className="mr-1 text-[13px] text-ink-soft">
+                {t.popularSearches}
+              </span>
+              {t.popularChips.map((chip) => (
+                <span
+                  key={chip}
+                  className="rounded-full border border-line bg-paper px-3.5 py-1.5 text-[13px] text-ink-soft"
+                >
+                  {chip}
                 </span>
-              </div>
-              <div className="absolute -right-3.5 -bottom-4 z-10 flex items-center gap-2 rounded-xl border border-line bg-paper px-3.5 py-2.5 text-xs font-semibold shadow-lg">
-                <span className="flex h-[22px] w-[22px] items-center justify-center rounded-full bg-accent text-[10px] font-bold text-white">
-                  A
-                </span>
-                {t.heroCardContacted}
-              </div>
+              ))}
             </div>
           </div>
         </section>
@@ -289,12 +228,9 @@ export default async function Home() {
                   <h4 className="mb-1 text-[14.5px] font-semibold">
                     {m.title}
                   </h4>
-                  <p className="mb-2.5 text-xs leading-snug text-ink-soft">
+                  <p className="text-xs leading-snug text-ink-soft">
                     {m.desc}
                   </p>
-                  <span className="font-mono text-[11px] font-semibold text-accent-dark">
-                    {m.count}
-                  </span>
                 </div>
               ))}
             </div>
@@ -303,73 +239,79 @@ export default async function Home() {
               <h3 className="font-serif text-[19px] font-semibold">
                 {t.talentsTitle}
               </h3>
-              <Link
-                href="#"
-                className="border-b-[1.5px] border-primary pb-0.5 text-[13.5px] font-semibold text-primary"
-              >
-                {t.talentsSeeAll}
-              </Link>
+              {talents.length > 0 && (
+                <Link
+                  href="/produits"
+                  className="border-b-[1.5px] border-primary pb-0.5 text-[13.5px] font-semibold text-primary"
+                >
+                  {t.talentsSeeAll}
+                </Link>
+              )}
             </div>
 
-            <div className="mb-7 flex gap-4 overflow-x-auto pb-2.5">
-              {talents.map((talent) => (
-                <div
-                  key={talent.key}
-                  className="relative w-[240px] shrink-0 rounded-2xl border border-line bg-paper p-[18px]"
-                >
-                  {talent.badge && (
+            {talents.length > 0 ? (
+              <div className="mb-7 flex gap-4 overflow-x-auto pb-2.5">
+                {talents.map((talent) => (
+                  <div
+                    key={talent.key}
+                    className="relative w-[240px] shrink-0 rounded-2xl border border-line bg-paper p-[18px]"
+                  >
                     <span className="absolute top-3.5 right-3.5 flex items-center gap-1 rounded-full bg-gold px-2.5 py-1 text-[10px] font-bold text-[#3A2C05]">
                       {t.talentsBadge}
                     </span>
-                  )}
-                  <div className="mb-3.5 flex items-center gap-2.5">
-                    <div
-                      className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full font-serif text-base font-bold text-white ${talent.color}`}
-                    >
-                      {talent.name[0]}
+                    <div className="mb-3.5 flex items-center gap-2.5">
+                      <div
+                        className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full font-serif text-base font-bold text-white ${talent.color}`}
+                      >
+                        {talent.name[0]}
+                      </div>
+                      <div>
+                        <h4 className="text-[14.5px] font-semibold">
+                          {talent.name}
+                        </h4>
+                        <span className="text-xs text-ink-soft">
+                          {talent.metier}
+                        </span>
+                      </div>
                     </div>
-                    <div>
-                      <h4 className="text-[14.5px] font-semibold">
-                        {talent.name}
-                      </h4>
-                      <span className="text-xs text-ink-soft">
-                        {talent.metier}
+                    <div className="mb-3 font-mono text-[12.5px] font-semibold text-accent-dark">
+                      {talent.rating} ★{" "}
+                      <span className="font-sans font-normal text-ink-soft">
+                        ({talent.reviews} {t.talentsReviews})
                       </span>
                     </div>
+                    <div className="mb-3.5 grid grid-cols-3 gap-1.5">
+                      {talent.thumbs.map((thumb, i) => (
+                        <div
+                          key={i}
+                          className="flex aspect-square items-center justify-center overflow-hidden rounded-lg bg-bg-alt text-lg"
+                        >
+                          {thumb.type === "photo" ? (
+                            <img
+                              src={thumb.value}
+                              alt=""
+                              className="h-full w-full object-cover"
+                            />
+                          ) : (
+                            thumb.value
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                    <Link
+                      href={talent.href}
+                      className="block w-full rounded-full border border-line py-2.5 text-center text-[13px] font-semibold transition-colors hover:border-ink"
+                    >
+                      {t.talentsSeeProfile}
+                    </Link>
                   </div>
-                  <div className="mb-3 font-mono text-[12.5px] font-semibold text-accent-dark">
-                    {talent.rating} ★{" "}
-                    <span className="font-sans font-normal text-ink-soft">
-                      ({talent.reviews} {t.talentsReviews})
-                    </span>
-                  </div>
-                  <div className="mb-3.5 grid grid-cols-3 gap-1.5">
-                    {talent.thumbs.map((thumb, i) => (
-                      <div
-                        key={i}
-                        className="flex aspect-square items-center justify-center overflow-hidden rounded-lg bg-bg-alt text-lg"
-                      >
-                        {thumb.type === "photo" ? (
-                          <img
-                            src={thumb.value}
-                            alt=""
-                            className="h-full w-full object-cover"
-                          />
-                        ) : (
-                          thumb.value
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                  <Link
-                    href={talent.href}
-                    className="block w-full rounded-full border border-line py-2.5 text-center text-[13px] font-semibold transition-colors hover:border-ink"
-                  >
-                    {t.talentsSeeProfile}
-                  </Link>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            ) : (
+              <p className="mb-7 rounded-xl border border-dashed border-line bg-paper px-4 py-6 text-center text-sm text-ink-soft">
+                {t.talentsEmpty}
+              </p>
+            )}
 
             <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl bg-ink px-[30px] py-[26px]">
               <div>
@@ -406,7 +348,11 @@ export default async function Home() {
                 </p>
               </div>
             </div>
-            <DressingScroll />
+            <ListingsPreviewGrid
+              listings={dressingListings}
+              emptyLabel={t.dressingEmpty}
+              donLabel={dict.produit.don}
+            />
           </div>
         </section>
 
@@ -429,7 +375,11 @@ export default async function Home() {
                 {t.annoncesSeeAll}
               </Link>
             </div>
-            <AnnoncesFilter />
+            <ListingsPreviewGrid
+              listings={recentListings}
+              emptyLabel={t.annoncesEmpty}
+              donLabel={dict.produit.don}
+            />
           </div>
         </section>
 
