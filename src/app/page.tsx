@@ -3,7 +3,8 @@ import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import DressingScroll from "@/components/DressingScroll";
 import AnnoncesFilter from "@/components/AnnoncesFilter";
-import { getPortfolioPhotoUrl, getTopTalents } from "@/lib/queries";
+import { getDonListings, getPortfolioPhotoUrl, getTopTalents } from "@/lib/queries";
+import DonsScroll from "@/components/DonsScroll";
 import { getLocale } from "@/lib/i18n/locale";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 
@@ -58,6 +59,7 @@ export default async function Home() {
   const t = dict.home;
 
   const realTalents = await getTopTalents(4).catch(() => []);
+  const donListings = await getDonListings(12).catch(() => []);
   const talents =
     realTalents.length > 0
       ? realTalents.map((talent, i) => ({
@@ -204,6 +206,23 @@ export default async function Home() {
                 {t.heroCardContacted}
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* Dons */}
+        <section className="border-b border-line bg-bg-alt py-10">
+          <div className="mx-auto max-w-6xl px-6">
+            <span className="mb-1.5 block font-mono text-[11.5px] tracking-wide text-dawn-dark uppercase">
+              {t.donsLabel}
+            </span>
+            <h2 className="mb-4 font-serif text-2xl font-semibold">
+              {t.donsTitle}
+            </h2>
+            <DonsScroll
+              listings={donListings}
+              donLabel={dict.produit.don}
+              emptyLabel={t.donsEmpty}
+            />
           </div>
         </section>
 

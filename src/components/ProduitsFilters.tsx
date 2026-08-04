@@ -233,23 +233,31 @@ export default function ProduitsFilters({
                     : dict.cardParticulier}
                 </span>
               </div>
-              <div className="flex items-center gap-2">
-                <span className="font-mono text-lg font-bold text-accent-dark">
-                  {formatDA(listing.price)}
+              {listing.is_don ? (
+                <span className="w-fit rounded-full bg-primary/10 px-2.5 py-1 text-xs font-bold text-primary-dark">
+                  {dict.cardDon}
                 </span>
-                <span
-                  className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${
-                    listing.negociable
-                      ? "bg-primary/10 text-primary-dark"
-                      : "bg-bg-alt text-ink-soft"
-                  }`}
-                >
-                  {listing.negociable ? dict.cardNegociable : dict.cardFerme}
-                </span>
-              </div>
-              <span className="text-[11px] text-ink-soft/70">
-                {formatEurApprox(listing.price, taux)}
-              </span>
+              ) : (
+                <>
+                  <div className="flex items-center gap-2">
+                    <span className="font-mono text-lg font-bold text-accent-dark">
+                      {formatDA(listing.price)}
+                    </span>
+                    <span
+                      className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${
+                        listing.negociable
+                          ? "bg-primary/10 text-primary-dark"
+                          : "bg-bg-alt text-ink-soft"
+                      }`}
+                    >
+                      {listing.negociable ? dict.cardNegociable : dict.cardFerme}
+                    </span>
+                  </div>
+                  <span className="text-[11px] text-ink-soft/70">
+                    {formatEurApprox(listing.price, taux)}
+                  </span>
+                </>
+              )}
               <div className="mt-auto flex items-center justify-between text-xs text-ink-soft">
                 <span>{listing.seller?.name}</span>
                 <span>

@@ -34,6 +34,7 @@ export type Listing = {
   photos: string[];
   description: string;
   negociable: boolean;
+  is_don: boolean;
   created_at: string;
   status?: ListingStatus;
   seller?: Seller;
@@ -143,6 +144,18 @@ export async function getListings(): Promise<Listing[]> {
     .from("listings")
     .select("*, seller:sellers(*)")
     .order("created_at", { ascending: false });
+
+  if (error) throw error;
+  return (data ?? []).map(normalizeListing);
+}
+
+export async function getDonListings(limit = 12): Promise<Listing[]> {
+  const { data, error } = await supabase
+    .from("listings")
+    .select("*, seller:sellers(*)")
+    .eq("is_don", true)
+    .order("created_at", { ascending: false })
+    .limit(limit);
 
   if (error) throw error;
   return (data ?? []).map(normalizeListing);

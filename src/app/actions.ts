@@ -131,7 +131,8 @@ export async function createListingAction(
   const commune = formData.get("commune")?.toString().trim() || null;
   const emoji = formData.get("emoji")?.toString() || "🛍️";
   const description = formData.get("description")?.toString().trim() ?? "";
-  const negociable = formData.get("negociable") === "on";
+  const isDon = formData.get("don") === "on";
+  const negociable = !isDon && formData.get("negociable") === "on";
   const photoFiles = [
     formData.get("photo1"),
     formData.get("photo2"),
@@ -141,12 +142,12 @@ export async function createListingAction(
       f instanceof File && f.size > 0 && f.type.startsWith("image/")
   );
 
-  const price = Number(priceRaw);
+  const price = isDon ? 0 : Number(priceRaw);
 
   if (!title || !category || !location || !description) {
     return { error: "Merci de remplir tous les champs." };
   }
-  if (!Number.isFinite(price) || price <= 0) {
+  if (!isDon && (!Number.isFinite(price) || price <= 0)) {
     return { error: "Le prix doit être un nombre positif." };
   }
   if (photoFiles.length === 0) {
@@ -197,6 +198,7 @@ export async function createListingAction(
     photos: photoPaths,
     description,
     negociable,
+    is_don: isDon,
   });
 
   if (error) {

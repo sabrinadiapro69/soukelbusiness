@@ -32,7 +32,8 @@ export async function generateMetadata({
 
   if (!listing) return {};
 
-  const description = `${formatDA(listing.price)} · ${listing.category} · ${listing.location}. ${listing.description}`.slice(
+  const priceLabel = listing.is_don ? "Don" : formatDA(listing.price);
+  const description = `${priceLabel} · ${listing.category} · ${listing.location}. ${listing.description}`.slice(
     0,
     160
   );
@@ -79,7 +80,7 @@ export default async function ProduitPage({
   const host = requestHeaders.get("host");
   const protocol = host?.startsWith("localhost") ? "http" : "https";
   const listingUrl = `${protocol}://${host}/produits/${listing.id}`;
-  const whatsappMessage = `${listing.title} — ${formatDA(listing.price)}\n${listingUrl}`;
+  const whatsappMessage = `${listing.title} — ${listing.is_don ? t.don : formatDA(listing.price)}\n${listingUrl}`;
   const whatsappHref = `https://wa.me/?text=${encodeURIComponent(whatsappMessage)}`;
 
   const supabase = await createClient();
@@ -151,23 +152,33 @@ export default async function ProduitPage({
               </span>
             </div>
 
-            <div className="flex flex-wrap items-center gap-3">
-              <span className="font-mono text-3xl font-bold text-accent-dark">
-                {formatDA(listing.price)}
-              </span>
-              <span
-                className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
-                  listing.negociable
-                    ? "bg-primary/10 text-primary-dark"
-                    : "bg-bg-alt text-ink-soft"
-                }`}
-              >
-                {listing.negociable ? t.negociable : t.ferme}
-              </span>
-            </div>
-            <span className="text-xs text-ink-soft">
-              {formatEurApprox(listing.price, taux)} {t.tauxIndicatif}
-            </span>
+            {listing.is_don ? (
+              <div className="flex items-center gap-3">
+                <span className="rounded-full bg-primary/10 px-3 py-1.5 text-lg font-bold text-primary-dark">
+                  {t.don}
+                </span>
+              </div>
+            ) : (
+              <>
+                <div className="flex flex-wrap items-center gap-3">
+                  <span className="font-mono text-3xl font-bold text-accent-dark">
+                    {formatDA(listing.price)}
+                  </span>
+                  <span
+                    className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
+                      listing.negociable
+                        ? "bg-primary/10 text-primary-dark"
+                        : "bg-bg-alt text-ink-soft"
+                    }`}
+                  >
+                    {listing.negociable ? t.negociable : t.ferme}
+                  </span>
+                </div>
+                <span className="text-xs text-ink-soft">
+                  {formatEurApprox(listing.price, taux)} {t.tauxIndicatif}
+                </span>
+              </>
+            )}
 
             <p className="leading-relaxed text-ink-soft">
               {listing.description}
@@ -226,14 +237,16 @@ export default async function ProduitPage({
               </a>
             </div>
 
-            <NegotiationPanel
-              listingId={listing.id}
-              askingPrice={listing.price}
-              negociable={listing.negociable}
-              sellerName={listing.seller?.name ?? dict.negotiation.defaultSellerName}
-              userId={user?.id ?? null}
-              offer={offer}
-            />
+            {!listing.is_don && (
+              <NegotiationPanel
+                listingId={listing.id}
+                askingPrice={listing.price}
+                negociable={listing.negociable}
+                sellerName={listing.seller?.name ?? dict.negotiation.defaultSellerName}
+                userId={user?.id ?? null}
+                offer={offer}
+              />
+            )}
           </div>
         </div>
 
@@ -260,9 +273,15 @@ export default async function ProduitPage({
                   </div>
                   <div className="flex flex-col gap-1 p-4">
                     <h3 className="font-semibold text-ink">{item.title}</h3>
-                    <span className="font-mono font-bold text-accent-dark">
-                      {formatDA(item.price)}
-                    </span>
+                    {item.is_don ? (
+                      <span className="w-fit rounded-full bg-primary/10 px-2 py-0.5 text-xs font-bold text-primary-dark">
+                        {t.don}
+                      </span>
+                    ) : (
+                      <span className="font-mono font-bold text-accent-dark">
+                        {formatDA(item.price)}
+                      </span>
+                    )}
                   </div>
                 </Link>
               ))}

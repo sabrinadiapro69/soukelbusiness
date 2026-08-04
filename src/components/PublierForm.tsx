@@ -22,6 +22,7 @@ export default function PublierForm({
   );
   const [selectedWilaya, setSelectedWilaya] = useState("");
   const communeOptions = communesByWilaya[selectedWilaya] ?? [];
+  const [isDon, setIsDon] = useState(false);
 
   if (state.success) {
     return (
@@ -86,17 +87,30 @@ export default function PublierForm({
             name="price"
             min={1}
             step="1"
-            required
-            className="mt-1 w-full rounded-xl border border-line px-4 py-2 text-sm text-ink outline-none focus:border-accent"
+            required={!isDon}
+            disabled={isDon}
+            className="mt-1 w-full rounded-xl border border-line px-4 py-2 text-sm text-ink outline-none focus:border-accent disabled:bg-bg-alt disabled:text-ink-soft"
           />
-          <label className="mt-2 flex items-center gap-2 text-sm text-ink-soft">
+          {!isDon && (
+            <label className="mt-2 flex items-center gap-2 text-sm text-ink-soft">
+              <input
+                type="checkbox"
+                name="negociable"
+                defaultChecked
+                className="h-4 w-4 rounded border-line accent-accent"
+              />
+              {dict.negociable}
+            </label>
+          )}
+          <label className="mt-2 flex items-center gap-2 text-sm font-medium text-accent">
             <input
               type="checkbox"
-              name="negociable"
-              defaultChecked
+              name="don"
+              checked={isDon}
+              onChange={(e) => setIsDon(e.target.checked)}
               className="h-4 w-4 rounded border-line accent-accent"
             />
-            {dict.negociable}
+            {dict.donLabel}
           </label>
         </div>
         <div>

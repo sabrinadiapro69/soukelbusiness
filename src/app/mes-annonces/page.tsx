@@ -86,7 +86,8 @@ export default async function MesAnnoncesPage() {
                   {listing.title}
                 </Link>
                 <p className="text-sm text-ink-soft">
-                  {formatDA(listing.price)} · {formatRelativeTime(listing.created_at)}
+                  {listing.is_don ? dict.produit.don : formatDA(listing.price)} ·{" "}
+                  {formatRelativeTime(listing.created_at)}
                 </p>
                 {listing.status === "vendu" && listing.sold_offer && (
                   <p className="mt-1 text-sm text-ink-soft">

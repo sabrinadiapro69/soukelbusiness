@@ -205,9 +205,15 @@ export default async function VendeurPage({
                     <h3 className="font-semibold text-ink">
                       {listing.title}
                     </h3>
-                    <span className="font-mono font-bold text-accent-dark">
-                      {formatDA(listing.price)}
-                    </span>
+                    {listing.is_don ? (
+                      <span className="w-fit rounded-full bg-primary/10 px-2 py-0.5 text-xs font-bold text-primary-dark">
+                        {dict.produit.don}
+                      </span>
+                    ) : (
+                      <span className="font-mono font-bold text-accent-dark">
+                        {formatDA(listing.price)}
+                      </span>
+                    )}
                   </div>
                 </Link>
               ))}
