@@ -206,6 +206,36 @@ export async function createListingAction(
   return { error: null, success: true };
 }
 
+export async function deleteListingAction(formData: FormData) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) redirect("/connexion");
+
+  const listingId = Number(formData.get("listingId"));
+
+  const { data: listing } = await supabase
+    .from("listings")
+    .select("photos")
+    .eq("id", listingId)
+    .eq("seller_id", user.id)
+    .maybeSingle();
+
+  await supabase
+    .from("listings")
+    .delete()
+    .eq("id", listingId)
+    .eq("seller_id", user.id);
+
+  if (listing?.photos?.length) {
+    await supabase.storage.from("listing-photos").remove(listing.photos);
+  }
+
+  revalidatePath("/mes-annonces");
+}
+
 export type UpdateProfileState = { error: string | null; success?: boolean };
 
 export async function updateProfileAction(
@@ -430,7 +460,15 @@ async function logAdminAction(
 export async function approveListingAction(formData: FormData) {
   const { supabase, adminId } = await requireAdmin();
   const listingId = Number(formData.get("listingId"));
-  const { data: listing } = await supabase
+  // La colonne "status" a volontairement été retirée des droits d'écriture
+  // du rôle authenticated (voir security-audit-column-locks.sql) pour
+  // empêcher un vendeur de s'auto-approuver — mais Postgres ne distingue
+  // pas "admin" de "utilisateur normal" au niveau des droits de colonne,
+  // seulement via les policies RLS. On passe donc par le client
+  // service_role (qui contourne RLS et ces droits) pour ce changement de
+  // statut, après avoir vérifié ci-dessus que l'appelant est bien admin.
+  const adminClient = createAdminClient();
+  const { data: listing } = await adminClient
     .from("listings")
     .update({ status: "approved" })
     .eq("id", listingId)
@@ -450,7 +488,8 @@ export async function approveListingAction(formData: FormData) {
 export async function rejectListingAction(formData: FormData) {
   const { supabase, adminId } = await requireAdmin();
   const listingId = Number(formData.get("listingId"));
-  const { data: listing } = await supabase
+  const adminClient = createAdminClient();
+  const { data: listing } = await adminClient
     .from("listings")
     .update({ status: "rejected" })
     .eq("id", listingId)
@@ -472,7 +511,8 @@ export async function removeListingAction(formData: FormData) {
   const listingId = Number(formData.get("listingId"));
   const reportId = formData.get("reportId")?.toString();
 
-  await supabase
+  const adminClient = createAdminClient();
+  await adminClient
     .from("listings")
     .update({ status: "rejected" })
     .eq("id", listingId);
@@ -570,7 +610,12 @@ export async function approveTalentAction(formData: FormData) {
   const { supabase, adminId } = await requireAdmin();
   const sellerId = formData.get("sellerId")?.toString() ?? "";
 
-  await supabase
+  // Même raison que pour listings.status : "verified" est verrouillée pour
+  // le rôle authenticated (voir security-audit-column-locks.sql), donc on
+  // passe par service_role pour ce changement une fois l'appelant vérifié
+  // admin ci-dessus.
+  const adminClient = createAdminClient();
+  await adminClient
     .from("pro_profiles")
     .update({ verified: true, reviewed_at: new Date().toISOString() })
     .eq("seller_id", sellerId);
@@ -587,7 +632,8 @@ export async function rejectTalentAction(formData: FormData) {
   const { supabase, adminId } = await requireAdmin();
   const sellerId = formData.get("sellerId")?.toString() ?? "";
 
-  await supabase
+  const adminClient = createAdminClient();
+  await adminClient
     .from("pro_profiles")
     .update({ verified: false, reviewed_at: new Date().toISOString() })
     .eq("seller_id", sellerId);
@@ -706,15 +752,31 @@ export async function concludeTransactionAction(formData: FormData) {
   if (!user) redirect("/connexion");
 
   const offerId = Number(formData.get("offerId"));
-  const listingId = Number(formData.get("listingId"));
 
-  await supabase
+  const { data: offer } = await supabase
     .from("offers")
     .update({ conclue_par_acheteur: true, conclue_le: new Date().toISOString() })
     .eq("id", offerId)
-    .eq("buyer_id", user.id);
+    .eq("buyer_id", user.id)
+    .select("listing_id")
+    .maybeSingle();
 
-  revalidatePath(`/produits/${listingId}`);
+  if (offer) {
+    // La transaction conclue par l'acheteur fait automatiquement passer
+    // l'annonce en "vendu" — la seule façon d'obtenir ce statut est donc
+    // toujours reliée à une vraie offre conclue (sold_via_offer_id), pas
+    // un bouton déclaratif du vendeur. "status" et "sold_via_offer_id"
+    // sont verrouillées pour authenticated (voir schémas de sécurité),
+    // d'où le passage par service_role ici.
+    const adminClient = createAdminClient();
+    await adminClient
+      .from("listings")
+      .update({ status: "vendu", sold_via_offer_id: offerId })
+      .eq("id", offer.listing_id);
+    revalidatePath(`/produits/${offer.listing_id}`);
+    revalidatePath("/mes-annonces");
+  }
+
   revalidatePath("/mes-offres");
 }
 

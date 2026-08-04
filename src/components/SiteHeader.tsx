@@ -52,6 +52,7 @@ export default async function SiteHeader() {
   const accountLinks = [
     ...(user
       ? [
+          { href: "/mes-annonces", label: t.mesAnnonces },
           { href: "/mes-offres", label: t.offresEnvoyees },
           { href: "/offres", label: t.offresRecues },
           { href: "/mes-recherches", label: t.mesRecherches },

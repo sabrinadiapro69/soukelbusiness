@@ -20,7 +20,7 @@ export type Seller = {
   status?: SellerStatus;
 };
 
-export type ListingStatus = "pending" | "approved" | "rejected";
+export type ListingStatus = "pending" | "approved" | "rejected" | "vendu";
 
 export type Listing = {
   id: number;
@@ -196,6 +196,39 @@ export async function getListingsBySeller(
 
   if (error) throw error;
   return (data ?? []).map(normalizeListing);
+}
+
+export type SoldOfferInfo = {
+  montant_propose: number;
+  conclue_le: string | null;
+  buyer?: { name: string };
+};
+
+export type MyListing = Listing & { sold_offer?: SoldOfferInfo | null };
+
+// Toutes les annonces d'un vendeur, quel que soit leur statut (y compris
+// en attente/rejetée/vendue) — nécessite le client de session de
+// l'utilisateur connecté (RLS "Sellers read own listings"), jamais le
+// singleton anonyme qui ne voit que les annonces approuvées.
+export async function getMyListings(
+  supabaseClient: SupabaseClient,
+  sellerId: string
+): Promise<MyListing[]> {
+  const { data, error } = await supabaseClient
+    .from("listings")
+    .select(
+      "*, sold_offer:offers!sold_via_offer_id(montant_propose, conclue_le, buyer:sellers(name))"
+    )
+    .eq("seller_id", sellerId)
+    .order("created_at", { ascending: false });
+
+  if (error) throw error;
+  return (data ?? []).map((row) => ({
+    ...normalizeListing(row),
+    sold_offer: row.sold_offer
+      ? { ...row.sold_offer, montant_propose: Number(row.sold_offer.montant_propose) }
+      : null,
+  }));
 }
 
 export async function getSavedSearches(
