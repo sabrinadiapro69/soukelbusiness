@@ -19,10 +19,11 @@ const rayonIcons = [
   <path key="1" d="M3 11 12 3l9 8M5 10v10h14V10" />,
   <g key="2"><rect x="6" y="2" width="12" height="20" rx="2" /><path d="M11 18h2" /></g>,
   <path key="3" d="M16 4v2a4 4 0 0 1-8 0V4M8 4H5l-2 4 3 2v10h12V10l3-2-2-4h-3" />,
-  <path key="4" d="M4 20V10l8-6 8 6v10M9 20v-6h6v6" />,
-  <g key="5"><path d="M20 6 9 17l-5-5" /><rect x="3" y="3" width="18" height="18" rx="4" /></g>,
-  <g key="6"><circle cx="12" cy="8" r="4" /><path d="M4 21c0-4 4-6 8-6s8 2 8 6" /></g>,
-  <path key="7" d="M11 4c1 2-1 3-1 5a2 2 0 0 0 4 0M8 9C5 9 3 12 3 15c0 3 2 6 9 6s9-3 9-6c0-3-2-6-5-6" />,
+  <g key="4"><path d="M9 3h4l1 4-3 10h-2L6 7l3-4Z" /><path d="M10 3V1h2v2" /></g>,
+  <path key="5" d="M4 20V10l8-6 8 6v10M9 20v-6h6v6" />,
+  <g key="6"><path d="M20 6 9 17l-5-5" /><rect x="3" y="3" width="18" height="18" rx="4" /></g>,
+  <g key="7"><circle cx="12" cy="8" r="4" /><path d="M4 21c0-4 4-6 8-6s8 2 8 6" /></g>,
+  <path key="8" d="M11 4c1 2-1 3-1 5a2 2 0 0 0 4 0M8 9C5 9 3 12 3 15c0 3 2 6 9 6s9-3 9-6c0-3-2-6-5-6" />,
 ];
 
 const metierIcons = [
@@ -151,7 +152,19 @@ export default async function Home() {
         {/* Dons */}
         <section className="border-b border-line bg-bg-alt py-10">
           <div className="mx-auto max-w-6xl px-6">
-            <span className="mb-1.5 block font-mono text-[11.5px] tracking-wide text-dawn-dark uppercase">
+            <span className="mb-1.5 flex items-center gap-1.5 font-mono text-[11.5px] tracking-wide text-dawn-dark uppercase">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                className="h-4 w-4 shrink-0"
+              >
+                <rect x="4" y="8" width="16" height="4" rx="1" />
+                <rect x="5" y="12" width="14" height="8" rx="1" />
+                <path d="M12 8v12" />
+                <path d="M12 8c-1.7 0-3-1.1-3-2.5S10.3 3 12 4c1.7-1 3 .1 3 1.5S13.7 8 12 8Z" />
+              </svg>
               {t.donsLabel}
             </span>
             <h2 className="mb-4 font-serif text-2xl font-semibold">

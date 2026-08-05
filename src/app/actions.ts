@@ -208,6 +208,123 @@ export async function createListingAction(
   return { error: null, success: true };
 }
 
+export type UpdateListingState = { error: string | null };
+
+export async function updateListingAction(
+  _prevState: UpdateListingState,
+  formData: FormData
+): Promise<UpdateListingState> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect("/connexion");
+  }
+
+  const listingId = Number(formData.get("listingId"));
+
+  const { data: existing } = await supabase
+    .from("listings")
+    .select("status, photos")
+    .eq("id", listingId)
+    .eq("seller_id", user.id)
+    .maybeSingle();
+
+  if (!existing) {
+    return { error: "Annonce introuvable." };
+  }
+  if (existing.status === "vendu") {
+    return { error: "Une annonce vendue ne peut plus être modifiée." };
+  }
+
+  const title = formData.get("title")?.toString().trim() ?? "";
+  const priceRaw = formData.get("price")?.toString() ?? "";
+  const category = formData.get("category")?.toString() ?? "";
+  const location = formData.get("location")?.toString().trim() ?? "";
+  const commune = formData.get("commune")?.toString().trim() || null;
+  const description = formData.get("description")?.toString().trim() ?? "";
+  const isDon = formData.get("don") === "on";
+  const negociable = !isDon && formData.get("negociable") === "on";
+  const photoFiles = [
+    formData.get("photo1"),
+    formData.get("photo2"),
+    formData.get("photo3"),
+  ].filter(
+    (f): f is File =>
+      f instanceof File && f.size > 0 && f.type.startsWith("image/")
+  );
+
+  const price = isDon ? 0 : Number(priceRaw);
+
+  if (!title || !category || !location || !description) {
+    return { error: "Merci de remplir tous les champs." };
+  }
+  if (!isDon && (!Number.isFinite(price) || price <= 0)) {
+    return { error: "Le prix doit être un nombre positif." };
+  }
+  if (photoFiles.length > 3) {
+    return { error: "Vous ne pouvez ajouter que 3 photos maximum." };
+  }
+  if (photoFiles.some((f) => f.size > MAX_PHOTO_SIZE)) {
+    return { error: "Chaque photo doit faire moins de 5 Mo." };
+  }
+
+  let photoPaths = existing.photos;
+  if (photoFiles.length > 0) {
+    const newPaths: string[] = [];
+    for (const file of photoFiles) {
+      const ext = file.name.split(".").pop() || "jpg";
+      const path = `${user.id}/${randomUUID()}.${ext}`;
+      const { error: uploadError } = await supabase.storage
+        .from("listing-photos")
+        .upload(path, file, { contentType: file.type });
+      if (uploadError) {
+        return { error: "L'envoi d'une photo a échoué. Merci de réessayer." };
+      }
+      newPaths.push(path);
+    }
+    if (existing.photos?.length) {
+      await supabase.storage.from("listing-photos").remove(existing.photos);
+    }
+    photoPaths = newPaths;
+  }
+
+  const { error } = await supabase
+    .from("listings")
+    .update({
+      title,
+      price,
+      category,
+      location,
+      commune,
+      photos: photoPaths,
+      description,
+      negociable,
+      is_don: isDon,
+    })
+    .eq("id", listingId)
+    .eq("seller_id", user.id);
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  // La colonne "status" est protégée (voir security-audit-column-locks.sql) :
+  // toute modification remet l'annonce en attente de validation, via le
+  // client service_role plutôt que directement par la vendeuse ou le vendeur.
+  const adminClient = createAdminClient();
+  await adminClient
+    .from("listings")
+    .update({ status: "pending" })
+    .eq("id", listingId)
+    .eq("seller_id", user.id);
+
+  revalidatePath("/mes-annonces");
+  redirect("/mes-annonces");
+}
+
 export async function deleteListingAction(formData: FormData) {
   const supabase = await createClient();
   const {

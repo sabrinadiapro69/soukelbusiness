@@ -49,8 +49,8 @@ const fr = {
     diasporaBanner:
       "🇫🇷 Souk El Business est pour l'instant disponible pour la diaspora algérienne en France. Les annonces en Algérie seront accessibles prochainement, après mise en conformité avec la réglementation algérienne.",
     badge: "Nouveau pour la diaspora",
-    heroTitle: "Le souk algérien de la diaspora,",
-    heroTitleEmphasis: "version moderne.",
+    heroTitle: "Le souk version moderne",
+    heroTitleEmphasis: "pour les Algériens et la diaspora.",
     heroSubtitle:
       "Achetez et vendez entre membres de la diaspora en France : véhicules, immobilier, mode, électronique. Simple à utiliser, clair à lire.",
     searchAllCategories: "Toutes catégories",
@@ -63,9 +63,9 @@ const fr = {
       "Appartement Paris",
       "Robe soirée",
     ],
-    donsLabel: "💝 La générosité algérienne",
+    donsLabel: "La générosité algérienne",
     donsTitle: "Les derniers dons",
-    donsEmpty: "Aucun don pour le moment — soyez le premier à donner un article !",
+    donsEmpty: "Aucun don pour le moment. Soyez le premier à donner un article !",
     rayonsLabel: "Explorer",
     rayonsTitle: "Les rayons du souk",
     rayons: [
@@ -73,6 +73,7 @@ const fr = {
       { title: "Immobilier", desc: "Location, vente, terrains" },
       { title: "Multimédia", desc: "Téléphones, PC, TV" },
       { title: "Dressing", desc: "Mode, vêtements, accessoires" },
+      { title: "Beauté", desc: "Cosmétiques, soins, parfums" },
       { title: "Maison & Jardin", desc: "Meubles, électroménager" },
       { title: "Emploi", desc: "Offres, CV, freelance" },
       { title: "Services", desc: "Cours, artisanat, événements" },
@@ -122,7 +123,7 @@ const fr = {
     talentsReviews: "avis",
     talentsSeeProfile: "Voir le profil",
     talentsEmpty:
-      "Aucun professionnel vérifié pour le moment — soyez parmi les premiers Talentueux !",
+      "Aucun professionnel vérifié pour le moment. Soyez parmi les premiers Talentueux !",
     talentsCtaTitle: "Vous êtes artisan ou professionnel ?",
     talentsCtaText:
       "Rejoignez Les Talentueux : créez votre profil, montrez votre portfolio, récoltez des avis clients près de chez vous.",
@@ -135,7 +136,7 @@ const fr = {
     annoncesLabel: "Dans la diaspora · France",
     annoncesTitle: "Annonces récentes",
     annoncesSeeAll: "Voir tout →",
-    annoncesEmpty: "Aucune annonce pour le moment — soyez le premier à publier !",
+    annoncesEmpty: "Aucune annonce pour le moment. Soyez le premier à publier !",
     confianceLabel: "Pourquoi Souk El Business",
     confianceTitle: "Fait pour marchander l'esprit tranquille",
     trust1Title: "Profils Talentueux vérifiés",
@@ -166,7 +167,7 @@ const fr = {
     cardParticulier: "Particulier",
     cardNegociable: "Négociable",
     cardFerme: "Prix ferme",
-    cardDon: "💝 Don",
+    cardDon: "Don",
     noResults: "Aucune annonce ne correspond à ces filtres.",
     saveSearchButton: "Enregistrer cette recherche",
     searchSavedToast: "Recherche enregistrée dans « Mes recherches ».",
@@ -181,7 +182,7 @@ const fr = {
     particulier: "Particulier",
     negociable: "Négociable",
     ferme: "Prix ferme",
-    don: "💝 Don",
+    don: "Don",
     tauxIndicatif: "(taux indicatif)",
     soldBy: "Vendu par",
     contactSeller: "Contacter le vendeur",
@@ -212,7 +213,7 @@ const fr = {
     loginSuffix: (seller: string) => `pour faire une offre à ${seller}.`,
     displayedPrice: "Prix affiché :",
     proposeText: (seller: string) =>
-      `— proposez votre prix, ${seller} pourra l'accepter ou faire une contre-offre.`,
+      `Proposez votre prix : ${seller} pourra l'accepter ou faire une contre-offre.`,
     pending: (amount: string) =>
       `Votre offre de ${amount} est en attente de réponse du vendeur.`,
     refused: "Votre offre a été refusée. Vous pouvez en proposer une nouvelle.",
@@ -289,7 +290,7 @@ const fr = {
     title: "Titre",
     price: "Prix (€)",
     negociable: "Prix négociable",
-    donLabel: "💝 Je donne cet article (gratuit)",
+    donLabel: "Je donne cet article (gratuit)",
     category: "Catégorie",
     wilaya: "Ville",
     chooseWilaya: "Choisir une ville",
@@ -341,7 +342,7 @@ const fr = {
     pageSubtitle:
       "Une question, une suggestion, un problème avec une annonce ? Écrivez-nous, nous vous répondons rapidement.",
     sentMessage:
-      "Votre client email a dû s'ouvrir avec votre message prérempli — il ne reste qu'à l'envoyer.",
+      "Votre client email a dû s'ouvrir avec votre message prérempli. Il ne reste qu'à l'envoyer.",
     name: "Nom",
     email: "Email",
     subject: "Sujet",
@@ -407,7 +408,18 @@ const fr = {
     statusVendu: "Vendue",
     soldTo: "Vendue à",
     soldFor: "pour",
+    editButton: "Modifier",
     deleteButton: "Supprimer",
+  },
+  modifier: {
+    back: "← Retour à mes annonces",
+    pageTitle: "Modifier l'annonce",
+    pageSubtitle:
+      "Après enregistrement, l'annonce repasse en attente de validation par notre équipe.",
+    currentPhotos: "Photos actuelles",
+    replacePhotos: "Remplacer les photos (facultatif)",
+    saving: "Enregistrement...",
+    save: "Enregistrer les modifications",
   },
   reviewForm: {
     thankYou: "Merci, votre avis a été publié !",

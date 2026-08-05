@@ -120,6 +120,7 @@ export const categories = [
   "Services",
   "Animaux",
   "Dressing",
+  "Beauté",
   "Artisanat & Métiers",
 ];
 
@@ -242,6 +243,25 @@ export async function getMyListings(
       ? { ...row.sold_offer, montant_propose: Number(row.sold_offer.montant_propose) }
       : null,
   }));
+}
+
+// Une annonce précise appartenant à l'utilisateur connecté, quel que soit
+// son statut — nécessite le client de session (RLS "Sellers read own
+// listings"), utilisé par la page de modification d'annonce.
+export async function getMyListingById(
+  supabaseClient: SupabaseClient,
+  id: number,
+  sellerId: string
+): Promise<Listing | null> {
+  const { data, error } = await supabaseClient
+    .from("listings")
+    .select("*")
+    .eq("id", id)
+    .eq("seller_id", sellerId)
+    .maybeSingle();
+
+  if (error) throw error;
+  return data ? normalizeListing(data) : null;
 }
 
 export async function getSavedSearches(

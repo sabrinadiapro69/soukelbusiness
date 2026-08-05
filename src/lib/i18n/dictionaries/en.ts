@@ -51,8 +51,8 @@ const en: Dictionary = {
     diasporaBanner:
       "🇫🇷 Souk El Business is currently available for the Algerian diaspora in France. Listings in Algeria will be available soon, once the platform complies with Algerian regulations.",
     badge: "New for the diaspora",
-    heroTitle: "The Algerian souk for the diaspora,",
-    heroTitleEmphasis: "reimagined.",
+    heroTitle: "The modern souk",
+    heroTitleEmphasis: "for Algerians and the diaspora.",
     heroSubtitle:
       "Buy and sell among diaspora members in France: vehicles, real estate, fashion, electronics. Simple to use, clear to read.",
     searchAllCategories: "All categories",
@@ -65,9 +65,9 @@ const en: Dictionary = {
       "Paris apartment",
       "Evening dress",
     ],
-    donsLabel: "💝 Algerian generosity",
+    donsLabel: "Algerian generosity",
     donsTitle: "Latest donations",
-    donsEmpty: "No donations yet — be the first to give an item away!",
+    donsEmpty: "No donations yet. Be the first to give an item away!",
     rayonsLabel: "Explore",
     rayonsTitle: "Souk categories",
     rayons: [
@@ -75,6 +75,7 @@ const en: Dictionary = {
       { title: "Real Estate", desc: "Rent, sale, land" },
       { title: "Electronics", desc: "Phones, computers, TVs" },
       { title: "Dressing", desc: "Fashion, clothes, accessories" },
+      { title: "Beauty", desc: "Cosmetics, skincare, perfume" },
       { title: "Home & Garden", desc: "Furniture, appliances" },
       { title: "Jobs", desc: "Listings, resumes, freelance" },
       { title: "Services", desc: "Lessons, crafts, events" },
@@ -124,7 +125,7 @@ const en: Dictionary = {
     talentsReviews: "reviews",
     talentsSeeProfile: "View profile",
     talentsEmpty:
-      "No verified professional yet — be among the first Talentueux!",
+      "No verified professional yet. Be among the first Talentueux!",
     talentsCtaTitle: "Are you a craftsperson or professional?",
     talentsCtaText:
       "Join Les Talentueux: create your profile, showcase your portfolio, collect customer reviews near you.",
@@ -137,7 +138,7 @@ const en: Dictionary = {
     annoncesLabel: "In the diaspora · France",
     annoncesTitle: "Recent listings",
     annoncesSeeAll: "See all →",
-    annoncesEmpty: "No listing yet — be the first to post one!",
+    annoncesEmpty: "No listing yet. Be the first to post one!",
     confianceLabel: "Why Souk El Business",
     confianceTitle: "Built for haggling with peace of mind",
     trust1Title: "Verified Talentueux profiles",
@@ -166,7 +167,7 @@ const en: Dictionary = {
     cardParticulier: "Individual",
     cardNegociable: "Negotiable",
     cardFerme: "Fixed price",
-    cardDon: "💝 Free",
+    cardDon: "Free",
     noResults: "No listing matches these filters.",
     saveSearchButton: "Save this search",
     searchSavedToast: "Search saved to \"My searches\".",
@@ -181,7 +182,7 @@ const en: Dictionary = {
     particulier: "Individual",
     negociable: "Negotiable",
     ferme: "Fixed price",
-    don: "💝 Free",
+    don: "Free",
     tauxIndicatif: "(indicative rate)",
     soldBy: "Sold by",
     contactSeller: "Contact the seller",
@@ -212,7 +213,7 @@ const en: Dictionary = {
     loginSuffix: (seller: string) => `to make an offer to ${seller}.`,
     displayedPrice: "Listed price:",
     proposeText: (seller: string) =>
-      `— propose your price, ${seller} can accept it or make a counter-offer.`,
+      `Propose your price: ${seller} can accept it or make a counter-offer.`,
     pending: (amount: string) =>
       `Your offer of ${amount} is awaiting the seller's response.`,
     refused: "Your offer was declined. You can make a new one.",
@@ -287,7 +288,7 @@ const en: Dictionary = {
     title: "Title",
     price: "Price (€)",
     negociable: "Negotiable price",
-    donLabel: "💝 I'm giving this item away (free)",
+    donLabel: "I'm giving this item away (free)",
     category: "Category",
     wilaya: "City",
     chooseWilaya: "Choose a city",
@@ -339,7 +340,7 @@ const en: Dictionary = {
     pageSubtitle:
       "A question, a suggestion, an issue with a listing? Write to us, we reply quickly.",
     sentMessage:
-      "Your email client should have opened with your message pre-filled — just hit send.",
+      "Your email client should have opened with your message pre-filled. Just hit send.",
     name: "Name",
     email: "Email",
     subject: "Subject",
@@ -403,7 +404,18 @@ const en: Dictionary = {
     statusVendu: "Sold",
     soldTo: "Sold to",
     soldFor: "for",
+    editButton: "Edit",
     deleteButton: "Delete",
+  },
+  modifier: {
+    back: "← Back to my listings",
+    pageTitle: "Edit listing",
+    pageSubtitle:
+      "After saving, the listing goes back to pending review by our team.",
+    currentPhotos: "Current photos",
+    replacePhotos: "Replace photos (optional)",
+    saving: "Saving...",
+    save: "Save changes",
   },
   reviewForm: {
     thankYou: "Thank you, your review has been published!",

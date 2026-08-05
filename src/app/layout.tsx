@@ -24,15 +24,16 @@ const ibmPlexMono = IBM_Plex_Mono({
   weight: ["500", "600"],
 });
 
-const title = "Souk El Business — Achetez, vendez, échangez partout en Algérie";
+const title =
+  "Souk El Business : le souk version moderne pour les Algériens et la diaspora";
 const description =
-  "Le souk algérien, version moderne : véhicules, immobilier, dressing, artisanat et services entre particuliers, partout dans les 58 wilayas.";
+  "Le souk version moderne pour les Algériens et la diaspora : véhicules, immobilier, dressing, beauté, artisanat et services entre particuliers.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
     default: title,
-    template: "%s — Souk El Business",
+    template: "%s : Souk El Business",
   },
   description,
   openGraph: {
@@ -60,6 +61,7 @@ export default async function RootLayout({
   return (
     <html
       lang={locale}
+      dir={locale === "ar" ? "rtl" : "ltr"}
       className={`${fraunces.variable} ${inter.variable} ${ibmPlexMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-(--bg) text-(--ink) font-sans">

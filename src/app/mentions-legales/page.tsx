@@ -4,7 +4,7 @@ import { getLocale } from "@/lib/i18n/locale";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 
 export const metadata = {
-  title: "Mentions légales — Souk El Business",
+  title: "Mentions légales",
 };
 
 export default async function MentionsLegalesPage() {

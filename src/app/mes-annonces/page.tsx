@@ -91,7 +91,7 @@ export default async function MesAnnoncesPage() {
                 </p>
                 {listing.status === "vendu" && listing.sold_offer && (
                   <p className="mt-1 text-sm text-ink-soft">
-                    {t.soldTo} {listing.sold_offer.buyer?.name ?? "—"} {t.soldFor}{" "}
+                    {t.soldTo} {listing.sold_offer.buyer?.name ?? "-"} {t.soldFor}{" "}
                     {formatEUR(listing.sold_offer.montant_propose)}
                     {listing.sold_offer.conclue_le && (
                       <> · {formatRelativeTime(listing.sold_offer.conclue_le)}</>
@@ -107,15 +107,23 @@ export default async function MesAnnoncesPage() {
               </span>
 
               {listing.status !== "vendu" && (
-                <form action={deleteListingAction}>
-                  <input type="hidden" name="listingId" value={listing.id} />
-                  <button
-                    type="submit"
-                    className="shrink-0 rounded-full border border-red-300 px-4 py-2 text-sm font-medium text-red-600 transition-colors hover:bg-red-50"
+                <div className="flex shrink-0 gap-2">
+                  <Link
+                    href={`/mes-annonces/${listing.id}/modifier`}
+                    className="rounded-full border border-line px-4 py-2 text-sm font-medium text-ink-soft transition-colors hover:border-ink hover:text-ink"
                   >
-                    {t.deleteButton}
-                  </button>
-                </form>
+                    {t.editButton}
+                  </Link>
+                  <form action={deleteListingAction}>
+                    <input type="hidden" name="listingId" value={listing.id} />
+                    <button
+                      type="submit"
+                      className="rounded-full border border-red-300 px-4 py-2 text-sm font-medium text-red-600 transition-colors hover:bg-red-50"
+                    >
+                      {t.deleteButton}
+                    </button>
+                  </form>
+                </div>
               )}
             </div>
           ))}

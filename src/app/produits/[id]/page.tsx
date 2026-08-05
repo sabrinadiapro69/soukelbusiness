@@ -80,7 +80,7 @@ export default async function ProduitPage({
   const host = requestHeaders.get("host");
   const protocol = host?.startsWith("localhost") ? "http" : "https";
   const listingUrl = `${protocol}://${host}/produits/${listing.id}`;
-  const whatsappMessage = `${listing.title} — ${listing.is_don ? t.don : formatEUR(listing.price)}\n${listingUrl}`;
+  const whatsappMessage = `${listing.title} (${listing.is_don ? t.don : formatEUR(listing.price)})\n${listingUrl}`;
   const whatsappHref = `https://wa.me/?text=${encodeURIComponent(whatsappMessage)}`;
 
   const supabase = await createClient();

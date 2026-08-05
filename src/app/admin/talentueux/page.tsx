@@ -28,7 +28,7 @@ export default async function AdminTalentueuxPage() {
             <div className="flex-1">
               <h2 className="font-semibold text-ink">{seller.name}</h2>
               <p className="text-sm text-ink-soft">
-                {pro_profile.metier || "—"} · {seller.city}
+                {pro_profile.metier || "-"} · {seller.city}
               </p>
               {seller.description && (
                 <p className="mt-1 text-sm text-ink-soft">

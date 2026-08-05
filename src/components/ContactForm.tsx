@@ -20,7 +20,7 @@ export default function ContactForm({
     const subject = formData.get("subject")?.toString() ?? "";
     const message = formData.get("message")?.toString() ?? "";
 
-    const mailtoBody = `${message}\n\n— ${name} (${email})`;
+    const mailtoBody = `${message}\n\n${name} (${email})`;
     const mailtoLink = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(
       subject || dict.defaultSubject
     )}&body=${encodeURIComponent(mailtoBody)}`;

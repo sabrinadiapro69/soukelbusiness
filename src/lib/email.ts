@@ -88,7 +88,7 @@ export async function sendWarningEmail(to: string, motif: string) {
     to,
     "Avertissement concernant votre compte",
     `<p>Notre équipe de modération a examiné un signalement vous concernant, pour le motif suivant : <strong>${escapeHtml(motif)}</strong>.</p>
-     <p>Ceci est un avertissement. Merci de respecter les règles d'utilisation de Souk El Business — en cas de nouveau signalement, votre compte pourrait être suspendu.</p>`
+     <p>Ceci est un avertissement. Merci de respecter les règles d'utilisation de Souk El Business : en cas de nouveau signalement, votre compte pourrait être suspendu.</p>`
   );
 }
 
