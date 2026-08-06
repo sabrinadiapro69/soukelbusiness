@@ -1,10 +1,29 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="8" fill="#b84c2f" />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
   <path
-    d="M8 25V15a8 8 0 0 1 16 0v10"
-    fill="none"
-    stroke="#fdfbf6"
-    stroke-width="3.2"
-    stroke-linecap="round"
+    d="M 192.0,100.0 Q 197.8,115.5 187.5,128.4 Q 188.2,144.9 174.4,154.1 Q 170.0,170.0 154.1,174.4 Q 144.9,188.2 128.4,187.5 Q 115.5,197.8 100.0,192.0 Q 84.5,197.8 71.6,187.5 Q 55.1,188.2 45.9,174.4 Q 30.0,170.0 25.6,154.1 Q 11.8,144.9 12.5,128.4 Q 2.2,115.5 8.0,100.0 Q 2.2,84.5 12.5,71.6 Q 11.8,55.1 25.6,45.9 Q 30.0,30.0 45.9,25.6 Q 55.1,11.8 71.6,12.5 Q 84.5,2.2 100.0,8.0 Q 115.5,2.2 128.4,12.5 Q 144.9,11.8 154.1,25.6 Q 170.0,30.0 174.4,45.9 Q 188.2,55.1 187.5,71.6 Q 197.8,84.5 192.0,100.0 Z"
+    fill="#f7f1e3"
   />
+  <circle cx="100" cy="100" r="78" fill="#fdfbf6" />
+  <circle cx="100" cy="100" r="72" fill="none" stroke="#b84c2f" stroke-width="1.4" />
+  <circle cx="100" cy="100" r="67" fill="none" stroke="#b84c2f" stroke-width="1.4" />
+
+  <path
+    d="M92 60A13 13 0 1 1 75.9 37 10.2 10.2 0 0 0 92 60z"
+    fill="#08543c"
+  />
+  <polygon
+    points="112,52 114,58 120,58 115,62 117,68 112,64 107,68 109,62 104,58 110,58"
+    fill="#08543c"
+  />
+
+  <text
+    x="100"
+    y="145"
+    text-anchor="middle"
+    font-family="Fraunces, ui-serif, Georgia, serif"
+    font-weight="700"
+    font-style="italic"
+    font-size="78"
+    fill="#b84c2f"
+  >SB</text>
 </svg>
