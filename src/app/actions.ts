@@ -8,7 +8,6 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { locales, type Locale } from "@/lib/i18n/locale";
-import { wilayas } from "@/lib/wilayas";
 import {
   sendListingApprovedEmail,
   sendListingRejectedEmail,
@@ -38,21 +37,6 @@ export async function setLocaleAction(formData: FormData) {
   if (locales.includes(locale as Locale)) {
     const cookieStore = await cookies();
     cookieStore.set("locale", locale as string, {
-      path: "/",
-      maxAge: 60 * 60 * 24 * 365,
-    });
-  }
-
-  const referer = (await headers()).get("referer");
-  redirect(referer || "/");
-}
-
-export async function setWilayaAction(formData: FormData) {
-  const wilaya = formData.get("wilaya")?.toString();
-
-  if (wilaya && wilayas.includes(wilaya)) {
-    const cookieStore = await cookies();
-    cookieStore.set("wilaya_pref", wilaya, {
       path: "/",
       maxAge: 60 * 60 * 24 * 365,
     });

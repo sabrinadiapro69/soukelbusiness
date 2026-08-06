@@ -149,69 +149,6 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* Dons */}
-        <section className="border-b border-line bg-bg-alt py-10">
-          <div className="mx-auto max-w-6xl px-6">
-            <span className="mb-1.5 flex items-center gap-1.5 font-mono text-[11.5px] tracking-wide text-dawn-dark uppercase">
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.6"
-                className="h-4 w-4 shrink-0"
-              >
-                <rect x="4" y="8" width="16" height="4" rx="1" />
-                <rect x="5" y="12" width="14" height="8" rx="1" />
-                <path d="M12 8v12" />
-                <path d="M12 8c-1.7 0-3-1.1-3-2.5S10.3 3 12 4c1.7-1 3 .1 3 1.5S13.7 8 12 8Z" />
-              </svg>
-              {t.donsLabel}
-            </span>
-            <h2 className="mb-4 font-serif text-2xl font-semibold">
-              {t.donsTitle}
-            </h2>
-            <DonsScroll
-              listings={donListings}
-              donLabel={dict.produit.don}
-              emptyLabel={t.donsEmpty}
-            />
-          </div>
-        </section>
-
-        {/* Rayons */}
-        <section id="rayons" className="scroll-mt-[7.5rem] py-12">
-          <div className="mx-auto max-w-6xl px-6">
-            <div className="mb-6">
-              <span className="mb-1.5 block font-mono text-[11.5px] tracking-wide text-dawn-dark uppercase">
-                {t.rayonsLabel}
-              </span>
-              <h2 className="font-serif text-2xl font-semibold">
-                {t.rayonsTitle}
-              </h2>
-            </div>
-            <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-4">
-              {t.rayons.map((r, i) => (
-                <div
-                  key={r.title}
-                  className="flex cursor-pointer flex-col gap-2.5 rounded-xl border border-line bg-paper p-5 transition-transform hover:-translate-y-1 hover:border-ink"
-                >
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.6"
-                    className="h-9 w-9 text-primary"
-                  >
-                    {rayonIcons[i]}
-                  </svg>
-                  <h3 className="text-[15px] font-semibold">{r.title}</h3>
-                  <span className="text-xs text-ink-soft">{r.desc}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
         {/* Artisanat & Les Talentueux */}
         <section id="artisanat" className="scroll-mt-[7.5rem] py-12">
           <div className="mx-auto max-w-6xl px-6">
@@ -341,6 +278,69 @@ export default async function Home() {
               >
                 {t.talentsCtaButton}
               </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* Dons */}
+        <section className="border-b border-line bg-bg-alt py-10">
+          <div className="mx-auto max-w-6xl px-6">
+            <span className="mb-1.5 flex items-center gap-1.5 font-mono text-[11.5px] tracking-wide text-dawn-dark uppercase">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                className="h-4 w-4 shrink-0"
+              >
+                <rect x="4" y="8" width="16" height="4" rx="1" />
+                <rect x="5" y="12" width="14" height="8" rx="1" />
+                <path d="M12 8v12" />
+                <path d="M12 8c-1.7 0-3-1.1-3-2.5S10.3 3 12 4c1.7-1 3 .1 3 1.5S13.7 8 12 8Z" />
+              </svg>
+              {t.donsLabel}
+            </span>
+            <h2 className="mb-4 font-serif text-2xl font-semibold">
+              {t.donsTitle}
+            </h2>
+            <DonsScroll
+              listings={donListings}
+              donLabel={dict.produit.don}
+              emptyLabel={t.donsEmpty}
+            />
+          </div>
+        </section>
+
+        {/* Rayons */}
+        <section id="rayons" className="scroll-mt-[7.5rem] py-12">
+          <div className="mx-auto max-w-6xl px-6">
+            <div className="mb-6">
+              <span className="mb-1.5 block font-mono text-[11.5px] tracking-wide text-dawn-dark uppercase">
+                {t.rayonsLabel}
+              </span>
+              <h2 className="font-serif text-2xl font-semibold">
+                {t.rayonsTitle}
+              </h2>
+            </div>
+            <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-4">
+              {t.rayons.map((r, i) => (
+                <div
+                  key={r.title}
+                  className="flex cursor-pointer flex-col gap-2.5 rounded-xl border border-line bg-paper p-5 transition-transform hover:-translate-y-1 hover:border-ink"
+                >
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.6"
+                    className="h-9 w-9 text-primary"
+                  >
+                    {rayonIcons[i]}
+                  </svg>
+                  <h3 className="text-[15px] font-semibold">{r.title}</h3>
+                  <span className="text-xs text-ink-soft">{r.desc}</span>
+                </div>
+              ))}
             </div>
           </div>
         </section>

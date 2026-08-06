@@ -1,14 +1,11 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { setLocaleAction, setWilayaAction } from "@/app/actions";
+import { setLocaleAction } from "@/app/actions";
 import { getLocale, type Locale } from "@/lib/i18n/locale";
 import { getDictionary } from "@/lib/i18n/dictionaries";
-import { getWilayaPref } from "@/lib/wilaya-pref";
-import { wilayas } from "@/lib/wilayas";
-import { wilayasAlgerie } from "@/lib/wilayas-algerie";
+import { getUserCity } from "@/lib/geolocation";
 import MobileMenu from "@/components/MobileMenu";
 import ProfileMenu from "@/components/ProfileMenu";
-import WilayaSwitcher from "@/components/WilayaSwitcher";
 
 const languageLabels: Record<Locale, string> = {
   fr: "FR",
@@ -26,8 +23,8 @@ export default async function SiteHeader() {
   const dict = await getDictionary(locale);
   const t = dict.header;
 
-  const wilayaPref = await getWilayaPref();
-  const locationLabel = wilayaPref ? `📍 ${wilayaPref}` : t.location;
+  const userCity = await getUserCity();
+  const locationLabel = `📍 ${userCity ?? t.location}`;
 
   const displayName =
     (user?.user_metadata?.name as string | undefined) ?? user?.email;
@@ -67,17 +64,7 @@ export default async function SiteHeader() {
       <div className="bg-ink text-[13px] text-[#EFE9DA]">
         <div className="mx-auto flex h-[34px] max-w-6xl items-center justify-between px-6">
           <div className="flex gap-5">
-            <span className="opacity-100">
-              {locationLabel}{" "}
-              <WilayaSwitcher
-                wilayas={wilayas}
-                wilayasAlgerie={wilayasAlgerie}
-                franceGroupLabel={t.franceGroupLabel}
-                algerieGroupLabel={t.algerieGroupLabel}
-                changeLabel={t.change}
-                action={setWilayaAction}
-              />
-            </span>
+            <span className="opacity-100">{locationLabel}</span>
             <Link
               href="/contact"
               className="hidden opacity-85 hover:opacity-100 sm:inline"
@@ -122,6 +109,20 @@ export default async function SiteHeader() {
         <div className="border-b border-line">
           <div className="mx-auto flex h-[78px] max-w-6xl items-center gap-7 px-6">
             <Link href="/" className="flex shrink-0 items-center gap-2.5">
+              <svg
+                viewBox="0 0 32 32"
+                className="h-8 w-8 shrink-0"
+                aria-hidden="true"
+              >
+                <rect width="32" height="32" rx="8" fill="var(--accent)" />
+                <path
+                  d="M8 25V15a8 8 0 0 1 16 0v10"
+                  fill="none"
+                  stroke="var(--bg)"
+                  strokeWidth="3.2"
+                  strokeLinecap="round"
+                />
+              </svg>
               <span className="font-serif text-xl font-bold tracking-tight">
                 <span className="text-accent">Souk</span> El Business
               </span>

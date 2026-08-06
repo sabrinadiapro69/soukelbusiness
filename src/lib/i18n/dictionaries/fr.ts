@@ -1,6 +1,6 @@
 const fr = {
   header: {
-    location: "📍 Choisir votre ville",
+    location: "France",
     change: "changer",
     franceGroupLabel: "France",
     algerieGroupLabel: "Algérie (bientôt disponible)",
@@ -25,7 +25,7 @@ const fr = {
   },
   footer: {
     tagline:
-      "La marketplace généraliste et de mode entre particuliers, pensée pour la diaspora algérienne en France.",
+      "La marketplace généraliste et de mode qui met à l'honneur les artisans français et algériens, ouverte à tous.",
     categories: "Catégories",
     vehicules: "Véhicules",
     immobilier: "Immobilier",
@@ -48,11 +48,11 @@ const fr = {
   home: {
     diasporaBanner:
       "🇫🇷 Souk El Business est pour l'instant disponible pour la diaspora algérienne en France. Les annonces en Algérie seront accessibles prochainement, après mise en conformité avec la réglementation algérienne.",
-    badge: "Nouveau pour la diaspora",
+    badge: "Nouveau en France",
     heroTitle: "Le souk version moderne",
     heroTitleEmphasis: "pour les Algériens et la diaspora.",
     heroSubtitle:
-      "Achetez et vendez entre membres de la diaspora en France : véhicules, immobilier, mode, électronique. Simple à utiliser, clair à lire.",
+      "Achetez et vendez en France : véhicules, immobilier, mode, électronique, artisanat français et algérien. Simple à utiliser, clair à lire.",
     searchAllCategories: "Toutes catégories",
     searchPlaceholder: "Que cherchez-vous ?",
     searchButton: "Rechercher",
@@ -82,7 +82,7 @@ const fr = {
     artisanatLabel: "Savoir-faire local",
     artisanatTitle: "Artisanat & Métiers",
     artisanatSubtitle:
-      "Découvrez Les Talentueux, des professionnels vérifiés avec portfolio et avis clients, près de chez vous.",
+      "Les Talentueux réunissent artisans français et algériens, professionnels vérifiés avec portfolio et avis clients, à découvrir près de chez vous.",
     metiers: [
       {
         title: "Couture & Retouches",

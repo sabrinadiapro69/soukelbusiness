@@ -2,7 +2,7 @@ import type { Dictionary } from "./fr";
 
 const en: Dictionary = {
   header: {
-    location: "📍 Choose your city",
+    location: "France",
     change: "change",
     franceGroupLabel: "France",
     algerieGroupLabel: "Algeria (coming soon)",
@@ -27,7 +27,7 @@ const en: Dictionary = {
   },
   footer: {
     tagline:
-      "The general and fashion marketplace between individuals, made for the Algerian diaspora in France.",
+      "The general and fashion marketplace celebrating French and Algerian artisans, open to all.",
     categories: "Categories",
     vehicules: "Vehicles",
     immobilier: "Real Estate",
@@ -50,11 +50,11 @@ const en: Dictionary = {
   home: {
     diasporaBanner:
       "🇫🇷 Souk El Business is currently available for the Algerian diaspora in France. Listings in Algeria will be available soon, once the platform complies with Algerian regulations.",
-    badge: "New for the diaspora",
+    badge: "New in France",
     heroTitle: "The modern souk",
     heroTitleEmphasis: "for Algerians and the diaspora.",
     heroSubtitle:
-      "Buy and sell among diaspora members in France: vehicles, real estate, fashion, electronics. Simple to use, clear to read.",
+      "Buy and sell in France: vehicles, real estate, fashion, electronics, French and Algerian crafts. Simple to use, clear to read.",
     searchAllCategories: "All categories",
     searchPlaceholder: "What are you looking for?",
     searchButton: "Search",
@@ -84,7 +84,7 @@ const en: Dictionary = {
     artisanatLabel: "Local know-how",
     artisanatTitle: "Crafts & Trades",
     artisanatSubtitle:
-      "Discover Les Talentueux, verified professionals with a portfolio and customer reviews, near you.",
+      "Les Talentueux brings together French and Algerian craftspeople, verified professionals with a portfolio and customer reviews, near you.",
     metiers: [
       {
         title: "Sewing & Alterations",
