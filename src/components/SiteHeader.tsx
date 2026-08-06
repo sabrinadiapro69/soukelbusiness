@@ -108,10 +108,10 @@ export default async function SiteHeader() {
         />
         <div className="border-b border-line">
           <div className="mx-auto flex h-[78px] max-w-6xl items-center gap-7 px-6">
-            <Link href="/" className="flex shrink-0 items-center gap-2.5">
+            <Link href="/" className="group flex shrink-0 items-center gap-2.5">
               <svg
                 viewBox="0 0 200 200"
-                className="h-16 w-16 shrink-0"
+                className="h-16 w-16 shrink-0 transition-transform duration-200 ease-out group-hover:scale-150"
                 aria-hidden="true"
               >
                 <path
