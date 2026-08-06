@@ -111,7 +111,7 @@ export default async function SiteHeader() {
             <Link href="/" className="flex shrink-0 items-center gap-2.5">
               <svg
                 viewBox="0 0 200 200"
-                className="h-11 w-11 shrink-0"
+                className="h-16 w-16 shrink-0"
                 aria-hidden="true"
               >
                 <path
