@@ -8,9 +8,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticPages: MetadataRoute.Sitemap = [
     { url: SITE_URL, changeFrequency: "daily", priority: 1 },
     { url: `${SITE_URL}/produits`, changeFrequency: "daily", priority: 0.9 },
+    { url: `${SITE_URL}/pro`, changeFrequency: "monthly", priority: 0.6 },
     { url: `${SITE_URL}/contact`, changeFrequency: "yearly", priority: 0.3 },
     {
       url: `${SITE_URL}/mentions-legales`,
+      changeFrequency: "yearly",
+      priority: 0.2,
+    },
+    { url: `${SITE_URL}/cgu`, changeFrequency: "yearly", priority: 0.2 },
+    {
+      url: `${SITE_URL}/confidentialite`,
       changeFrequency: "yearly",
       priority: 0.2,
     },
@@ -24,12 +31,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const listings = await getListings().catch(() => []);
 
-  const listingPages: MetadataRoute.Sitemap = listings.map((listing) => ({
-    url: `${SITE_URL}/produits/${listing.id}`,
-    lastModified: listing.created_at,
-    changeFrequency: "weekly",
-    priority: 0.7,
-  }));
+  const listingPages: MetadataRoute.Sitemap = listings.map((listing) => {
+    const createdAt = new Date(listing.created_at);
+    return {
+      url: `${SITE_URL}/produits/${listing.id}`,
+      ...(Number.isNaN(createdAt.getTime()) ? {} : { lastModified: createdAt }),
+      changeFrequency: "weekly",
+      priority: 0.7,
+    };
+  });
 
   const sellerIds = Array.from(new Set(listings.map((l) => l.seller_id)));
   const sellerPages: MetadataRoute.Sitemap = sellerIds.map((id) => ({
