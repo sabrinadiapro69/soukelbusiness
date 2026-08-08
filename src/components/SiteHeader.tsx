@@ -110,57 +110,41 @@ export default async function SiteHeader() {
           <div className="mx-auto flex h-[78px] max-w-6xl items-center gap-7 px-6">
             <Link href="/" className="group flex shrink-0 items-center gap-2.5">
               <svg
-                viewBox="0 0 200 200"
+                viewBox="0 0 140 140"
                 className="h-16 w-16 shrink-0 transition-transform duration-200 ease-out group-hover:scale-150"
                 aria-hidden="true"
               >
-                <path
-                  d="M 192.0,100.0 Q 197.8,115.5 187.5,128.4 Q 188.2,144.9 174.4,154.1 Q 170.0,170.0 154.1,174.4 Q 144.9,188.2 128.4,187.5 Q 115.5,197.8 100.0,192.0 Q 84.5,197.8 71.6,187.5 Q 55.1,188.2 45.9,174.4 Q 30.0,170.0 25.6,154.1 Q 11.8,144.9 12.5,128.4 Q 2.2,115.5 8.0,100.0 Q 2.2,84.5 12.5,71.6 Q 11.8,55.1 25.6,45.9 Q 30.0,30.0 45.9,25.6 Q 55.1,11.8 71.6,12.5 Q 84.5,2.2 100.0,8.0 Q 115.5,2.2 128.4,12.5 Q 144.9,11.8 154.1,25.6 Q 170.0,30.0 174.4,45.9 Q 188.2,55.1 187.5,71.6 Q 197.8,84.5 192.0,100.0 Z"
-                  fill="var(--accent)"
+                <rect
+                  width="140"
+                  height="140"
+                  rx="24"
+                  fill="var(--bg)"
+                  stroke="var(--line)"
+                  strokeWidth="1.5"
                 />
-                <circle cx="100" cy="100" r="78" fill="var(--bg)" />
-                <circle
-                  cx="100"
-                  cy="100"
-                  r="70"
-                  fill="none"
-                  stroke="var(--accent)"
-                  strokeWidth="1.2"
-                />
-
-                <path
-                  d="M85 40.5A11 11 0 1 1 71.6 22 8.6 8.6 0 0 0 85 40.5z"
-                  fill="var(--primary-dark)"
-                />
-                <polygon
-                  points="105,44 106.7,48.9 111.8,49 107.7,52 109.2,57 105,54.1 100.8,57 102.3,52 98.2,49 103.3,48.9"
-                  fill="var(--primary-dark)"
-                />
-
                 <text
-                  x="100"
-                  y="128"
+                  x="82"
+                  y="98"
                   textAnchor="middle"
-                  fontFamily="var(--font-fraunces), ui-serif, Georgia, serif"
-                  fontWeight="700"
-                  fontStyle="italic"
-                  fontSize="58"
-                  fill="var(--accent)"
+                  fontFamily="Helvetica Neue, Helvetica, Arial, sans-serif"
+                  fontWeight="900"
+                  fontSize="80"
+                  letterSpacing="-2"
+                  fill="#c3272b"
                 >
-                  SB
+                  B
                 </text>
-
-                <path id="headerLogoArc" d="M 164,100 A 64,64 0 0 1 36,100" fill="none" />
                 <text
-                  fontFamily="var(--font-ibm-plex-mono), ui-monospace, monospace"
-                  fontWeight="700"
-                  fontSize="12"
-                  letterSpacing="3"
-                  fill="var(--ink)"
+                  x="58"
+                  y="98"
+                  textAnchor="middle"
+                  fontFamily="Helvetica Neue, Helvetica, Arial, sans-serif"
+                  fontWeight="900"
+                  fontSize="80"
+                  letterSpacing="-2"
+                  fill="#006233"
                 >
-                  <textPath href="#headerLogoArc" startOffset="50%" textAnchor="middle">
-                    MADE BY A DZ
-                  </textPath>
+                  S
                 </text>
               </svg>
               <span className="font-serif text-xl font-bold tracking-tight">
