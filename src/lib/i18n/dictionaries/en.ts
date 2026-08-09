@@ -27,7 +27,7 @@ const en: Dictionary = {
   },
   footer: {
     tagline:
-      "The general and fashion marketplace celebrating French and Algerian artisans, open to all.",
+      "The general and fashion marketplace celebrating Algerian craftsmanship, from France and Algeria, open to all.",
     categories: "Categories",
     vehicules: "Vehicles",
     immobilier: "Real Estate",
@@ -45,16 +45,16 @@ const en: Dictionary = {
     mentions: "Legal notice",
     cgu: "Terms",
     confidentialite: "Privacy",
-    fait: "Made with 🌿 by and for the diaspora",
+    fait: "Made with 🌿, to showcase Algerian craftsmanship",
   },
   home: {
     diasporaBanner:
-      "🇫🇷 Souk El Business is currently available for the Algerian diaspora in France. Listings in Algeria will be available soon, once the platform complies with Algerian regulations.",
-    badge: "New in France",
-    heroTitle: "The modern souk",
-    heroTitleEmphasis: "for Algerians and the diaspora.",
+      "🇫🇷 Souk El Business is currently available in France only. Listings in Algeria will be available soon, once the platform complies with Algerian regulations.",
+    badge: "Authentic Algerian craftsmanship",
+    heroTitle: "Algerian craftsmanship,",
+    heroTitleEmphasis: "handmade in France and Algeria.",
     heroSubtitle:
-      "Buy and sell in France: vehicles, real estate, fashion, electronics, French and Algerian crafts. Simple to use, clear to read.",
+      "Open to everyone, wherever you are: discover creations and know-how from Algerian artisans based in France and in Algeria. Plus: classifieds and donations between individuals.",
     searchAllCategories: "All categories",
     searchPlaceholder: "What are you looking for?",
     searchButton: "Search",
@@ -81,10 +81,10 @@ const en: Dictionary = {
       { title: "Services", desc: "Lessons, crafts, events" },
       { title: "Pets", desc: "Dogs, cats, poultry" },
     ],
-    artisanatLabel: "Local know-how",
+    artisanatLabel: "Algerian craftsmanship",
     artisanatTitle: "Crafts & Trades",
     artisanatSubtitle:
-      "Les Talentueux brings together French and Algerian craftspeople, verified professionals with a portfolio and customer reviews, near you.",
+      "Les Talentueux brings together Algerian craftspeople, from France and Algeria: verified professionals with a portfolio and customer reviews, near you.",
     metiers: [
       {
         title: "Sewing & Alterations",
@@ -135,7 +135,7 @@ const en: Dictionary = {
     dressingSubtitle:
       "Buy and sell clothes and accessories between individuals: condition, size and brand always shown.",
     dressingEmpty: "No Dressing listing yet.",
-    annoncesLabel: "In the diaspora · France",
+    annoncesLabel: "Also on the site · Classifieds",
     annoncesTitle: "Recent listings",
     annoncesSeeAll: "See all →",
     annoncesEmpty: "No listing yet. Be the first to post one!",

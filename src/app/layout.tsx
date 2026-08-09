@@ -24,10 +24,9 @@ const ibmPlexMono = IBM_Plex_Mono({
   weight: ["500", "600"],
 });
 
-const title =
-  "Souk El Business : le souk version moderne pour les Algériens et la diaspora";
+const title = "Souk El Business : l'artisanat algérien fait main, de France et d'Algérie";
 const description =
-  "Le souk version moderne pour les Algériens et la diaspora : véhicules, immobilier, dressing, beauté, artisanat et services entre particuliers.";
+  "Découvrez les créations et le savoir-faire d'artisans algériens installés en France et en Algérie. Egalement sur le site : petites annonces et dons entre particuliers, ouvert à tous.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -51,6 +50,28 @@ export const metadata: Metadata = {
   },
 };
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      name: "Souk El Business",
+      url: SITE_URL,
+      description,
+    },
+    {
+      "@type": "WebSite",
+      name: "Souk El Business",
+      url: SITE_URL,
+      potentialAction: {
+        "@type": "SearchAction",
+        target: `${SITE_URL}/produits?q={search_term_string}`,
+        "query-input": "required name=search_term_string",
+      },
+    },
+  ],
+};
+
 export default async function RootLayout({
   children,
 }: Readonly<{
@@ -65,6 +86,10 @@ export default async function RootLayout({
       className={`${fraunces.variable} ${inter.variable} ${ibmPlexMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-(--bg) text-(--ink) font-sans">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         {children}
         <BackToTopButton />
       </body>

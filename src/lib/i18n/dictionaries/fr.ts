@@ -25,7 +25,7 @@ const fr = {
   },
   footer: {
     tagline:
-      "La marketplace généraliste et de mode qui met à l'honneur les artisans français et algériens, ouverte à tous.",
+      "La marketplace généraliste et de mode qui met à l'honneur l'artisanat algérien, de France et d'Algérie, ouverte à tous.",
     categories: "Catégories",
     vehicules: "Véhicules",
     immobilier: "Immobilier",
@@ -43,16 +43,16 @@ const fr = {
     mentions: "Mentions légales",
     cgu: "CGU",
     confidentialite: "Confidentialité",
-    fait: "Fait avec 🌿 par et pour la diaspora",
+    fait: "Fait avec 🌿, pour faire rayonner le savoir-faire algérien",
   },
   home: {
     diasporaBanner:
-      "🇫🇷 Souk El Business est pour l'instant disponible pour la diaspora algérienne en France. Les annonces en Algérie seront accessibles prochainement, après mise en conformité avec la réglementation algérienne.",
-    badge: "Nouveau en France",
-    heroTitle: "Le souk version moderne",
-    heroTitleEmphasis: "pour les Algériens et la diaspora.",
+      "🇫🇷 Souk El Business est pour l'instant disponible en France uniquement. Les annonces en Algérie seront accessibles prochainement, après mise en conformité avec la réglementation algérienne.",
+    badge: "Savoir-faire algérien authentique",
+    heroTitle: "L'artisanat algérien",
+    heroTitleEmphasis: "fait main, de France et d'Algérie.",
     heroSubtitle:
-      "Achetez et vendez en France : véhicules, immobilier, mode, électronique, artisanat français et algérien. Simple à utiliser, clair à lire.",
+      "Ouvert à tous, où que vous soyez : découvrez les créations et le savoir-faire d'artisans algériens installés en France et en Algérie. En prime : petites annonces et dons entre particuliers.",
     searchAllCategories: "Toutes catégories",
     searchPlaceholder: "Que cherchez-vous ?",
     searchButton: "Rechercher",
@@ -79,10 +79,10 @@ const fr = {
       { title: "Services", desc: "Cours, artisanat, événements" },
       { title: "Animaux", desc: "Chiens, chats, volaille" },
     ],
-    artisanatLabel: "Savoir-faire local",
+    artisanatLabel: "Savoir-faire algérien",
     artisanatTitle: "Artisanat & Métiers",
     artisanatSubtitle:
-      "Les Talentueux réunissent artisans français et algériens, professionnels vérifiés avec portfolio et avis clients, à découvrir près de chez vous.",
+      "Les Talentueux réunissent des artisans algériens, de France et d'Algérie : professionnels vérifiés avec portfolio et avis clients, à découvrir près de chez vous.",
     metiers: [
       {
         title: "Couture & Retouches",
@@ -133,7 +133,7 @@ const fr = {
     dressingSubtitle:
       "Vendez et achetez vos vêtements et accessoires entre particuliers : état, taille et marque toujours affichés.",
     dressingEmpty: "Aucune annonce Dressing pour le moment.",
-    annoncesLabel: "Dans la diaspora · France",
+    annoncesLabel: "Aussi sur le site · Petites annonces",
     annoncesTitle: "Annonces récentes",
     annoncesSeeAll: "Voir tout →",
     annoncesEmpty: "Aucune annonce pour le moment. Soyez le premier à publier !",
