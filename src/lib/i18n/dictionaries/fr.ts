@@ -25,7 +25,7 @@ const fr = {
   },
   footer: {
     tagline:
-      "La marketplace généraliste et de mode qui met à l'honneur l'artisanat algérien, de France et d'Algérie, ouverte à tous.",
+      "La marketplace qui réunit talent, artisanat et bonnes affaires algériennes, ouverte à tous.",
     categories: "Catégories",
     vehicules: "Véhicules",
     immobilier: "Immobilier",
@@ -48,11 +48,11 @@ const fr = {
   home: {
     diasporaBanner:
       "🇫🇷 Souk El Business est pour l'instant disponible en France uniquement. Les annonces en Algérie seront accessibles prochainement, après mise en conformité avec la réglementation algérienne.",
-    badge: "Savoir-faire algérien authentique",
-    heroTitle: "L'artisanat algérien",
-    heroTitleEmphasis: "fait main, de France et d'Algérie.",
+    badge: "Talent algérien, esprit business",
+    heroTitle: "Là où le talent algérien",
+    heroTitleEmphasis: "rencontre les bonnes affaires.",
     heroSubtitle:
-      "Ouvert à tous, où que vous soyez : découvrez les créations et le savoir-faire d'artisans algériens installés en France et en Algérie. En prime : petites annonces et dons entre particuliers.",
+      "Artisanat, bonnes affaires, gestes de générosité : la référence pour tout ce qui vient d'Algérie, ouverte à la découverte de tous.",
     searchAllCategories: "Toutes catégories",
     searchPlaceholder: "Que cherchez-vous ?",
     searchButton: "Rechercher",
@@ -82,7 +82,7 @@ const fr = {
     artisanatLabel: "Savoir-faire algérien",
     artisanatTitle: "Artisanat & Métiers",
     artisanatSubtitle:
-      "Les Talentueux réunissent des artisans algériens, de France et d'Algérie : professionnels vérifiés avec portfolio et avis clients, à découvrir près de chez vous.",
+      "Les Talentueux réunissent artisans et entrepreneurs algériens, de France et d'Algérie : professionnels vérifiés avec portfolio et avis clients, à découvrir près de chez vous.",
     metiers: [
       {
         title: "Couture & Retouches",
@@ -133,7 +133,7 @@ const fr = {
     dressingSubtitle:
       "Vendez et achetez vos vêtements et accessoires entre particuliers : état, taille et marque toujours affichés.",
     dressingEmpty: "Aucune annonce Dressing pour le moment.",
-    annoncesLabel: "Aussi sur le site · Petites annonces",
+    annoncesLabel: "Bonnes affaires",
     annoncesTitle: "Annonces récentes",
     annoncesSeeAll: "Voir tout →",
     annoncesEmpty: "Aucune annonce pour le moment. Soyez le premier à publier !",

@@ -24,9 +24,10 @@ const ibmPlexMono = IBM_Plex_Mono({
   weight: ["500", "600"],
 });
 
-const title = "Souk El Business : l'artisanat algérien fait main, de France et d'Algérie";
+const title =
+  "Souk El Business : le talent algérien, entre artisanat et bonnes affaires";
 const description =
-  "Découvrez les créations et le savoir-faire d'artisans algériens installés en France et en Algérie. Egalement sur le site : petites annonces et dons entre particuliers, ouvert à tous.";
+  "Artisanat, bonnes affaires, gestes de générosité : la référence pour tout ce qui vient d'Algérie. Talent et savoir-faire algériens, de France et d'Algérie, ouverts à tous.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

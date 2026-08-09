@@ -27,7 +27,7 @@ const en: Dictionary = {
   },
   footer: {
     tagline:
-      "The general and fashion marketplace celebrating Algerian craftsmanship, from France and Algeria, open to all.",
+      "The marketplace celebrating Algerian talent, craftsmanship and great deals, open to all.",
     categories: "Categories",
     vehicules: "Vehicles",
     immobilier: "Real Estate",
@@ -50,11 +50,11 @@ const en: Dictionary = {
   home: {
     diasporaBanner:
       "🇫🇷 Souk El Business is currently available in France only. Listings in Algeria will be available soon, once the platform complies with Algerian regulations.",
-    badge: "Authentic Algerian craftsmanship",
-    heroTitle: "Algerian craftsmanship,",
-    heroTitleEmphasis: "handmade in France and Algeria.",
+    badge: "Algerian talent, business spirit",
+    heroTitle: "Where Algerian talent",
+    heroTitleEmphasis: "meets great deals.",
     heroSubtitle:
-      "Open to everyone, wherever you are: discover creations and know-how from Algerian artisans based in France and in Algeria. Plus: classifieds and donations between individuals.",
+      "Craftsmanship, great deals, acts of generosity: the go-to place for everything from Algeria, open for anyone to discover.",
     searchAllCategories: "All categories",
     searchPlaceholder: "What are you looking for?",
     searchButton: "Search",
@@ -84,7 +84,7 @@ const en: Dictionary = {
     artisanatLabel: "Algerian craftsmanship",
     artisanatTitle: "Crafts & Trades",
     artisanatSubtitle:
-      "Les Talentueux brings together Algerian craftspeople, from France and Algeria: verified professionals with a portfolio and customer reviews, near you.",
+      "Les Talentueux brings together Algerian craftspeople and entrepreneurs, from France and Algeria: verified professionals with a portfolio and customer reviews, near you.",
     metiers: [
       {
         title: "Sewing & Alterations",
@@ -135,7 +135,7 @@ const en: Dictionary = {
     dressingSubtitle:
       "Buy and sell clothes and accessories between individuals: condition, size and brand always shown.",
     dressingEmpty: "No Dressing listing yet.",
-    annoncesLabel: "Also on the site · Classifieds",
+    annoncesLabel: "Great deals",
     annoncesTitle: "Recent listings",
     annoncesSeeAll: "See all →",
     annoncesEmpty: "No listing yet. Be the first to post one!",
