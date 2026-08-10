@@ -119,9 +119,10 @@ const en: Dictionary = {
         desc: "Events, traditional dishes, cakes",
       },
     ],
-    talentsTitle: "🏅 Talentueux of the moment",
+    talentsWeekLabel: "This week",
+    talentsTitle: "Talentueux of the week",
     talentsSeeAll: "All profiles →",
-    talentsBadge: "🏅 Talentueux",
+    talentsBadge: "Talentueux",
     talentsReviews: "reviews",
     talentsSeeProfile: "View profile",
     talentsEmpty:

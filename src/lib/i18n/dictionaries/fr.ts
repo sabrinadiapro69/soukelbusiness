@@ -117,9 +117,10 @@ const fr = {
         desc: "Événements, plats traditionnels, gâteaux",
       },
     ],
-    talentsTitle: "🏅 Les Talentueux du moment",
+    talentsWeekLabel: "Cette semaine",
+    talentsTitle: "Les Talentueux de la semaine",
     talentsSeeAll: "Tous les profils →",
-    talentsBadge: "🏅 Talentueux",
+    talentsBadge: "Talentueux",
     talentsReviews: "avis",
     talentsSeeProfile: "Voir le profil",
     talentsEmpty:
