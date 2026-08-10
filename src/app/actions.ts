@@ -158,18 +158,20 @@ export async function createListingAction(
     };
   }
 
-  const photoPaths: string[] = [];
-  for (const file of photoFiles) {
-    const ext = file.name.split(".").pop() || "jpg";
-    const path = `${user.id}/${randomUUID()}.${ext}`;
-    const { error: uploadError } = await supabase.storage
-      .from("listing-photos")
-      .upload(path, file, { contentType: file.type });
-    if (uploadError) {
-      return { error: "L'envoi d'une photo a échoué. Merci de réessayer." };
-    }
-    photoPaths.push(path);
+  const uploadResults = await Promise.all(
+    photoFiles.map((file) => {
+      const ext = file.name.split(".").pop() || "jpg";
+      const path = `${user.id}/${randomUUID()}.${ext}`;
+      return supabase.storage
+        .from("listing-photos")
+        .upload(path, file, { contentType: file.type })
+        .then(({ error }) => ({ path, error }));
+    })
+  );
+  if (uploadResults.some((r) => r.error)) {
+    return { error: "L'envoi d'une photo a échoué. Merci de réessayer." };
   }
+  const photoPaths = uploadResults.map((r) => r.path);
 
   const { error } = await supabase.from("listings").insert({
     seller_id: user.id,
@@ -257,22 +259,23 @@ export async function updateListingAction(
 
   let photoPaths = existing.photos;
   if (photoFiles.length > 0) {
-    const newPaths: string[] = [];
-    for (const file of photoFiles) {
-      const ext = file.name.split(".").pop() || "jpg";
-      const path = `${user.id}/${randomUUID()}.${ext}`;
-      const { error: uploadError } = await supabase.storage
-        .from("listing-photos")
-        .upload(path, file, { contentType: file.type });
-      if (uploadError) {
-        return { error: "L'envoi d'une photo a échoué. Merci de réessayer." };
-      }
-      newPaths.push(path);
+    const uploadResults = await Promise.all(
+      photoFiles.map((file) => {
+        const ext = file.name.split(".").pop() || "jpg";
+        const path = `${user.id}/${randomUUID()}.${ext}`;
+        return supabase.storage
+          .from("listing-photos")
+          .upload(path, file, { contentType: file.type })
+          .then(({ error }) => ({ path, error }));
+      })
+    );
+    if (uploadResults.some((r) => r.error)) {
+      return { error: "L'envoi d'une photo a échoué. Merci de réessayer." };
     }
     if (existing.photos?.length) {
       await supabase.storage.from("listing-photos").remove(existing.photos);
     }
-    photoPaths = newPaths;
+    photoPaths = uploadResults.map((r) => r.path);
   }
 
   const { error } = await supabase
@@ -412,16 +415,18 @@ export async function addPortfolioItemAction(formData: FormData) {
   if (!title || files.length === 0 || files.length > 3) return;
   if (files.some((f) => f.size > MAX_PHOTO_SIZE)) return;
 
-  const paths: string[] = [];
-  for (const file of files) {
-    const ext = file.name.split(".").pop() || "jpg";
-    const path = `${user.id}/${randomUUID()}.${ext}`;
-    const { error: uploadError } = await supabase.storage
-      .from("portfolio-photos")
-      .upload(path, file, { contentType: file.type });
-    if (uploadError) return;
-    paths.push(path);
-  }
+  const uploadResults = await Promise.all(
+    files.map((file) => {
+      const ext = file.name.split(".").pop() || "jpg";
+      const path = `${user.id}/${randomUUID()}.${ext}`;
+      return supabase.storage
+        .from("portfolio-photos")
+        .upload(path, file, { contentType: file.type })
+        .then(({ error }) => ({ path, error }));
+    })
+  );
+  if (uploadResults.some((r) => r.error)) return;
+  const paths = uploadResults.map((r) => r.path);
 
   await supabase.from("portfolio_items").insert({
     seller_id: user.id,

@@ -8,6 +8,9 @@ import { getLocale } from "@/lib/i18n/locale";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 
 export const dynamic = "force-dynamic";
+// Laisse plus de temps au serveur pour l'envoi des photos de portfolio
+// sur une connexion mobile lente.
+export const maxDuration = 60;
 
 export default async function ProfilPage() {
   const locale = await getLocale();
