@@ -27,7 +27,7 @@ const en: Dictionary = {
   },
   footer: {
     tagline:
-      "The marketplace celebrating Algerian talent, craftsmanship and great deals, open to all.",
+      "The marketplace celebrating talent, craftsmanship and great deals from around the world, open to all.",
     categories: "Categories",
     vehicules: "Vehicles",
     immobilier: "Real Estate",
@@ -45,16 +45,16 @@ const en: Dictionary = {
     mentions: "Legal notice",
     cgu: "Terms",
     confidentialite: "Privacy",
-    fait: "Made with 🌿, to showcase Algerian craftsmanship",
+    fait: "Made with 🌿, to showcase craftsmanship from around the world",
   },
   home: {
-    diasporaBanner:
-      "🇫🇷 Souk El Business is currently available in France only. Listings in Algeria will be available soon, once the platform complies with Algerian regulations.",
-    badge: "Algerian talent, business spirit",
-    heroTitle: "Where Algerian talent",
-    heroTitleEmphasis: "meets great deals.",
+    welcomeBanner:
+      "🌍 Welcome to Souk El Business: craftsmanship, traditions and great deals from around the world, between individuals in France.",
+    badge: "World cultures, business spirit",
+    heroTitle: "Where the world's cultures",
+    heroTitleEmphasis: "meet great deals.",
     heroSubtitle:
-      "Craftsmanship, great deals, acts of generosity: the go-to place for everything from Algeria, open for anyone to discover.",
+      "Craftsmanship, great deals, acts of generosity: the go-to place to discover traditions and talents from around the world, open to all.",
     searchAllCategories: "All categories",
     searchPlaceholder: "What are you looking for?",
     searchButton: "Search",
@@ -65,7 +65,7 @@ const en: Dictionary = {
       "Paris apartment",
       "Evening dress",
     ],
-    donsLabel: "Algerian generosity",
+    donsLabel: "The gesture that brings joy",
     donsTitle: "Latest donations",
     donsEmpty: "No donations yet. Be the first to give an item away!",
     rayonsLabel: "Explore",
@@ -81,10 +81,10 @@ const en: Dictionary = {
       { title: "Services", desc: "Lessons, crafts, events" },
       { title: "Pets", desc: "Dogs, cats, poultry" },
     ],
-    artisanatLabel: "Algerian craftsmanship",
+    artisanatLabel: "Craftsmanship from around the world",
     artisanatTitle: "Crafts & Trades",
     artisanatSubtitle:
-      "Les Talentueux brings together Algerian craftspeople and entrepreneurs, from France and Algeria: verified professionals with a portfolio and customer reviews, near you.",
+      "Les Talentueux brings together craftspeople and entrepreneurs based in France, specialized in the traditions and know-how of a country close to their heart: verified professionals with a portfolio and customer reviews, near you.",
     metiers: [
       {
         title: "Sewing & Alterations",
@@ -334,6 +334,30 @@ const en: Dictionary = {
     signIn: "Sign in",
     noAccount: "Don't have an account yet?",
     signUp: "Sign up",
+    forgotPassword: "Forgot your password?",
+  },
+  motDePasseOublie: {
+    pageTitle: "Forgot password",
+    pageSubtitle:
+      "Enter your email and we'll send you a link to choose a new password.",
+    email: "Email",
+    send: "Send the link",
+    sending: "Sending...",
+    success:
+      "If an account exists with this email, a reset link was just sent. Please check your spam folder too.",
+    backToLogin: "Back to sign in",
+  },
+  reinitialiserMotDePasse: {
+    pageTitle: "Choose a new password",
+    pageSubtitle: "Enter a new password for your account.",
+    newPassword: "New password",
+    confirmPassword: "Confirm password",
+    save: "Save password",
+    saving: "Saving...",
+    success: "Password updated. You can now sign in.",
+    mismatch: "The two passwords don't match.",
+    invalidLink: "This link is no longer valid. Please request a new one.",
+    backToLogin: "Go to sign in",
   },
   contact: {
     pageTitle: "Contact us",

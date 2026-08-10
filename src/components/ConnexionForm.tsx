@@ -66,6 +66,14 @@ export default function ConnexionForm({
           onChange={(e) => setPassword(e.target.value)}
           className="mt-1 w-full rounded-xl border border-line px-4 py-2 text-sm text-ink outline-none focus:border-accent"
         />
+        <div className="mt-1.5 text-right">
+          <Link
+            href="/mot-de-passe-oublie"
+            className="text-xs text-ink-soft hover:text-accent hover:underline"
+          >
+            {dict.forgotPassword}
+          </Link>
+        </div>
       </div>
 
       <button

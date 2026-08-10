@@ -1,0 +1,28 @@
+import SiteHeader from "@/components/SiteHeader";
+import SiteFooter from "@/components/SiteFooter";
+import MotDePasseOublieForm from "@/components/MotDePasseOublieForm";
+import { getLocale } from "@/lib/i18n/locale";
+import { getDictionary } from "@/lib/i18n/dictionaries";
+
+export default async function MotDePasseOubliePage() {
+  const locale = await getLocale();
+  const dict = await getDictionary(locale);
+
+  return (
+    <div className="flex flex-1 flex-col">
+      <SiteHeader />
+
+      <main className="mx-auto w-full max-w-md flex-1 px-6 py-16">
+        <h1 className="text-2xl font-bold text-ink">
+          {dict.motDePasseOublie.pageTitle}
+        </h1>
+        <p className="mt-2 text-sm text-ink-soft">
+          {dict.motDePasseOublie.pageSubtitle}
+        </p>
+        <MotDePasseOublieForm dict={dict.motDePasseOublie} />
+      </main>
+
+      <SiteFooter />
+    </div>
+  );
+}

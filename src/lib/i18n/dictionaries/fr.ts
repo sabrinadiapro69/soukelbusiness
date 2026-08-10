@@ -25,7 +25,7 @@ const fr = {
   },
   footer: {
     tagline:
-      "La marketplace qui réunit talent, artisanat et bonnes affaires algériennes, ouverte à tous.",
+      "La marketplace qui réunit talents, artisanat et bonnes affaires du monde entier, ouverte à tous.",
     categories: "Catégories",
     vehicules: "Véhicules",
     immobilier: "Immobilier",
@@ -43,16 +43,16 @@ const fr = {
     mentions: "Mentions légales",
     cgu: "CGU",
     confidentialite: "Confidentialité",
-    fait: "Fait avec 🌿, pour faire rayonner le savoir-faire algérien",
+    fait: "Fait avec 🌿, pour faire rayonner les savoir-faire du monde",
   },
   home: {
-    diasporaBanner:
-      "🇫🇷 Souk El Business est pour l'instant disponible en France uniquement. Les annonces en Algérie seront accessibles prochainement, après mise en conformité avec la réglementation algérienne.",
-    badge: "Talent algérien, esprit business",
-    heroTitle: "Là où le talent algérien",
-    heroTitleEmphasis: "rencontre les bonnes affaires.",
+    welcomeBanner:
+      "🌍 Bienvenue sur Souk El Business : artisanat, traditions et bonnes affaires du monde entier, entre particuliers en France.",
+    badge: "Cultures du monde, esprit business",
+    heroTitle: "Là où les cultures du monde",
+    heroTitleEmphasis: "rencontrent les bonnes affaires.",
     heroSubtitle:
-      "Artisanat, bonnes affaires, gestes de générosité : la référence pour tout ce qui vient d'Algérie, ouverte à la découverte de tous.",
+      "Artisanat, bonnes affaires, gestes de générosité : la référence pour découvrir les traditions et talents du monde entier, ouverte à tous.",
     searchAllCategories: "Toutes catégories",
     searchPlaceholder: "Que cherchez-vous ?",
     searchButton: "Rechercher",
@@ -63,7 +63,7 @@ const fr = {
       "Appartement Paris",
       "Robe soirée",
     ],
-    donsLabel: "La générosité algérienne",
+    donsLabel: "Le geste qui fait plaisir",
     donsTitle: "Les derniers dons",
     donsEmpty: "Aucun don pour le moment. Soyez le premier à donner un article !",
     rayonsLabel: "Explorer",
@@ -79,10 +79,10 @@ const fr = {
       { title: "Services", desc: "Cours, artisanat, événements" },
       { title: "Animaux", desc: "Chiens, chats, volaille" },
     ],
-    artisanatLabel: "Savoir-faire algérien",
+    artisanatLabel: "Savoir-faire du monde",
     artisanatTitle: "Artisanat & Métiers",
     artisanatSubtitle:
-      "Les Talentueux réunissent artisans et entrepreneurs algériens, de France et d'Algérie : professionnels vérifiés avec portfolio et avis clients, à découvrir près de chez vous.",
+      "Les Talentueux réunissent des artisans et entrepreneurs installés en France, spécialisés dans les traditions et savoir-faire de leur pays de cœur : professionnels vérifiés avec portfolio et avis clients, à découvrir près de chez vous.",
     metiers: [
       {
         title: "Couture & Retouches",
@@ -336,6 +336,31 @@ const fr = {
     signIn: "Se connecter",
     noAccount: "Pas encore de compte ?",
     signUp: "Inscrivez-vous",
+    forgotPassword: "Mot de passe oublié ?",
+  },
+  motDePasseOublie: {
+    pageTitle: "Mot de passe oublié",
+    pageSubtitle:
+      "Indiquez votre email, nous vous envoyons un lien pour choisir un nouveau mot de passe.",
+    email: "Email",
+    send: "Envoyer le lien",
+    sending: "Envoi...",
+    success:
+      "Si un compte existe avec cet email, un lien de réinitialisation vient de vous être envoyé. Pensez à vérifier vos spams.",
+    backToLogin: "Retour à la connexion",
+  },
+  reinitialiserMotDePasse: {
+    pageTitle: "Choisir un nouveau mot de passe",
+    pageSubtitle: "Saisissez votre nouveau mot de passe pour votre compte.",
+    newPassword: "Nouveau mot de passe",
+    confirmPassword: "Confirmer le mot de passe",
+    save: "Enregistrer le mot de passe",
+    saving: "Enregistrement...",
+    success: "Mot de passe mis à jour. Vous pouvez vous connecter.",
+    mismatch: "Les deux mots de passe ne correspondent pas.",
+    invalidLink:
+      "Ce lien n'est plus valable. Refaites une demande de mot de passe oublié.",
+    backToLogin: "Aller à la connexion",
   },
   contact: {
     pageTitle: "Contactez-nous",
