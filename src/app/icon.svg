@@ -1,23 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 140">
   <rect width="140" height="140" rx="24" fill="#fdfbf6" stroke="#e6ddc8" stroke-width="1.5" />
-  <text
-    x="82"
-    y="98"
-    text-anchor="middle"
-    font-family="Helvetica Neue, Helvetica, Arial, sans-serif"
-    font-weight="900"
-    letter-spacing="-2"
-    font-size="80"
-    fill="#c3272b"
-  >B</text>
-  <text
-    x="58"
-    y="98"
-    text-anchor="middle"
-    font-family="Helvetica Neue, Helvetica, Arial, sans-serif"
-    font-weight="900"
-    letter-spacing="-2"
-    font-size="80"
-    fill="#006233"
-  >S</text>
+
+  <polygon points="70,18 60,70 80,70" fill="#b84c2f" />
+  <polygon points="122,70 70,60 70,80" fill="#b4881b" />
+  <polygon points="70,122 60,70 80,70" fill="#b4881b" />
+  <polygon points="18,70 70,60 70,80" fill="#b84c2f" />
+
+  <circle cx="70" cy="70" r="7" fill="#fdfbf6" stroke="#1c2620" stroke-width="1.5" />
 </svg>

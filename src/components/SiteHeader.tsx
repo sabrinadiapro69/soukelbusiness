@@ -122,30 +122,18 @@ export default async function SiteHeader() {
                   stroke="var(--line)"
                   strokeWidth="1.5"
                 />
-                <text
-                  x="82"
-                  y="98"
-                  textAnchor="middle"
-                  fontFamily="Helvetica Neue, Helvetica, Arial, sans-serif"
-                  fontWeight="900"
-                  fontSize="80"
-                  letterSpacing="-2"
-                  fill="#c3272b"
-                >
-                  B
-                </text>
-                <text
-                  x="58"
-                  y="98"
-                  textAnchor="middle"
-                  fontFamily="Helvetica Neue, Helvetica, Arial, sans-serif"
-                  fontWeight="900"
-                  fontSize="80"
-                  letterSpacing="-2"
-                  fill="#006233"
-                >
-                  S
-                </text>
+                <polygon points="70,18 60,70 80,70" fill="var(--accent)" />
+                <polygon points="122,70 70,60 70,80" fill="var(--gold)" />
+                <polygon points="70,122 60,70 80,70" fill="var(--gold)" />
+                <polygon points="18,70 70,60 70,80" fill="var(--accent)" />
+                <circle
+                  cx="70"
+                  cy="70"
+                  r="7"
+                  fill="var(--bg)"
+                  stroke="var(--ink)"
+                  strokeWidth="1.5"
+                />
               </svg>
               <span className="font-serif text-xl font-bold tracking-tight">
                 <span className="text-accent">Souk</span> El Business

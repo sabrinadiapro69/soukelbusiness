@@ -25,9 +25,9 @@ const ibmPlexMono = IBM_Plex_Mono({
 });
 
 const title =
-  "Souk El Business : le talent algérien, entre artisanat et bonnes affaires";
+  "Souk El Business : les cultures du monde, entre artisanat et bonnes affaires";
 const description =
-  "Artisanat, bonnes affaires, gestes de générosité : la référence pour tout ce qui vient d'Algérie. Talent et savoir-faire algériens, de France et d'Algérie, ouverts à tous.";
+  "Artisanat, bonnes affaires, gestes de générosité : découvrez les traditions et talents du monde entier, entre particuliers en France, ouverts à tous.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

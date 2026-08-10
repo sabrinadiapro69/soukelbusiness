@@ -77,9 +77,9 @@ export default async function Home() {
     <div className="flex flex-1 flex-col">
       <SiteHeader />
 
-      {/* Bandeau diaspora */}
+      {/* Bandeau de bienvenue */}
       <div className="border-b border-line bg-dawn-soft px-6 py-2.5 text-center text-[13px] text-dawn-dark">
-        {t.diasporaBanner}
+        {t.welcomeBanner}
       </div>
 
       <main className="flex-1">
