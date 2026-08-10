@@ -9,6 +9,7 @@ import {
 } from "@/app/actions";
 import { wilayas } from "@/lib/wilayas";
 import { wilayasAlgerie } from "@/lib/wilayas-algerie";
+import { compressPhotoInput } from "@/lib/imageCompression";
 import { getPortfolioPhotoUrl, type PortfolioItem } from "@/lib/queries";
 import type { Dictionary } from "@/lib/i18n/dictionaries/fr";
 
@@ -236,6 +237,7 @@ export default function ProfilForm({
               name="photo1"
               accept="image/*"
               required
+              onChange={(e) => compressPhotoInput(e.currentTarget)}
               className="mt-1 w-full cursor-pointer text-sm text-ink-soft file:mr-3 file:cursor-pointer file:rounded-full file:border file:border-accent file:bg-paper file:px-4 file:py-2 file:text-sm file:font-semibold file:text-accent hover:file:bg-dawn-soft"
             />
           </div>
@@ -247,6 +249,7 @@ export default function ProfilForm({
               type="file"
               name="photo2"
               accept="image/*"
+              onChange={(e) => compressPhotoInput(e.currentTarget)}
               className="mt-1 w-full cursor-pointer text-sm text-ink-soft file:mr-3 file:cursor-pointer file:rounded-full file:border file:border-accent file:bg-paper file:px-4 file:py-2 file:text-sm file:font-semibold file:text-accent hover:file:bg-dawn-soft"
             />
           </div>
@@ -258,6 +261,7 @@ export default function ProfilForm({
               type="file"
               name="photo3"
               accept="image/*"
+              onChange={(e) => compressPhotoInput(e.currentTarget)}
               className="mt-1 w-full cursor-pointer text-sm text-ink-soft file:mr-3 file:cursor-pointer file:rounded-full file:border file:border-accent file:bg-paper file:px-4 file:py-2 file:text-sm file:font-semibold file:text-accent hover:file:bg-dawn-soft"
             />
           </div>

@@ -2,6 +2,7 @@
 
 import { useActionState, useState } from "react";
 import { createListingAction, type CreateListingState } from "@/app/actions";
+import { compressPhotoInput } from "@/lib/imageCompression";
 import { categories } from "@/lib/queries";
 import { wilayas } from "@/lib/wilayas";
 import { wilayasAlgerie } from "@/lib/wilayas-algerie";
@@ -48,6 +49,7 @@ export default function PublierForm({
           name="photo1"
           accept="image/*"
           required
+          onChange={(e) => compressPhotoInput(e.currentTarget)}
           className="mt-1 w-full cursor-pointer text-sm text-ink-soft file:mr-3 file:cursor-pointer file:rounded-full file:border file:border-accent file:bg-paper file:px-4 file:py-2 file:text-sm file:font-semibold file:text-accent hover:file:bg-dawn-soft"
         />
       </div>
@@ -57,6 +59,7 @@ export default function PublierForm({
           type="file"
           name="photo2"
           accept="image/*"
+          onChange={(e) => compressPhotoInput(e.currentTarget)}
           className="mt-1 w-full cursor-pointer text-sm text-ink-soft file:mr-3 file:cursor-pointer file:rounded-full file:border file:border-accent file:bg-paper file:px-4 file:py-2 file:text-sm file:font-semibold file:text-accent hover:file:bg-dawn-soft"
         />
       </div>
@@ -66,6 +69,7 @@ export default function PublierForm({
           type="file"
           name="photo3"
           accept="image/*"
+          onChange={(e) => compressPhotoInput(e.currentTarget)}
           className="mt-1 w-full cursor-pointer text-sm text-ink-soft file:mr-3 file:cursor-pointer file:rounded-full file:border file:border-accent file:bg-paper file:px-4 file:py-2 file:text-sm file:font-semibold file:text-accent hover:file:bg-dawn-soft"
         />
       </div>
