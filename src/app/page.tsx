@@ -149,46 +149,18 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* Artisanat & Les Talentueux */}
-        <section id="artisanat" className="scroll-mt-[7.5rem] py-12">
+        {/* Talentueux de la semaine */}
+        <section className="border-b border-line bg-bg-alt py-12">
           <div className="mx-auto max-w-6xl px-6">
-            <div className="mb-6">
-              <span className="mb-1.5 block font-mono text-[11.5px] tracking-wide text-dawn-dark uppercase">
-                {t.artisanatLabel}
-              </span>
-              <h2 className="font-serif text-2xl font-semibold">
-                {t.artisanatTitle}
-              </h2>
-              <p className="mt-1 max-w-md text-sm text-ink-soft">
-                {t.artisanatSubtitle}
-              </p>
-            </div>
-
-            <div className="mb-7 grid grid-cols-2 gap-4 sm:grid-cols-4">
-              {t.metiers.map((m, i) => (
-                <div
-                  key={m.title}
-                  className="rounded-2xl border border-line bg-paper px-[18px] py-[22px] text-center transition-all hover:-translate-y-1 hover:shadow-lg"
-                >
-                  <div className="mx-auto mb-3.5 flex h-14 w-14 items-center justify-center rounded-full bg-bg-alt">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className="h-[26px] w-[26px] text-primary-dark">
-                      {metierIcons[i]}
-                    </svg>
-                  </div>
-                  <h4 className="mb-1 text-[14.5px] font-semibold">
-                    {m.title}
-                  </h4>
-                  <p className="text-xs leading-snug text-ink-soft">
-                    {m.desc}
-                  </p>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-2 mb-[18px] flex items-end justify-between">
-              <h3 className="font-serif text-[19px] font-semibold">
-                {t.talentsTitle}
-              </h3>
+            <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
+              <div>
+                <span className="mb-1.5 block font-mono text-[11.5px] tracking-wide text-dawn-dark uppercase">
+                  {t.talentsWeekLabel}
+                </span>
+                <h2 className="font-serif text-2xl font-semibold">
+                  {t.talentsTitle}
+                </h2>
+              </div>
               {talents.length > 0 && (
                 <Link
                   href="/produits"
@@ -278,6 +250,44 @@ export default async function Home() {
               >
                 {t.talentsCtaButton}
               </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* Artisanat & Métiers */}
+        <section id="artisanat" className="scroll-mt-[7.5rem] py-12">
+          <div className="mx-auto max-w-6xl px-6">
+            <div className="mb-6">
+              <span className="mb-1.5 block font-mono text-[11.5px] tracking-wide text-dawn-dark uppercase">
+                {t.artisanatLabel}
+              </span>
+              <h2 className="font-serif text-2xl font-semibold">
+                {t.artisanatTitle}
+              </h2>
+              <p className="mt-1 max-w-md text-sm text-ink-soft">
+                {t.artisanatSubtitle}
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+              {t.metiers.map((m, i) => (
+                <div
+                  key={m.title}
+                  className="rounded-2xl border border-line bg-paper px-[18px] py-[22px] text-center transition-all hover:-translate-y-1 hover:shadow-lg"
+                >
+                  <div className="mx-auto mb-3.5 flex h-14 w-14 items-center justify-center rounded-full bg-bg-alt">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className="h-[26px] w-[26px] text-primary-dark">
+                      {metierIcons[i]}
+                    </svg>
+                  </div>
+                  <h4 className="mb-1 text-[14.5px] font-semibold">
+                    {m.title}
+                  </h4>
+                  <p className="text-xs leading-snug text-ink-soft">
+                    {m.desc}
+                  </p>
+                </div>
+              ))}
             </div>
           </div>
         </section>
