@@ -25,7 +25,7 @@ const fr = {
   },
   footer: {
     tagline:
-      "La marketplace qui réunit la crème des artisans, créateurs et entrepreneurs, ouverte à tous.",
+      "La plateforme qui réunit les meilleurs artisans, créateurs et entrepreneurs, ouverte à tous.",
     categories: "Catégories",
     vehicules: "Véhicules",
     immobilier: "Immobilier",
@@ -43,14 +43,14 @@ const fr = {
     mentions: "Mentions légales",
     cgu: "CGU",
     confidentialite: "Confidentialité",
-    fait: "Fait avec 🌿, pour faire rayonner les savoir-faire du monde",
+    fait: "Fait pour faire rayonner les savoir-faire du monde",
   },
   home: {
     welcomeBanner:
-      "🌍 Souk El Business réunit la crème des artisans, créateurs et entrepreneurs du monde entier, entre particuliers en France.",
-    badge: "Le chic, sans l'étiquette",
-    heroTitle: "Trouvez la bonne personne,",
-    heroTitleEmphasis: "pas juste le bon prix.",
+      "Souk El Business La plateforme qui réunit les meilleurs artisans, créateurs et entrepreneurs .",
+    badge: "Le style sans se ruiner",
+    heroTitle: "Trouvez le produit de qualité,",
+    heroTitleEmphasis: "à prix négocié.",
     heroSubtitle:
       "Les meilleurs artisans, créateurs et entrepreneurs installés en France, à découvrir profil par profil, avis après avis. Le rare ne devrait pas être réservé à ceux qui ne négocient jamais.",
     searchAllCategories: "Toutes catégories",
