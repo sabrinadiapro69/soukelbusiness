@@ -22,25 +22,25 @@ const universTiles = [
     key: "evenements",
     className: "bg-[#7C3AED] text-white",
     area: "md:col-span-2 md:row-span-2",
-    image: "/univers/evenements.jpg",
+    image: "/univers/evenements.webp",
   },
   {
     key: "decoration",
     className: "bg-[#1F4E8C] text-white",
     area: "",
-    image: "/univers/decoration.jpg",
+    image: "/univers/decoration.webp",
   },
   {
     key: "mode",
     className: "bg-[#111111] text-white",
     area: "",
-    image: "/univers/mode.jpg",
+    image: "/univers/mode.webp",
   },
   {
     key: "creation",
     className: "bg-[#E2611A] text-white",
     area: "md:col-span-2",
-    image: "/univers/creation.jpg",
+    image: "/univers/creation.webp",
   },
 ] as const;
 
