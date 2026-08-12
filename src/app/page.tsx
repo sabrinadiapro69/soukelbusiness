@@ -144,6 +144,57 @@ export default async function Home() {
           </div>
         </section>
 
+        {/* Nos univers : Evenements, Decoration, Mode, Creation */}
+        <section id="artisanat" className="scroll-mt-[7.5rem] py-12">
+          <div className="mx-auto max-w-6xl px-6">
+            <h2 className="sr-only">{t.universTitle}</h2>
+
+            <div className="grid grid-cols-2 gap-3 md:auto-rows-[200px] md:grid-cols-4">
+              {(
+                [
+                  {
+                    key: "evenements",
+                    title: t.universEvenementsTitle,
+                    text: t.universEvenementsText,
+                  },
+                  {
+                    key: "decoration",
+                    title: t.universDecorationTitle,
+                    text: t.universDecorationText,
+                  },
+                  {
+                    key: "mode",
+                    title: t.universModeTitle,
+                    text: t.universModeText,
+                  },
+                  {
+                    key: "creation",
+                    title: t.universCreationTitle,
+                    text: t.universCreationText,
+                  },
+                ] as const
+              ).map((univers) => {
+                const tile = universTiles.find((u) => u.key === univers.key)!;
+                return (
+                  <Link
+                    key={univers.key}
+                    href="#talentueux"
+                    role="img"
+                    aria-label={univers.text}
+                    className={`group relative flex aspect-[3/4] items-end overflow-hidden bg-cover bg-center p-5 md:aspect-auto ${tile.className} ${tile.area}`}
+                    style={{ backgroundImage: `url(${tile.image})` }}
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/0 to-transparent" />
+                    <span className="relative font-serif text-2xl font-semibold italic transition-opacity group-hover:opacity-70 sm:text-3xl">
+                      {univers.title}
+                    </span>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
         {/* Talentueux de la semaine */}
         <section id="talentueux" className="scroll-mt-[7.5rem] border-b border-line bg-bg-alt py-12">
           <div className="mx-auto max-w-6xl px-6">
@@ -253,57 +304,6 @@ export default async function Home() {
               >
                 {t.talentsCtaButton}
               </Link>
-            </div>
-          </div>
-        </section>
-
-        {/* Nos univers : Evenements, Decoration, Mode, Creation */}
-        <section id="artisanat" className="scroll-mt-[7.5rem] py-12">
-          <div className="mx-auto max-w-6xl px-6">
-            <h2 className="sr-only">{t.universTitle}</h2>
-
-            <div className="grid grid-cols-2 gap-3 md:auto-rows-[200px] md:grid-cols-4">
-              {(
-                [
-                  {
-                    key: "evenements",
-                    title: t.universEvenementsTitle,
-                    text: t.universEvenementsText,
-                  },
-                  {
-                    key: "decoration",
-                    title: t.universDecorationTitle,
-                    text: t.universDecorationText,
-                  },
-                  {
-                    key: "mode",
-                    title: t.universModeTitle,
-                    text: t.universModeText,
-                  },
-                  {
-                    key: "creation",
-                    title: t.universCreationTitle,
-                    text: t.universCreationText,
-                  },
-                ] as const
-              ).map((univers) => {
-                const tile = universTiles.find((u) => u.key === univers.key)!;
-                return (
-                  <Link
-                    key={univers.key}
-                    href="#talentueux"
-                    role="img"
-                    aria-label={univers.text}
-                    className={`group relative flex aspect-[3/4] items-end overflow-hidden bg-cover bg-center p-5 md:aspect-auto ${tile.className} ${tile.area}`}
-                    style={{ backgroundImage: `url(${tile.image})` }}
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/0 to-transparent" />
-                    <span className="relative font-serif text-2xl font-semibold italic transition-opacity group-hover:opacity-70 sm:text-3xl">
-                      {univers.title}
-                    </span>
-                  </Link>
-                );
-              })}
             </div>
           </div>
         </section>
