@@ -14,13 +14,34 @@ export const dynamic = "force-dynamic";
 
 type Thumb = { type: "emoji" | "photo"; value: string };
 
-// En attente des vraies photos : une couleur chic et distincte par tuile
-// (violet lumineux, bleu, noir, orange), a la demande du dernier retour.
+// Photo a deposer par la cliente dans /public/univers/ (voir README ou
+// message de livraison). Le fond de couleur reste visible tant que le
+// fichier n'existe pas encore, et sert de fond pendant le chargement.
 const universTiles = [
-  { key: "evenements", className: "bg-[#7C3AED] text-white", area: "md:col-span-2 md:row-span-2" },
-  { key: "decoration", className: "bg-[#1F4E8C] text-white", area: "" },
-  { key: "mode", className: "bg-[#111111] text-white", area: "" },
-  { key: "creation", className: "bg-[#E2611A] text-white", area: "md:col-span-2" },
+  {
+    key: "evenements",
+    className: "bg-[#7C3AED] text-white",
+    area: "md:col-span-2 md:row-span-2",
+    image: "/univers/evenements.jpg",
+  },
+  {
+    key: "decoration",
+    className: "bg-[#1F4E8C] text-white",
+    area: "",
+    image: "/univers/decoration.jpg",
+  },
+  {
+    key: "mode",
+    className: "bg-[#111111] text-white",
+    area: "",
+    image: "/univers/mode.jpg",
+  },
+  {
+    key: "creation",
+    className: "bg-[#E2611A] text-white",
+    area: "md:col-span-2",
+    image: "/univers/creation.jpg",
+  },
 ] as const;
 
 const talentColors = ["bg-primary", "bg-accent", "bg-primary-dark", "bg-accent-dark"];
@@ -65,10 +86,6 @@ export default async function Home() {
         {/* Hero */}
         <section className="relative overflow-hidden border-b border-line bg-bg py-16">
           <div className="mx-auto max-w-3xl px-6 text-center">
-            <span className="mb-5 inline-flex items-center gap-2 border border-line px-3.5 py-1.5 font-mono text-[11.5px] font-medium tracking-wide text-ink uppercase">
-              <span className="h-1.5 w-1.5 shrink-0 bg-accent" />
-              {t.badge}
-            </span>
             <h1 className="font-serif text-4xl leading-tight font-semibold tracking-tight sm:text-5xl">
               {t.heroTitle}{" "}
               <em className="text-accent font-medium italic">
@@ -160,11 +177,19 @@ export default async function Home() {
                       {t.talentsBadge}
                     </span>
                     <div className="mb-3.5 flex items-center gap-2.5">
-                      <div
-                        className={`flex h-11 w-11 shrink-0 items-center justify-center font-serif text-base font-semibold text-white ${talent.color}`}
-                      >
-                        {talent.name[0]}
-                      </div>
+                      {talent.thumbs[0]?.type === "photo" ? (
+                        <img
+                          src={talent.thumbs[0].value}
+                          alt=""
+                          className="rounded-avatar h-11 w-11 shrink-0 object-cover"
+                        />
+                      ) : (
+                        <div
+                          className={`rounded-avatar flex h-11 w-11 shrink-0 items-center justify-center font-serif text-base font-semibold text-white ${talent.color}`}
+                        >
+                          {talent.name[0]}
+                        </div>
+                      )}
                       <div>
                         <h4 className="text-[14.5px] font-semibold">
                           {talent.name}
@@ -184,7 +209,7 @@ export default async function Home() {
                       {talent.thumbs.map((thumb, i) => (
                         <div
                           key={i}
-                          className="flex aspect-square items-center justify-center overflow-hidden border border-line text-lg"
+                          className="rounded-photo flex aspect-square items-center justify-center overflow-hidden border border-line text-lg"
                         >
                           {thumb.type === "photo" ? (
                             <img
@@ -267,12 +292,15 @@ export default async function Home() {
                   <Link
                     key={univers.key}
                     href="#talentueux"
-                    className={`group relative flex aspect-[3/4] items-end overflow-hidden p-5 md:aspect-auto ${tile.className} ${tile.area}`}
+                    role="img"
+                    aria-label={univers.text}
+                    className={`group relative flex aspect-[3/4] items-end overflow-hidden bg-cover bg-center p-5 md:aspect-auto ${tile.className} ${tile.area}`}
+                    style={{ backgroundImage: `url(${tile.image})` }}
                   >
-                    <span className="font-serif text-2xl font-semibold italic transition-opacity group-hover:opacity-70 sm:text-3xl">
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/0 to-transparent" />
+                    <span className="relative font-serif text-2xl font-semibold italic transition-opacity group-hover:opacity-70 sm:text-3xl">
                       {univers.title}
                     </span>
-                    <span className="sr-only">{univers.text}</span>
                   </Link>
                 );
               })}
