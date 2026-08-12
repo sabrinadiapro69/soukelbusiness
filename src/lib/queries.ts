@@ -54,6 +54,7 @@ export type Review = {
 export type ProProfile = {
   seller_id: string;
   metier: string;
+  categories: string[];
   verified: boolean;
 };
 
@@ -413,6 +414,7 @@ export async function getPendingTalents(
     pro_profile: {
       seller_id: row.seller_id,
       metier: row.metier,
+      categories: row.categories ?? [],
       verified: row.verified,
     },
   }));
@@ -583,11 +585,20 @@ export async function getPortfolioBySeller(
   return data ?? [];
 }
 
-export async function getTopTalents(limit = 4): Promise<Talent[]> {
-  const { data, error } = await supabase
+export async function getTopTalents(
+  limit = 4,
+  category?: string
+): Promise<Talent[]> {
+  let query = supabase
     .from("pro_profiles")
     .select("*, seller:sellers!inner(*), portfolio:portfolio_items(*)")
-    .eq("verified", true)
+    .eq("verified", true);
+
+  if (category) {
+    query = query.contains("categories", [category]);
+  }
+
+  const { data, error } = await query
     .order("rating", { ascending: false, referencedTable: "seller" })
     .limit(limit);
 
@@ -605,6 +616,7 @@ export async function getTopTalents(limit = 4): Promise<Talent[]> {
         pro_profile: {
           seller_id: row.seller_id,
           metier: row.metier,
+          categories: row.categories ?? [],
           verified: row.verified,
         },
         portfolio: (row.portfolio ?? []).slice(0, 3),

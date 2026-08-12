@@ -170,6 +170,7 @@ export default async function ProfilPage() {
           <ProfilForm
             seller={seller}
             metier={proProfile?.metier ?? ""}
+            categories={proProfile?.categories ?? []}
             portfolio={portfolio ?? []}
             dict={dict.profilForm}
           />

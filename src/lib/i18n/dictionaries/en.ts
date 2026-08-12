@@ -5,7 +5,7 @@ const en: Dictionary = {
     location: "France",
     change: "change",
     franceGroupLabel: "France",
-    algerieGroupLabel: "Algeria (coming soon)",
+    algerieGroupLabel: "Algeria",
     assistance: "Support",
     pro: "Souk El Business Pro",
     rayons: "Categories",
@@ -85,6 +85,21 @@ const en: Dictionary = {
     artisanatTitle: "Crafts & Trades",
     artisanatSubtitle:
       "Les Talentueux brings together craftspeople, creators and entrepreneurs selected for their skill and customer reviews, based in France and specialized in the traditions of a country close to their heart. Find the right person, not just the right piece.",
+    universLabel: "Our worlds",
+    universTitle: "Three ways to bring beauty into your home",
+    universLinkLabel: "Discover",
+    universEvenementsTitle: "Events",
+    universEvenementsText:
+      "Ceremony outfits and jewelry, tableware, calligraphed invitations, tailoring and catering: for occasions that matter.",
+    universDecorationTitle: "Interior decoration",
+    universDecorationText:
+      "Pottery, weaving, metalwork, as well as renovation, decorative painting, carpentry, plumbing and electricity: craftspeople to elevate every room.",
+    universCreationTitle: "Creation",
+    universCreationText:
+      "Painting, sculpture, fine leather goods, pre-loved fashion: the work of artists and creators, at a fair price.",
+    universAnnoncesTitle: "Classifieds",
+    universAnnoncesText:
+      "Buy and sell between individuals, commission-free, just like the rest of the site.",
     metiers: [
       {
         title: "Sewing & Alterations",
@@ -175,7 +190,7 @@ const en: Dictionary = {
     filterWilayaAll: "All cities",
     filterCommuneAll: "All communes",
     franceGroupLabel: "France",
-    algerieGroupLabel: "Algeria (coming soon)",
+    algerieGroupLabel: "Algeria",
   },
   produit: {
     back: "← Back to listings",
@@ -260,10 +275,17 @@ const en: Dictionary = {
     wilaya: "City",
     chooseWilaya: "Choose a city",
     franceGroupLabel: "France",
-    algerieGroupLabel: "Algeria (coming soon)",
+    algerieGroupLabel: "Algeria",
     bio: "Bio / description",
     metier: "Trade",
     metierPlaceholder: "E.g.: Plumber, Seamstress, Photographer...",
+    categoriesLabel: "Your specialties",
+    categoriesHint:
+      "Check one or more categories that match your activity.",
+    categorieEvenements: "Events",
+    categorieDecoration: "Interior decoration",
+    categorieCreation: "Creation",
+    categorieServices: "Services",
     saving: "Saving...",
     save: "Save",
     myPortfolio: "My portfolio",
@@ -294,7 +316,7 @@ const en: Dictionary = {
     wilaya: "City",
     chooseWilaya: "Choose a city",
     franceGroupLabel: "France",
-    algerieGroupLabel: "Algeria (coming soon)",
+    algerieGroupLabel: "Algeria",
     commune: "Commune (optional)",
     chooseCommune: "Choose a commune",
     description: "Description",
@@ -310,7 +332,7 @@ const en: Dictionary = {
     wilaya: "City",
     chooseWilaya: "Choose a city",
     franceGroupLabel: "France",
-    algerieGroupLabel: "Algeria (coming soon)",
+    algerieGroupLabel: "Algeria",
     youAre: "You are",
     particulier: "Individual",
     professionnel: "Professional",

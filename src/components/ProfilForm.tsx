@@ -30,9 +30,12 @@ const emojiOptions = [
 
 const initialState: UpdateProfileState = { error: null };
 
+const categorieOptions = ["evenements", "decoration", "creation", "services"] as const;
+
 export default function ProfilForm({
   seller,
   metier,
+  categories,
   portfolio,
   dict,
 }: {
@@ -44,6 +47,7 @@ export default function ProfilForm({
     type: "particulier" | "pro";
   };
   metier: string;
+  categories: string[];
   portfolio: PortfolioItem[];
   dict: Dictionary["profilForm"];
 }) {
@@ -52,6 +56,13 @@ export default function ProfilForm({
     initialState
   );
   const [avatar, setAvatar] = useState(seller.avatar_emoji);
+
+  const categorieLabels: Record<(typeof categorieOptions)[number], string> = {
+    evenements: dict.categorieEvenements,
+    decoration: dict.categorieDecoration,
+    creation: dict.categorieCreation,
+    services: dict.categorieServices,
+  };
 
   return (
     <>
@@ -151,6 +162,32 @@ export default function ProfilForm({
             defaultValue={metier}
             className="mt-1 w-full rounded-xl border border-line px-4 py-2 text-sm text-ink outline-none focus:border-accent"
           />
+        </div>
+      )}
+
+      {seller.type === "pro" && (
+        <div>
+          <label className="text-sm font-medium text-ink">
+            {dict.categoriesLabel}
+          </label>
+          <p className="mt-0.5 text-xs text-ink-soft">{dict.categoriesHint}</p>
+          <div className="mt-2 flex flex-wrap gap-x-5 gap-y-2">
+            {categorieOptions.map((option) => (
+              <label
+                key={option}
+                className="flex items-center gap-2 text-sm text-ink"
+              >
+                <input
+                  type="checkbox"
+                  name="categories"
+                  value={option}
+                  defaultChecked={categories.includes(option)}
+                  className="h-4 w-4 accent-accent"
+                />
+                {categorieLabels[option]}
+              </label>
+            ))}
+          </div>
         </div>
       )}
 

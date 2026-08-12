@@ -26,17 +26,6 @@ const rayonIcons = [
   <path key="8" d="M11 4c1 2-1 3-1 5a2 2 0 0 0 4 0M8 9C5 9 3 12 3 15c0 3 2 6 9 6s9-3 9-6c0-3-2-6-5-6" />,
 ];
 
-const metierIcons = [
-  <path key="0" d="M6 3h12l-2 6H8L6 3Zm2 6-3 12h14L16 9M12 9v12" />,
-  <path key="1" d="M3 21h18M5 21V9l7-5 7 5v12M9 21v-6h6v6" />,
-  <path key="2" d="M14 7a4 4 0 1 0-6 3.5V21h4v-6h2v6h4V10.5A4 4 0 0 0 14 7Z" />,
-  <path key="3" d="M13 3 4 14h6l-1 7 9-11h-6l1-7Z" />,
-  <g key="4"><path d="M4 20 20 4M4 20 8 8l4 4-4 8Z" /><circle cx="17" cy="7" r="2" /></g>,
-  <g key="5"><circle cx="7" cy="17" r="3" /><circle cx="17" cy="17" r="3" /><path d="M10 17h4l3-6h-8l-2 4" /></g>,
-  <g key="6"><circle cx="12" cy="8" r="4" /><path d="M4 21c0-4 4-6 8-6s8 2 8 6" /></g>,
-  <path key="7" d="M6 8h12l-1 12H7L6 8Zm2-4h8l1 4H7l1-4Z" />,
-];
-
 type Thumb = { type: "emoji" | "photo"; value: string };
 
 const talentColors = ["bg-primary", "bg-accent", "bg-primary-dark", "bg-accent-dark"];
@@ -151,7 +140,7 @@ export default async function Home() {
         </section>
 
         {/* Talentueux de la semaine */}
-        <section className="border-b border-line bg-bg-alt py-12">
+        <section id="talentueux" className="scroll-mt-[7.5rem] border-b border-line bg-bg-alt py-12">
           <div className="mx-auto max-w-6xl px-6">
             <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
               <div>
@@ -255,38 +244,59 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* Artisanat & Métiers */}
+        {/* Nos univers : Evenements, Decoration, Creation, Petites annonces */}
         <section id="artisanat" className="scroll-mt-[7.5rem] py-12">
           <div className="mx-auto max-w-6xl px-6">
-            <div className="mb-6">
-              <span className="mb-1.5 block font-mono text-[11.5px] tracking-wide text-dawn-dark uppercase">
-                {t.artisanatLabel}
+            <div className="mb-8 max-w-lg">
+              <span className="mb-1.5 block font-mono text-[11.5px] tracking-wide text-ink uppercase">
+                {t.universLabel}
               </span>
               <h2 className="font-serif text-2xl font-semibold">
-                {t.artisanatTitle}
+                {t.universTitle}
               </h2>
-              <p className="mt-1 max-w-md text-sm text-ink-soft">
-                {t.artisanatSubtitle}
-              </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-              {t.metiers.map((m, i) => (
+            <div className="border-t border-ink">
+              {[
+                {
+                  title: t.universEvenementsTitle,
+                  text: t.universEvenementsText,
+                  href: "#talentueux",
+                },
+                {
+                  title: t.universDecorationTitle,
+                  text: t.universDecorationText,
+                  href: "#talentueux",
+                },
+                {
+                  title: t.universCreationTitle,
+                  text: t.universCreationText,
+                  href: "#talentueux",
+                },
+                {
+                  title: t.universAnnoncesTitle,
+                  text: t.universAnnoncesText,
+                  href: "/produits",
+                },
+              ].map((univers, i) => (
                 <div
-                  key={m.title}
-                  className="border border-line bg-paper px-[18px] py-[22px] text-center transition-colors hover:border-ink"
+                  key={univers.title}
+                  className={`flex flex-col gap-3 border-b border-line py-7 sm:flex-row sm:items-center sm:gap-10 ${
+                    i % 2 === 1 ? "sm:flex-row-reverse sm:text-right" : ""
+                  }`}
                 >
-                  <div className="mx-auto mb-3.5 flex h-14 w-14 items-center justify-center border border-line">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className="h-[26px] w-[26px] text-ink">
-                      {metierIcons[i]}
-                    </svg>
-                  </div>
-                  <h4 className="mb-1 text-[14.5px] font-semibold">
-                    {m.title}
-                  </h4>
-                  <p className="text-xs leading-snug text-ink-soft">
-                    {m.desc}
+                  <h3 className="font-serif text-xl font-semibold sm:w-64 sm:shrink-0">
+                    {univers.title}
+                  </h3>
+                  <p className="flex-1 text-sm leading-relaxed text-ink-soft">
+                    {univers.text}
                   </p>
+                  <Link
+                    href={univers.href}
+                    className="shrink-0 border-b border-ink pb-0.5 text-[13px] font-medium whitespace-nowrap text-ink hover:border-accent hover:text-accent"
+                  >
+                    {t.universLinkLabel} →
+                  </Link>
                 </div>
               ))}
             </div>

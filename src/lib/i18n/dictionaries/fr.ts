@@ -3,7 +3,7 @@ const fr = {
     location: "France",
     change: "changer",
     franceGroupLabel: "France",
-    algerieGroupLabel: "Algérie (bientôt disponible)",
+    algerieGroupLabel: "Algérie",
     assistance: "Assistance",
     pro: "Souk El Business Pro",
     rayons: "Rayons",
@@ -83,6 +83,21 @@ const fr = {
     artisanatTitle: "Artisanat & Métiers",
     artisanatSubtitle:
       "Les Talentueux réunissent des artisans, créateurs et entrepreneurs sélectionnés pour leur savoir-faire et leurs avis clients, installés en France et spécialisés dans les traditions de leur pays de cœur. Trouvez la bonne personne, pas juste la bonne pièce.",
+    universLabel: "Nos univers",
+    universTitle: "Trois manières de faire vivre le beau chez vous",
+    universLinkLabel: "Découvrir",
+    universEvenementsTitle: "Événements",
+    universEvenementsText:
+      "Tenues et bijoux de cérémonie, art de la table, faire-part calligraphiés, couture sur mesure et traiteur : pour des occasions qui comptent.",
+    universDecorationTitle: "Décoration d'intérieur",
+    universDecorationText:
+      "Poterie, tissage, dinanderie, mais aussi rénovation, peinture décorative, menuiserie, plomberie et électricité : des artisans pour sublimer chaque pièce.",
+    universCreationTitle: "Création",
+    universCreationText:
+      "Peinture, sculpture, maroquinerie d'art, mode seconde main : le travail d'artistes et de créateurs, à prix juste.",
+    universAnnoncesTitle: "Petites annonces",
+    universAnnoncesText:
+      "Vendez et achetez entre particuliers, sans commission, comme sur le reste du site.",
     metiers: [
       {
         title: "Couture & Retouches",
@@ -175,7 +190,7 @@ const fr = {
     filterWilayaAll: "Toutes les villes",
     filterCommuneAll: "Toutes les communes",
     franceGroupLabel: "France",
-    algerieGroupLabel: "Algérie (bientôt disponible)",
+    algerieGroupLabel: "Algérie",
   },
   produit: {
     back: "← Retour aux annonces",
@@ -261,10 +276,17 @@ const fr = {
     wilaya: "Ville",
     chooseWilaya: "Choisir une ville",
     franceGroupLabel: "France",
-    algerieGroupLabel: "Algérie (bientôt disponible)",
+    algerieGroupLabel: "Algérie",
     bio: "Bio / description",
     metier: "Métier",
     metierPlaceholder: "Ex : Plombier, Couturière, Photographe...",
+    categoriesLabel: "Vos univers",
+    categoriesHint:
+      "Cochez une ou plusieurs catégories qui correspondent à votre activité.",
+    categorieEvenements: "Événements",
+    categorieDecoration: "Décoration d'intérieur",
+    categorieCreation: "Création",
+    categorieServices: "Services",
     saving: "Enregistrement...",
     save: "Enregistrer",
     myPortfolio: "Mon portfolio",
@@ -296,7 +318,7 @@ const fr = {
     wilaya: "Ville",
     chooseWilaya: "Choisir une ville",
     franceGroupLabel: "France",
-    algerieGroupLabel: "Algérie (bientôt disponible)",
+    algerieGroupLabel: "Algérie",
     commune: "Commune (facultatif)",
     chooseCommune: "Choisir une commune",
     description: "Description",
@@ -312,7 +334,7 @@ const fr = {
     wilaya: "Ville",
     chooseWilaya: "Choisir une ville",
     franceGroupLabel: "France",
-    algerieGroupLabel: "Algérie (bientôt disponible)",
+    algerieGroupLabel: "Algérie",
     youAre: "Vous êtes",
     particulier: "Particulier",
     professionnel: "Professionnel",

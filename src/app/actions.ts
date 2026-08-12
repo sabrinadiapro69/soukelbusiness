@@ -362,6 +362,7 @@ export async function updateProfileAction(
   const description = formData.get("description")?.toString().trim() ?? "";
   const avatarEmoji = formData.get("avatar_emoji")?.toString() || "🙂";
   const metier = formData.get("metier")?.toString().trim();
+  const categories = formData.getAll("categories").map((c) => c.toString());
 
   if (!name || !city) {
     return { error: "Le nom et la ville sont obligatoires." };
@@ -383,7 +384,7 @@ export async function updateProfileAction(
 
   if (metier !== undefined) {
     await supabase.from("pro_profiles").upsert(
-      { seller_id: user.id, metier, reviewed_at: null },
+      { seller_id: user.id, metier, categories, reviewed_at: null },
       { onConflict: "seller_id" }
     );
   }
