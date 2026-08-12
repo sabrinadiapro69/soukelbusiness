@@ -1,21 +1,21 @@
 @import "tailwindcss";
 
 :root {
-  --bg: #faf3e8;
-  --bg-alt: #f3e9d8;
+  --bg: #ffffff;
+  --bg-alt: #ffffff;
   --paper: #ffffff;
-  --ink: #3a1f2e;
-  --ink-soft: #6b5850;
-  --primary: #6b2f52;
-  --primary-dark: #4f2039;
-  --accent: #b3492b;
-  --accent-dark: #8f3820;
-  --dawn: #c99a3e;
-  --dawn-dark: #8a6a1f;
-  --dawn-soft: #f0e0c8;
-  --gold: #c99a3e;
-  --line: rgba(58, 31, 46, 0.14);
-  --line-soft: rgba(58, 31, 46, 0.08);
+  --ink: #2a2a24;
+  --ink-soft: #6b6a60;
+  --primary: #8a9c68;
+  --primary-dark: #6e7f52;
+  --accent: #a83f1d;
+  --accent-dark: #c05226;
+  --dawn: #a83f1d;
+  --dawn-dark: #2a2a24;
+  --dawn-soft: #ffffff;
+  --gold: #a83f1d;
+  --line: rgba(42, 42, 36, 0.2);
+  --line-soft: rgba(42, 42, 36, 0.1);
 }
 
 @theme inline {
@@ -33,14 +33,23 @@
   --color-dawn-soft: var(--dawn-soft);
   --color-gold: var(--gold);
   --color-line: var(--line);
-  --font-sans: var(--font-inter);
-  --font-serif: var(--font-fraunces);
+  --font-sans: var(--font-work-sans);
+  --font-serif: var(--font-cormorant);
   --font-mono: var(--font-ibm-plex-mono);
 }
 
 body {
   background: var(--bg);
   color: var(--ink);
+  font-weight: 300;
+}
+
+/* Identite visuelle : angles nets et aucune ombre portee, partout. */
+*,
+*::before,
+*::after {
+  border-radius: 0 !important;
+  box-shadow: none !important;
 }
 
 @keyframes marquee {

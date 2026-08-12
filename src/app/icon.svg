@@ -1,10 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 140 140">
-  <rect width="140" height="140" rx="24" fill="#faf3e8" stroke="#e8dcc6" stroke-width="1.5" />
-
-  <polygon points="70,18 60,70 80,70" fill="#b3492b" />
-  <polygon points="122,70 70,60 70,80" fill="#c99a3e" />
-  <polygon points="70,122 60,70 80,70" fill="#c99a3e" />
-  <polygon points="18,70 70,60 70,80" fill="#b3492b" />
-
-  <circle cx="70" cy="70" r="7" fill="#faf3e8" stroke="#3a1f2e" stroke-width="1.5" />
+  <rect width="140" height="140" fill="#ffffff" />
+  <circle cx="70" cy="70" r="62" fill="none" stroke="#2a2a24" stroke-width="2.5" />
+  <text x="70" y="90" text-anchor="middle" font-family="Georgia, serif" font-size="62" font-weight="500" fill="none" stroke="#2a2a24" stroke-width="2.5">SB</text>
 </svg>

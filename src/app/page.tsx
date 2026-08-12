@@ -39,7 +39,7 @@ const metierIcons = [
 
 type Thumb = { type: "emoji" | "photo"; value: string };
 
-const talentColors = ["bg-primary", "bg-accent", "bg-gold", "bg-primary-dark"];
+const talentColors = ["bg-primary", "bg-accent", "bg-primary-dark", "bg-accent-dark"];
 
 export default async function Home() {
   const locale = await getLocale();
@@ -86,13 +86,13 @@ export default async function Home() {
         {/* Hero */}
         <section className="relative overflow-hidden border-b border-line bg-bg py-16">
           <div className="mx-auto max-w-3xl px-6 text-center">
-            <span className="mb-5 inline-flex items-center gap-2 rounded-full border border-line bg-dawn-soft px-3.5 py-1.5 text-[12.5px] font-semibold text-dawn-dark">
-              <span className="h-1.5 w-1.5 rounded-full bg-dawn-dark" />
+            <span className="mb-5 inline-flex items-center gap-2 border border-line px-3.5 py-1.5 font-mono text-[11.5px] font-medium tracking-wide text-ink uppercase">
+              <span className="h-1.5 w-1.5 shrink-0 bg-accent" />
               {t.badge}
             </span>
-            <h1 className="font-serif text-4xl leading-tight font-bold tracking-tight sm:text-5xl">
+            <h1 className="font-serif text-4xl leading-tight font-semibold tracking-tight sm:text-5xl">
               {t.heroTitle}{" "}
-              <em className="text-primary not-italic font-medium italic">
+              <em className="text-accent font-medium italic">
                 {t.heroTitleEmphasis}
               </em>
             </h1>
@@ -103,7 +103,7 @@ export default async function Home() {
             <form
               action="/produits"
               method="GET"
-              className="mx-auto mt-8 flex w-full max-w-2xl flex-col overflow-hidden rounded-2xl border-[1.5px] border-ink bg-paper shadow-[4px_4px_0_var(--ink)] sm:flex-row"
+              className="mx-auto mt-8 flex w-full max-w-2xl flex-col border border-ink bg-paper sm:flex-row"
             >
               <select
                 name="categorie"
@@ -123,7 +123,7 @@ export default async function Home() {
               />
               <button
                 type="submit"
-                className="flex items-center justify-center gap-2 bg-primary px-7 py-4 font-semibold text-white transition-colors hover:bg-primary-dark"
+                className="flex items-center justify-center gap-2 bg-ink px-7 py-4 font-mono text-[13px] font-semibold tracking-[0.06em] text-white uppercase transition-colors hover:bg-accent"
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4">
                   <circle cx="11" cy="11" r="7" />
@@ -133,19 +133,20 @@ export default async function Home() {
               </button>
             </form>
 
-            <div className="mt-[18px] flex flex-wrap items-center justify-center gap-2.5">
-              <span className="mr-1 text-[13px] text-ink-soft">
-                {t.popularSearches}
-              </span>
-              {t.popularChips.map((chip) => (
-                <span
-                  key={chip}
-                  className="rounded-full border border-line bg-paper px-3.5 py-1.5 text-[13px] text-ink-soft"
-                >
-                  {chip}
+            <p className="mt-[18px] text-[13px] text-ink-soft">
+              {t.popularSearches}{" "}
+              {t.popularChips.map((chip, i) => (
+                <span key={chip}>
+                  <Link
+                    href={`/produits?q=${encodeURIComponent(chip)}`}
+                    className="text-ink underline decoration-line underline-offset-4 hover:text-accent"
+                  >
+                    {chip}
+                  </Link>
+                  {i < t.popularChips.length - 1 ? " / " : ""}
                 </span>
               ))}
-            </div>
+            </p>
           </div>
         </section>
 
@@ -164,7 +165,7 @@ export default async function Home() {
               {talents.length > 0 && (
                 <Link
                   href="/produits"
-                  className="border-b-[1.5px] border-primary pb-0.5 text-[13.5px] font-semibold text-primary"
+                  className="border-b border-ink pb-0.5 text-[13.5px] font-medium text-ink hover:border-accent hover:text-accent"
                 >
                   {t.talentsSeeAll}
                 </Link>
@@ -176,14 +177,14 @@ export default async function Home() {
                 {talents.map((talent) => (
                   <div
                     key={talent.key}
-                    className="relative w-[240px] shrink-0 rounded-2xl border border-line bg-paper p-[18px]"
+                    className="relative w-[240px] shrink-0 border border-line bg-paper p-[18px]"
                   >
-                    <span className="absolute top-3.5 right-3.5 flex items-center gap-1 rounded-full bg-gold px-2.5 py-1 text-[10px] font-bold text-[#3A2C05]">
+                    <span className="absolute top-3.5 right-3.5 border border-accent px-2 py-0.5 font-mono text-[10px] font-semibold tracking-wide text-accent uppercase">
                       {t.talentsBadge}
                     </span>
                     <div className="mb-3.5 flex items-center gap-2.5">
                       <div
-                        className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full font-serif text-base font-bold text-white ${talent.color}`}
+                        className={`flex h-11 w-11 shrink-0 items-center justify-center font-serif text-base font-semibold text-white ${talent.color}`}
                       >
                         {talent.name[0]}
                       </div>
@@ -196,7 +197,7 @@ export default async function Home() {
                         </span>
                       </div>
                     </div>
-                    <div className="mb-3 font-mono text-[12.5px] font-semibold text-accent-dark">
+                    <div className="mb-3 font-mono text-[12.5px] font-semibold text-accent">
                       {talent.rating} ★{" "}
                       <span className="font-sans font-normal text-ink-soft">
                         ({talent.reviews} {t.talentsReviews})
@@ -206,7 +207,7 @@ export default async function Home() {
                       {talent.thumbs.map((thumb, i) => (
                         <div
                           key={i}
-                          className="flex aspect-square items-center justify-center overflow-hidden rounded-lg bg-bg-alt text-lg"
+                          className="flex aspect-square items-center justify-center overflow-hidden border border-line text-lg"
                         >
                           {thumb.type === "photo" ? (
                             <img
@@ -222,7 +223,7 @@ export default async function Home() {
                     </div>
                     <Link
                       href={talent.href}
-                      className="block w-full rounded-full border border-line py-2.5 text-center text-[13px] font-semibold transition-colors hover:border-ink"
+                      className="block w-full border border-line py-2.5 text-center text-[13px] font-medium transition-colors hover:border-ink"
                     >
                       {t.talentsSeeProfile}
                     </Link>
@@ -230,23 +231,23 @@ export default async function Home() {
                 ))}
               </div>
             ) : (
-              <p className="mb-7 rounded-xl border border-dashed border-line bg-paper px-4 py-6 text-center text-sm text-ink-soft">
+              <p className="mb-7 border border-dashed border-line bg-paper px-4 py-6 text-center text-sm text-ink-soft">
                 {t.talentsEmpty}
               </p>
             )}
 
-            <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl bg-ink px-[30px] py-[26px]">
+            <div className="flex flex-wrap items-center justify-between gap-6 border-t border-ink pt-6">
               <div>
-                <h3 className="mb-1 font-serif text-[19px] font-semibold text-bg">
+                <h3 className="mb-1 font-serif text-[19px] font-semibold">
                   {t.talentsCtaTitle}
                 </h3>
-                <p className="text-[13px] text-[#C6CDC6]">
+                <p className="text-[13px] text-ink-soft">
                   {t.talentsCtaText}
                 </p>
               </div>
               <Link
                 href="/publier"
-                className="rounded-full bg-accent px-5 py-2.5 text-sm font-semibold whitespace-nowrap text-white transition-colors hover:bg-accent-dark"
+                className="border-b border-ink pb-0.5 text-sm font-medium whitespace-nowrap text-ink hover:border-accent hover:text-accent"
               >
                 {t.talentsCtaButton}
               </Link>
@@ -273,10 +274,10 @@ export default async function Home() {
               {t.metiers.map((m, i) => (
                 <div
                   key={m.title}
-                  className="rounded-2xl border border-line bg-paper px-[18px] py-[22px] text-center transition-all hover:-translate-y-1 hover:shadow-lg"
+                  className="border border-line bg-paper px-[18px] py-[22px] text-center transition-colors hover:border-ink"
                 >
-                  <div className="mx-auto mb-3.5 flex h-14 w-14 items-center justify-center rounded-full bg-bg-alt">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className="h-[26px] w-[26px] text-primary-dark">
+                  <div className="mx-auto mb-3.5 flex h-14 w-14 items-center justify-center border border-line">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className="h-[26px] w-[26px] text-ink">
                       {metierIcons[i]}
                     </svg>
                   </div>
@@ -336,14 +337,14 @@ export default async function Home() {
               {t.rayons.map((r, i) => (
                 <div
                   key={r.title}
-                  className="flex cursor-pointer flex-col gap-2.5 rounded-xl border border-line bg-paper p-5 transition-transform hover:-translate-y-1 hover:border-ink"
+                  className="flex cursor-pointer flex-col gap-2.5 border border-line bg-paper p-5 transition-colors hover:border-ink"
                 >
                   <svg
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="1.6"
-                    className="h-9 w-9 text-primary"
+                    className="h-9 w-9 text-ink"
                   >
                     {rayonIcons[i]}
                   </svg>
@@ -393,7 +394,7 @@ export default async function Home() {
               </div>
               <Link
                 href="/produits"
-                className="shrink-0 border-b-[1.5px] border-primary pb-0.5 text-[13.5px] font-semibold text-primary"
+                className="shrink-0 border-b border-ink pb-0.5 text-[13.5px] font-medium text-ink hover:border-accent hover:text-accent"
               >
                 {t.annoncesSeeAll}
               </Link>
@@ -418,14 +419,14 @@ export default async function Home() {
               </h2>
             </div>
             <div className="grid grid-cols-1 gap-[22px] sm:grid-cols-3">
-              <div className="rounded-xl border border-line bg-paper p-[26px]">
-                <div className="mb-3.5 flex h-11 w-11 items-center justify-center rounded-full bg-bg-alt">
+              <div className="border border-line bg-paper p-[26px]">
+                <div className="mb-3.5 flex h-11 w-11 items-center justify-center border border-line">
                   <svg
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="1.6"
-                    className="h-5 w-5 text-accent"
+                    className="h-5 w-5 text-primary"
                   >
                     <path d="M12 3 5 6v5c0 5 3 8.5 7 10 4-1.5 7-5 7-10V6l-7-3Z" />
                     <path d="M9 12l2 2 4-4" />
@@ -438,14 +439,14 @@ export default async function Home() {
                   {t.trust1Text}
                 </p>
               </div>
-              <div className="rounded-xl border border-line bg-paper p-[26px]">
-                <div className="mb-3.5 flex h-11 w-11 items-center justify-center rounded-full bg-bg-alt">
+              <div className="border border-line bg-paper p-[26px]">
+                <div className="mb-3.5 flex h-11 w-11 items-center justify-center border border-line">
                   <svg
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="1.6"
-                    className="h-5 w-5 text-accent"
+                    className="h-5 w-5 text-primary"
                   >
                     <path d="M12 21s7-7.5 7-13a7 7 0 1 0-14 0c0 5.5 7 13 7 13Z" />
                     <path d="M9.5 8.5l2 2 3-3" />
@@ -458,14 +459,14 @@ export default async function Home() {
                   {t.trust2Text}
                 </p>
               </div>
-              <div className="rounded-xl border border-line bg-paper p-[26px]">
-                <div className="mb-3.5 flex h-11 w-11 items-center justify-center rounded-full bg-bg-alt">
+              <div className="border border-line bg-paper p-[26px]">
+                <div className="mb-3.5 flex h-11 w-11 items-center justify-center border border-line">
                   <svg
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="1.6"
-                    className="h-5 w-5 text-accent"
+                    className="h-5 w-5 text-primary"
                   >
                     <path d="M4 5h16v11H9l-4 4V5Z" />
                     <path d="M8 9.5h8M8 12.5h5" />
@@ -485,16 +486,13 @@ export default async function Home() {
         {/* CTA vendeur */}
         <section className="py-12">
           <div className="mx-auto max-w-6xl px-6">
-            <div className="flex flex-wrap items-center justify-between gap-6 rounded-[20px] bg-ink px-[46px] py-11">
-              <div>
-                <h2 className="max-w-md font-serif text-2xl leading-snug font-semibold text-bg">
-                  {t.ctaTitle}
-                </h2>
-                <p className="mt-2.5 text-sm text-[#C6CDC6]">{t.ctaText}</p>
-              </div>
+            <div className="flex flex-wrap items-center justify-between gap-6 border-t-2 border-b-2 border-ink py-8">
+              <h2 className="max-w-md font-serif text-2xl leading-snug font-semibold">
+                {t.ctaTitle}
+              </h2>
               <Link
                 href="/publier"
-                className="rounded-full bg-accent px-[26px] py-3.5 text-[14.5px] font-semibold whitespace-nowrap text-white transition-colors hover:bg-accent-dark"
+                className="bg-ink px-[26px] py-3.5 font-mono text-[13px] font-semibold tracking-[0.06em] whitespace-nowrap text-white uppercase transition-colors hover:bg-accent"
               >
                 {t.ctaButton}
               </Link>
