@@ -27,7 +27,7 @@ const en: Dictionary = {
   },
   footer: {
     tagline:
-      "The marketplace celebrating talent, craftsmanship and great deals from around the world, open to all.",
+      "The marketplace bringing together the finest craftspeople, creators and entrepreneurs, open to all.",
     categories: "Categories",
     vehicules: "Vehicles",
     immobilier: "Real Estate",
@@ -49,12 +49,12 @@ const en: Dictionary = {
   },
   home: {
     welcomeBanner:
-      "🌍 Welcome to Souk El Business: craftsmanship, traditions and great deals from around the world, between individuals in France.",
-    badge: "World cultures, business spirit",
-    heroTitle: "Where the world's cultures",
-    heroTitleEmphasis: "meet great deals.",
+      "🌍 Souk El Business brings together the finest craftspeople, creators and entrepreneurs from around the world, between individuals in France.",
+    badge: "Chic, without the gallery markup",
+    heroTitle: "Find the right person,",
+    heroTitleEmphasis: "not just the right price.",
     heroSubtitle:
-      "Craftsmanship, great deals, acts of generosity: the go-to place to discover traditions and talents from around the world, open to all.",
+      "The finest craftspeople, creators and entrepreneurs based in France, to discover profile by profile, review by review. Rare shouldn't be reserved for those who never negotiate.",
     searchAllCategories: "All categories",
     searchPlaceholder: "What are you looking for?",
     searchButton: "Search",
@@ -81,10 +81,10 @@ const en: Dictionary = {
       { title: "Services", desc: "Lessons, crafts, events" },
       { title: "Pets", desc: "Dogs, cats, poultry" },
     ],
-    artisanatLabel: "Craftsmanship from around the world",
+    artisanatLabel: "Exceptional craftsmanship",
     artisanatTitle: "Crafts & Trades",
     artisanatSubtitle:
-      "Les Talentueux brings together craftspeople and entrepreneurs based in France, specialized in the traditions and know-how of a country close to their heart: verified professionals with a portfolio and customer reviews, near you.",
+      "Les Talentueux brings together craftspeople, creators and entrepreneurs selected for their skill and customer reviews, based in France and specialized in the traditions of a country close to their heart. Find the right person, not just the right piece.",
     metiers: [
       {
         title: "Sewing & Alterations",
@@ -127,9 +127,9 @@ const en: Dictionary = {
     talentsSeeProfile: "View profile",
     talentsEmpty:
       "No verified professional yet. Be among the first Talentueux!",
-    talentsCtaTitle: "Are you a craftsperson or professional?",
+    talentsCtaTitle: "Are you a craftsperson, creator or entrepreneur?",
     talentsCtaText:
-      "Join Les Talentueux: create your profile, showcase your portfolio, collect customer reviews near you.",
+      "Join Les Talentueux: showcase your work, collect reviews, become part of the go-to craftsmanship near you.",
     talentsCtaButton: "Become a Talentueux",
     dressingLabel: "New · inspired by collaborative fashion",
     dressingTitle: "The Souk El Business Dressing",
@@ -150,7 +150,7 @@ const en: Dictionary = {
       "Clear advice for meeting in public places and checking the item before finalizing, at every step.",
     trust3Title: "Built-in messaging",
     trust3Text:
-      "Chat and negotiate directly in the app, in French or Darija, without sharing your phone number.",
+      "Chat and negotiate directly in the app, without sharing your phone number.",
     ctaTitle: "An item gathering dust at home is worth more than a forgotten one.",
     ctaText: "Posting a listing takes less than two minutes, free for individuals.",
     ctaButton: "Post a listing",

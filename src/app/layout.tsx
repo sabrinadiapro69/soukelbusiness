@@ -1,21 +1,21 @@
 import type { Metadata } from "next";
-import { Fraunces, Inter, IBM_Plex_Mono } from "next/font/google";
+import { Cormorant, Work_Sans, IBM_Plex_Mono } from "next/font/google";
 import { SITE_URL } from "@/lib/site";
 import { getLocale } from "@/lib/i18n/locale";
 import BackToTopButton from "@/components/BackToTopButton";
 import "./globals.css";
 
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
+const cormorant = Cormorant({
+  variable: "--font-cormorant",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "900"],
+  weight: ["400", "500", "600", "700"],
   style: ["normal", "italic"],
 });
 
-const inter = Inter({
-  variable: "--font-inter",
+const workSans = Work_Sans({
+  variable: "--font-work-sans",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["300", "400", "500", "600"],
 });
 
 const ibmPlexMono = IBM_Plex_Mono({
@@ -25,9 +25,9 @@ const ibmPlexMono = IBM_Plex_Mono({
 });
 
 const title =
-  "Souk El Business : les cultures du monde, entre artisanat et bonnes affaires";
+  "Souk El Business : le meilleur de l'artisanat, des créateurs et entrepreneurs";
 const description =
-  "Artisanat, bonnes affaires, gestes de générosité : découvrez les traditions et talents du monde entier, entre particuliers en France, ouverts à tous.";
+  "Trouvez la bonne personne, pas juste le bon prix : les meilleurs artisans, créateurs et entrepreneurs du monde entier, entre particuliers en France.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -84,7 +84,7 @@ export default async function RootLayout({
     <html
       lang={locale}
       dir={locale === "ar" ? "rtl" : "ltr"}
-      className={`${fraunces.variable} ${inter.variable} ${ibmPlexMono.variable} h-full antialiased`}
+      className={`${cormorant.variable} ${workSans.variable} ${ibmPlexMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-(--bg) text-(--ink) font-sans">
         <script

@@ -25,7 +25,7 @@ const fr = {
   },
   footer: {
     tagline:
-      "La marketplace qui réunit talents, artisanat et bonnes affaires du monde entier, ouverte à tous.",
+      "La marketplace qui réunit la crème des artisans, créateurs et entrepreneurs, ouverte à tous.",
     categories: "Catégories",
     vehicules: "Véhicules",
     immobilier: "Immobilier",
@@ -47,12 +47,12 @@ const fr = {
   },
   home: {
     welcomeBanner:
-      "🌍 Bienvenue sur Souk El Business : artisanat, traditions et bonnes affaires du monde entier, entre particuliers en France.",
-    badge: "Cultures du monde, esprit business",
-    heroTitle: "Là où les cultures du monde",
-    heroTitleEmphasis: "rencontrent les bonnes affaires.",
+      "🌍 Souk El Business réunit la crème des artisans, créateurs et entrepreneurs du monde entier, entre particuliers en France.",
+    badge: "Le chic, sans l'étiquette",
+    heroTitle: "Trouvez la bonne personne,",
+    heroTitleEmphasis: "pas juste le bon prix.",
     heroSubtitle:
-      "Artisanat, bonnes affaires, gestes de générosité : la référence pour découvrir les traditions et talents du monde entier, ouverte à tous.",
+      "Les meilleurs artisans, créateurs et entrepreneurs installés en France, à découvrir profil par profil, avis après avis. Le rare ne devrait pas être réservé à ceux qui ne négocient jamais.",
     searchAllCategories: "Toutes catégories",
     searchPlaceholder: "Que cherchez-vous ?",
     searchButton: "Rechercher",
@@ -79,10 +79,10 @@ const fr = {
       { title: "Services", desc: "Cours, artisanat, événements" },
       { title: "Animaux", desc: "Chiens, chats, volaille" },
     ],
-    artisanatLabel: "Savoir-faire du monde",
+    artisanatLabel: "Savoir-faire d'exception",
     artisanatTitle: "Artisanat & Métiers",
     artisanatSubtitle:
-      "Les Talentueux réunissent des artisans et entrepreneurs installés en France, spécialisés dans les traditions et savoir-faire de leur pays de cœur : professionnels vérifiés avec portfolio et avis clients, à découvrir près de chez vous.",
+      "Les Talentueux réunissent des artisans, créateurs et entrepreneurs sélectionnés pour leur savoir-faire et leurs avis clients, installés en France et spécialisés dans les traditions de leur pays de cœur. Trouvez la bonne personne, pas juste la bonne pièce.",
     metiers: [
       {
         title: "Couture & Retouches",
@@ -125,9 +125,9 @@ const fr = {
     talentsSeeProfile: "Voir le profil",
     talentsEmpty:
       "Aucun professionnel vérifié pour le moment. Soyez parmi les premiers Talentueux !",
-    talentsCtaTitle: "Vous êtes artisan ou professionnel ?",
+    talentsCtaTitle: "Vous êtes artisan, créateur ou entrepreneur ?",
     talentsCtaText:
-      "Rejoignez Les Talentueux : créez votre profil, montrez votre portfolio, récoltez des avis clients près de chez vous.",
+      "Rejoignez Les Talentueux : montrez votre travail, récoltez des avis, faites partie de la référence du savoir-faire près de chez vous.",
     talentsCtaButton: "Devenir un Talentueux",
     dressingLabel: "Nouveau · inspiré du dressing collaboratif",
     dressingTitle: "Le Dressing Souk El Business",
@@ -148,7 +148,7 @@ const fr = {
       "Des conseils clairs pour échanger en lieu public et vérifier l'article avant de conclure, à chaque étape.",
     trust3Title: "Messagerie intégrée",
     trust3Text:
-      "Discutez et négociez directement dans l'application, en français ou en darija, sans donner votre numéro.",
+      "Discutez et négociez directement dans l'application, sans donner votre numéro.",
     ctaTitle:
       "Un article qui dort chez vous vaut plus qu'un article oublié.",
     ctaText:
