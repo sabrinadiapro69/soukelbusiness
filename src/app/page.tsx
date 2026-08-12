@@ -1,11 +1,9 @@
 import Link from "next/link";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
-import ListingsPreviewGrid from "@/components/ListingsPreviewGrid";
 import DonsScroll from "@/components/DonsScroll";
 import {
   getDonListings,
-  getListings,
   getPortfolioPhotoUrl,
   getTopTalents,
 } from "@/lib/queries";
@@ -14,19 +12,16 @@ import { getDictionary } from "@/lib/i18n/dictionaries";
 
 export const dynamic = "force-dynamic";
 
-const rayonIcons = [
-  <path key="0" d="M5 17h14M5 17a2 2 0 1 1-4 0 2 2 0 0 1 4 0Zm14 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM3 17V9l2-5h10l3 5h1a2 2 0 0 1 2 2v6" />,
-  <path key="1" d="M3 11 12 3l9 8M5 10v10h14V10" />,
-  <g key="2"><rect x="6" y="2" width="12" height="20" rx="2" /><path d="M11 18h2" /></g>,
-  <path key="3" d="M16 4v2a4 4 0 0 1-8 0V4M8 4H5l-2 4 3 2v10h12V10l3-2-2-4h-3" />,
-  <g key="4"><path d="M9 3h4l1 4-3 10h-2L6 7l3-4Z" /><path d="M10 3V1h2v2" /></g>,
-  <path key="5" d="M4 20V10l8-6 8 6v10M9 20v-6h6v6" />,
-  <g key="6"><path d="M20 6 9 17l-5-5" /><rect x="3" y="3" width="18" height="18" rx="4" /></g>,
-  <g key="7"><circle cx="12" cy="8" r="4" /><path d="M4 21c0-4 4-6 8-6s8 2 8 6" /></g>,
-  <path key="8" d="M11 4c1 2-1 3-1 5a2 2 0 0 0 4 0M8 9C5 9 3 12 3 15c0 3 2 6 9 6s9-3 9-6c0-3-2-6-5-6" />,
-];
-
 type Thumb = { type: "emoji" | "photo"; value: string };
+
+// En attente des vraies photos : une couleur chic et distincte par tuile
+// (violet lumineux, bleu, noir, orange), a la demande du dernier retour.
+const universTiles = [
+  { key: "evenements", className: "bg-[#7C3AED] text-white", area: "md:col-span-2 md:row-span-2" },
+  { key: "decoration", className: "bg-[#1F4E8C] text-white", area: "" },
+  { key: "mode", className: "bg-[#111111] text-white", area: "" },
+  { key: "creation", className: "bg-[#E2611A] text-white", area: "md:col-span-2" },
+] as const;
 
 const talentColors = ["bg-primary", "bg-accent", "bg-primary-dark", "bg-accent-dark"];
 
@@ -55,11 +50,6 @@ export default async function Home() {
     ),
   }));
 
-  const allListings = await getListings().catch(() => []);
-  const recentListings = allListings.slice(0, 8);
-  const dressingListings = allListings
-    .filter((l) => l.category === "Dressing")
-    .slice(0, 8);
   const donListings = await getDonListings(12).catch(() => []);
 
   return (
@@ -85,9 +75,7 @@ export default async function Home() {
                 {t.heroTitleEmphasis}
               </em>
             </h1>
-            <p className="mx-auto mt-4 max-w-md text-base leading-relaxed text-ink-soft">
-              {t.heroSubtitle}
-            </p>
+            <p className="sr-only">{t.heroSubtitle}</p>
 
             <form
               action="/produits"
@@ -244,61 +232,50 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* Nos univers : Evenements, Decoration, Creation, Petites annonces */}
+        {/* Nos univers : Evenements, Decoration, Mode, Creation */}
         <section id="artisanat" className="scroll-mt-[7.5rem] py-12">
           <div className="mx-auto max-w-6xl px-6">
-            <div className="mb-8 max-w-lg">
-              <span className="mb-1.5 block font-mono text-[11.5px] tracking-wide text-ink uppercase">
-                {t.universLabel}
-              </span>
-              <h2 className="font-serif text-2xl font-semibold">
-                {t.universTitle}
-              </h2>
-            </div>
+            <h2 className="sr-only">{t.universTitle}</h2>
 
-            <div className="border-t border-ink">
-              {[
-                {
-                  title: t.universEvenementsTitle,
-                  text: t.universEvenementsText,
-                  href: "#talentueux",
-                },
-                {
-                  title: t.universDecorationTitle,
-                  text: t.universDecorationText,
-                  href: "#talentueux",
-                },
-                {
-                  title: t.universCreationTitle,
-                  text: t.universCreationText,
-                  href: "#talentueux",
-                },
-                {
-                  title: t.universAnnoncesTitle,
-                  text: t.universAnnoncesText,
-                  href: "/produits",
-                },
-              ].map((univers, i) => (
-                <div
-                  key={univers.title}
-                  className={`flex flex-col gap-3 border-b border-line py-7 sm:flex-row sm:items-center sm:gap-10 ${
-                    i % 2 === 1 ? "sm:flex-row-reverse sm:text-right" : ""
-                  }`}
-                >
-                  <h3 className="font-serif text-xl font-semibold sm:w-64 sm:shrink-0">
-                    {univers.title}
-                  </h3>
-                  <p className="flex-1 text-sm leading-relaxed text-ink-soft">
-                    {univers.text}
-                  </p>
+            <div className="grid grid-cols-2 gap-3 md:auto-rows-[200px] md:grid-cols-4">
+              {(
+                [
+                  {
+                    key: "evenements",
+                    title: t.universEvenementsTitle,
+                    text: t.universEvenementsText,
+                  },
+                  {
+                    key: "decoration",
+                    title: t.universDecorationTitle,
+                    text: t.universDecorationText,
+                  },
+                  {
+                    key: "mode",
+                    title: t.universModeTitle,
+                    text: t.universModeText,
+                  },
+                  {
+                    key: "creation",
+                    title: t.universCreationTitle,
+                    text: t.universCreationText,
+                  },
+                ] as const
+              ).map((univers) => {
+                const tile = universTiles.find((u) => u.key === univers.key)!;
+                return (
                   <Link
-                    href={univers.href}
-                    className="shrink-0 border-b border-ink pb-0.5 text-[13px] font-medium whitespace-nowrap text-ink hover:border-accent hover:text-accent"
+                    key={univers.key}
+                    href="#talentueux"
+                    className={`group relative flex aspect-[3/4] items-end overflow-hidden p-5 md:aspect-auto ${tile.className} ${tile.area}`}
                   >
-                    {t.universLinkLabel} →
+                    <span className="font-serif text-2xl font-semibold italic transition-opacity group-hover:opacity-70 sm:text-3xl">
+                      {univers.title}
+                    </span>
+                    <span className="sr-only">{univers.text}</span>
                   </Link>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </section>
@@ -332,91 +309,6 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* Rayons */}
-        <section id="rayons" className="scroll-mt-[7.5rem] py-12">
-          <div className="mx-auto max-w-6xl px-6">
-            <div className="mb-6">
-              <span className="mb-1.5 block font-mono text-[11.5px] tracking-wide text-dawn-dark uppercase">
-                {t.rayonsLabel}
-              </span>
-              <h2 className="font-serif text-2xl font-semibold">
-                {t.rayonsTitle}
-              </h2>
-            </div>
-            <div className="grid grid-cols-2 gap-3.5 sm:grid-cols-4">
-              {t.rayons.map((r, i) => (
-                <div
-                  key={r.title}
-                  className="flex cursor-pointer flex-col gap-2.5 border border-line bg-paper p-5 transition-colors hover:border-ink"
-                >
-                  <svg
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="1.6"
-                    className="h-9 w-9 text-ink"
-                  >
-                    {rayonIcons[i]}
-                  </svg>
-                  <h3 className="text-[15px] font-semibold">{r.title}</h3>
-                  <span className="text-xs text-ink-soft">{r.desc}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Dressing */}
-        <section id="dressing" className="scroll-mt-[7.5rem] bg-bg-alt py-12">
-          <div className="mx-auto max-w-6xl px-6">
-            <div className="mb-6 flex items-end justify-between">
-              <div>
-                <span className="mb-1.5 block font-mono text-[11.5px] tracking-wide text-dawn-dark uppercase">
-                  {t.dressingLabel}
-                </span>
-                <h2 className="font-serif text-2xl font-semibold">
-                  {t.dressingTitle}
-                </h2>
-                <p className="mt-1 max-w-md text-sm text-ink-soft">
-                  {t.dressingSubtitle}
-                </p>
-              </div>
-            </div>
-            <ListingsPreviewGrid
-              listings={dressingListings}
-              emptyLabel={t.dressingEmpty}
-              donLabel={dict.produit.don}
-            />
-          </div>
-        </section>
-
-        {/* Annonces récentes */}
-        <section id="annonces" className="scroll-mt-[7.5rem] py-12">
-          <div className="mx-auto max-w-6xl px-6">
-            <div className="mb-6 flex items-end justify-between">
-              <div>
-                <span className="mb-1.5 block font-mono text-[11.5px] tracking-wide text-dawn-dark uppercase">
-                  {t.annoncesLabel}
-                </span>
-                <h2 className="font-serif text-2xl font-semibold">
-                  {t.annoncesTitle}
-                </h2>
-              </div>
-              <Link
-                href="/produits"
-                className="shrink-0 border-b border-ink pb-0.5 text-[13.5px] font-medium text-ink hover:border-accent hover:text-accent"
-              >
-                {t.annoncesSeeAll}
-              </Link>
-            </div>
-            <ListingsPreviewGrid
-              listings={recentListings}
-              emptyLabel={t.annoncesEmpty}
-              donLabel={dict.produit.don}
-            />
-          </div>
-        </section>
-
         {/* Confiance */}
         <section id="confiance" className="scroll-mt-[7.5rem] bg-bg-alt py-12">
           <div className="mx-auto max-w-6xl px-6">
@@ -445,9 +337,7 @@ export default async function Home() {
                 <h3 className="mb-2 text-[16.5px] font-semibold">
                   {t.trust1Title}
                 </h3>
-                <p className="text-[13.5px] leading-relaxed text-ink-soft">
-                  {t.trust1Text}
-                </p>
+                <p className="sr-only">{t.trust1Text}</p>
               </div>
               <div className="border border-line bg-paper p-[26px]">
                 <div className="mb-3.5 flex h-11 w-11 items-center justify-center border border-line">
@@ -465,9 +355,7 @@ export default async function Home() {
                 <h3 className="mb-2 text-[16.5px] font-semibold">
                   {t.trust2Title}
                 </h3>
-                <p className="text-[13.5px] leading-relaxed text-ink-soft">
-                  {t.trust2Text}
-                </p>
+                <p className="sr-only">{t.trust2Text}</p>
               </div>
               <div className="border border-line bg-paper p-[26px]">
                 <div className="mb-3.5 flex h-11 w-11 items-center justify-center border border-line">
@@ -485,9 +373,7 @@ export default async function Home() {
                 <h3 className="mb-2 text-[16.5px] font-semibold">
                   {t.trust3Title}
                 </h3>
-                <p className="text-[13.5px] leading-relaxed text-ink-soft">
-                  {t.trust3Text}
-                </p>
+                <p className="sr-only">{t.trust3Text}</p>
               </div>
             </div>
           </div>

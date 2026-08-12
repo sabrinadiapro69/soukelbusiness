@@ -92,6 +92,9 @@ const fr = {
     universDecorationTitle: "Décoration d'intérieur",
     universDecorationText:
       "Poterie, tissage, dinanderie, mais aussi rénovation, peinture décorative, menuiserie, plomberie et électricité : des artisans pour sublimer chaque pièce.",
+    universModeTitle: "Mode",
+    universModeText:
+      "Couturiers, créateurs de mode et dressing seconde main : des pièces choisies, pas juste des vêtements.",
     universCreationTitle: "Création",
     universCreationText:
       "Peinture, sculpture, maroquinerie d'art, mode seconde main : le travail d'artistes et de créateurs, à prix juste.",
@@ -285,8 +288,8 @@ const fr = {
       "Cochez une ou plusieurs catégories qui correspondent à votre activité.",
     categorieEvenements: "Événements",
     categorieDecoration: "Décoration d'intérieur",
+    categorieMode: "Mode",
     categorieCreation: "Création",
-    categorieServices: "Services",
     saving: "Enregistrement...",
     save: "Enregistrer",
     myPortfolio: "Mon portfolio",

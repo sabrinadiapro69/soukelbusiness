@@ -94,6 +94,9 @@ const en: Dictionary = {
     universDecorationTitle: "Interior decoration",
     universDecorationText:
       "Pottery, weaving, metalwork, as well as renovation, decorative painting, carpentry, plumbing and electricity: craftspeople to elevate every room.",
+    universModeTitle: "Fashion",
+    universModeText:
+      "Tailors, fashion designers and pre-loved wardrobe finds: chosen pieces, not just clothes.",
     universCreationTitle: "Creation",
     universCreationText:
       "Painting, sculpture, fine leather goods, pre-loved fashion: the work of artists and creators, at a fair price.",
@@ -284,8 +287,8 @@ const en: Dictionary = {
       "Check one or more categories that match your activity.",
     categorieEvenements: "Events",
     categorieDecoration: "Interior decoration",
+    categorieMode: "Fashion",
     categorieCreation: "Creation",
-    categorieServices: "Services",
     saving: "Saving...",
     save: "Save",
     myPortfolio: "My portfolio",

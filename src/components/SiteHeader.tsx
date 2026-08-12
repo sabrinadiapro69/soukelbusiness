@@ -40,9 +40,7 @@ export default async function SiteHeader() {
   }
 
   const navLinks = [
-    { href: "/#rayons", label: t.rayons },
     { href: "/#artisanat", label: t.artisanat },
-    { href: "/#dressing", label: t.dressing },
     { href: "/produits", label: t.annonces },
     { href: "/#confiance", label: t.confiance },
   ];

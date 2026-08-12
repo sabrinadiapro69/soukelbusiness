@@ -93,6 +93,9 @@ const ar: Dictionary = {
     universDecorationTitle: "ديكور المنزل",
     universDecorationText:
       "الفخار والنسيج والنحاس، وأيضا الترميم والدهان الزخرفي والنجارة والسباكة والكهرباء: حرفيون لتجميل كل ركن.",
+    universModeTitle: "الموضة",
+    universModeText:
+      "خياطون ومصممو أزياء وملابس مستعملة مختارة: قطع مختارة، لا مجرد ملابس.",
     universCreationTitle: "الإبداع",
     universCreationText:
       "الرسم والنحت والجلود الفنية والأزياء المستعملة: عمل الفنانين والمبدعين، بسعر عادل.",
@@ -274,8 +277,8 @@ const ar: Dictionary = {
     categoriesHint: "اختر فئة واحدة أو أكثر تناسب نشاطك.",
     categorieEvenements: "المناسبات",
     categorieDecoration: "ديكور المنزل",
+    categorieMode: "الموضة",
     categorieCreation: "الإبداع",
-    categorieServices: "خدمات",
     saving: "جارٍ الحفظ...",
     save: "حفظ",
     myPortfolio: "معرض أعمالي",

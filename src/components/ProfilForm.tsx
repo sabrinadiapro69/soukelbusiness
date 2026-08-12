@@ -30,7 +30,7 @@ const emojiOptions = [
 
 const initialState: UpdateProfileState = { error: null };
 
-const categorieOptions = ["evenements", "decoration", "creation", "services"] as const;
+const categorieOptions = ["evenements", "decoration", "mode", "creation"] as const;
 
 export default function ProfilForm({
   seller,
@@ -60,8 +60,8 @@ export default function ProfilForm({
   const categorieLabels: Record<(typeof categorieOptions)[number], string> = {
     evenements: dict.categorieEvenements,
     decoration: dict.categorieDecoration,
+    mode: dict.categorieMode,
     creation: dict.categorieCreation,
-    services: dict.categorieServices,
   };
 
   return (
