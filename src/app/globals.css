@@ -2,20 +2,21 @@
 
 :root {
   --bg: #ffffff;
-  --bg-alt: #ffffff;
+  --bg-alt: #f8f7f3;
   --paper: #ffffff;
-  --ink: #2a2a24;
-  --ink-soft: #6b6a60;
-  --primary: #8a9c68;
-  --primary-dark: #6e7f52;
-  --accent: #a83f1d;
-  --accent-dark: #c05226;
-  --dawn: #a83f1d;
-  --dawn-dark: #2a2a24;
-  --dawn-soft: #ffffff;
-  --gold: #a83f1d;
-  --line: rgba(42, 42, 36, 0.2);
-  --line-soft: rgba(42, 42, 36, 0.1);
+  --ink: #25291f;
+  --ink-soft: #6f7268;
+  --primary: #6f7652;
+  --primary-dark: #4f563b;
+  --primary-light: #aeb494;
+  --accent: #b85f45;
+  --accent-dark: #9d4e38;
+  --dawn: #b85f45;
+  --dawn-dark: #4f563b;
+  --dawn-soft: #f8f7f3;
+  --gold: #b85f45;
+  --line: #e5e2da;
+  --line-soft: rgba(37, 41, 31, 0.08);
 }
 
 @theme inline {
@@ -26,6 +27,7 @@
   --color-ink-soft: var(--ink-soft);
   --color-primary: var(--primary);
   --color-primary-dark: var(--primary-dark);
+  --color-primary-light: var(--primary-light);
   --color-accent: var(--accent);
   --color-accent-dark: var(--accent-dark);
   --color-dawn: var(--dawn);
@@ -44,12 +46,15 @@ body {
   font-weight: 300;
 }
 
-/* Identite visuelle : angles nets et aucune ombre portee, partout. */
-*,
-*::before,
-*::after {
-  border-radius: 0 !important;
-  box-shadow: none !important;
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 @keyframes marquee {

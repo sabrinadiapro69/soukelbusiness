@@ -7,83 +7,57 @@ export default async function SiteFooter() {
   const dict = await getDictionary(locale);
   const t = dict.footer;
 
+  const links = [
+    { href: "/produits", label: t.linkExplorer },
+    { href: "/pro", label: t.linkVendre },
+    { href: "/contact", label: t.linkApropos },
+    { href: "/contact", label: t.linkAide },
+    { href: "/mentions-legales", label: t.linkMentions },
+    { href: "/confidentialite", label: t.linkConfidentialite },
+    { href: "/confidentialite", label: t.linkCookies },
+  ];
+
   return (
-    <footer className="border-t border-line pt-11 pb-7">
-      <div className="mx-auto max-w-6xl px-6">
-        <div className="mb-8 grid grid-cols-2 gap-6 sm:grid-cols-5">
-          <div className="col-span-2 sm:col-span-1">
-            <span className="font-serif text-lg font-bold">
-              <span className="text-accent">Souk</span> El Business
-            </span>
-            <p className="mt-2.5 max-w-[230px] text-[13px] leading-relaxed text-ink-soft">
-              {t.tagline}
+    <footer className="border-t border-line py-10">
+      <div className="mx-auto flex max-w-6xl flex-col items-center gap-5 px-6 text-center sm:flex-row sm:justify-between sm:text-left">
+        <div className="flex items-center gap-2.5">
+          <svg viewBox="0 0 100 100" className="h-8 w-8 shrink-0" aria-hidden="true">
+            <circle cx="50" cy="50" r="48" fill="var(--accent)" />
+            <text
+              x="50"
+              y="65"
+              textAnchor="middle"
+              fontFamily="var(--font-serif)"
+              fontSize="44"
+              fontWeight="600"
+              fill="#ffffff"
+            >
+              S
+            </text>
+          </svg>
+          <div>
+            <p className="font-serif text-sm font-semibold text-ink">
+              Souk El Business
             </p>
-          </div>
-          <div>
-            <h5 className="mb-3.5 text-[12.5px] font-semibold tracking-wide text-ink-soft uppercase">
-              {t.categories}
-            </h5>
-            <Link href="/#rayons" className="mb-2 block text-[13.5px]">
-              {t.vehicules}
-            </Link>
-            <Link href="/#rayons" className="mb-2 block text-[13.5px]">
-              {t.immobilier}
-            </Link>
-            <Link href="/#dressing" className="mb-2 block text-[13.5px]">
-              {t.dressing}
-            </Link>
-            <Link href="/#rayons" className="mb-2 block text-[13.5px]">
-              {t.multimedia}
-            </Link>
-          </div>
-          <div>
-            <h5 className="mb-3.5 text-[12.5px] font-semibold tracking-wide text-ink-soft uppercase">
-              {t.souk}
-            </h5>
-            <Link href="/contact" className="mb-2 block text-[13.5px]">
-              {t.apropos}
-            </Link>
-            <Link href="/contact" className="mb-2 block text-[13.5px]">
-              {t.presse}
-            </Link>
-            <Link href="/pro" className="mb-2 block text-[13.5px]">
-              {t.pro}
-            </Link>
-          </div>
-          <div>
-            <h5 className="mb-3.5 text-[12.5px] font-semibold tracking-wide text-ink-soft uppercase">
-              {t.assistance}
-            </h5>
-            <Link href="/contact" className="mb-2 block text-[13.5px]">
-              {t.aide}
-            </Link>
-            <Link href="/contact" className="mb-2 block text-[13.5px]">
-              {t.securite}
-            </Link>
-            <Link href="/contact" className="mb-2 block text-[13.5px]">
-              {t.signaler}
-            </Link>
-          </div>
-          <div>
-            <h5 className="mb-3.5 text-[12.5px] font-semibold tracking-wide text-ink-soft uppercase">
-              {t.legal}
-            </h5>
-            <Link href="/mentions-legales" className="mb-2 block text-[13.5px]">
-              {t.mentions}
-            </Link>
-            <Link href="/cgu" className="mb-2 block text-[13.5px]">
-              {t.cgu}
-            </Link>
-            <Link href="/confidentialite" className="mb-2 block text-[13.5px]">
-              {t.confidentialite}
-            </Link>
+            <p className="text-xs text-ink-soft">{t.tagline}</p>
           </div>
         </div>
-        <div className="flex flex-col items-center justify-between gap-2 border-t border-line pt-5 text-[12.5px] text-ink-soft sm:flex-row">
-          <span>© {new Date().getFullYear()} Souk El Business</span>
-          <span>{t.fait}</span>
-        </div>
+
+        <nav className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-[13px] text-ink-soft">
+          {links.map((link, i) => (
+            <Link
+              key={`${link.href}-${i}`}
+              href={link.href}
+              className="transition-colors hover:text-primary"
+            >
+              {link.label}
+            </Link>
+          ))}
+        </nav>
       </div>
+      <p className="mt-6 text-center text-[12px] text-ink-soft/70">
+        © {new Date().getFullYear()} Souk El Business
+      </p>
     </footer>
   );
 }
