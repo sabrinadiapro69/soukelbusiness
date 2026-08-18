@@ -530,6 +530,99 @@ export async function submitReviewAction(
   return { error: null, success: true };
 }
 
+// --- Ouverture d'une boutique (vérification SIRET) ---
+
+// Un SIRET valide (14 chiffres) doit passer l'algorithme de Luhn — la
+// même règle de contrôle que les numéros de carte bancaire. Ça permet de
+// détecter une faute de frappe ou un numéro inventé sans dépendre d'un
+// service externe (l'utilisatrice a demandé à éviter toute clé d'API).
+function isValidSiret(raw: string): boolean {
+  const siret = raw.replace(/\s/g, "");
+  if (!/^\d{14}$/.test(siret)) return false;
+
+  let sum = 0;
+  for (let i = 0; i < siret.length; i++) {
+    let digit = Number(siret[siret.length - 1 - i]);
+    if (i % 2 === 1) {
+      digit *= 2;
+      if (digit > 9) digit -= 9;
+    }
+    sum += digit;
+  }
+  return sum % 10 === 0;
+}
+
+export type SubmitSiretState = { error: string | null; success?: boolean };
+
+export async function submitSiretAction(
+  _prevState: SubmitSiretState,
+  formData: FormData
+): Promise<SubmitSiretState> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) redirect("/connexion");
+
+  const siret = formData.get("siret")?.toString().replace(/\s/g, "") ?? "";
+
+  if (!isValidSiret(siret)) {
+    return {
+      error:
+        "Ce numéro SIRET n'est pas valide. Vérifiez les 14 chiffres saisis.",
+    };
+  }
+
+  // "siret", "siret_status" et "type" sont verrouillées pour authenticated
+  // (voir siret-verification-schema.sql, security-audit-column-locks.sql) :
+  // on passe par service_role, après avoir vérifié l'utilisateur ci-dessus,
+  // pour cette soumission comme pour une nouvelle tentative après refus.
+  const adminClient = createAdminClient();
+  const { error } = await adminClient
+    .from("sellers")
+    .update({ siret, siret_status: "en_attente", type: "pro" })
+    .eq("id", user.id);
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  revalidatePath("/pro");
+  revalidatePath("/profil");
+  return { error: null, success: true };
+}
+
+export async function approveSiretAction(formData: FormData) {
+  const { supabase, adminId } = await requireAdmin();
+  const sellerId = formData.get("sellerId")?.toString() ?? "";
+
+  const adminClient = createAdminClient();
+  await adminClient
+    .from("sellers")
+    .update({ siret_status: "verifie" })
+    .eq("id", sellerId);
+  await logAdminAction(supabase, adminId, "approuver_siret", "utilisateur", sellerId);
+
+  revalidatePath("/admin/boutiques");
+  redirect("/admin/boutiques");
+}
+
+export async function rejectSiretAction(formData: FormData) {
+  const { supabase, adminId } = await requireAdmin();
+  const sellerId = formData.get("sellerId")?.toString() ?? "";
+
+  const adminClient = createAdminClient();
+  await adminClient
+    .from("sellers")
+    .update({ siret_status: "rejete" })
+    .eq("id", sellerId);
+  await logAdminAction(supabase, adminId, "rejeter_siret", "utilisateur", sellerId);
+
+  revalidatePath("/admin/boutiques");
+  redirect("/admin/boutiques");
+}
+
 async function requireAdmin() {
   const supabase = await createClient();
   const {

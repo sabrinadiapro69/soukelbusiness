@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState, useSyncExternalStore } from "react";
+import Link from "next/link";
 import {
   Palette,
   Shirt,
@@ -15,7 +16,7 @@ import {
 } from "lucide-react";
 import NegotiationModal, { type DemoOffer } from "./NegotiationModal";
 
-type CategoryKey =
+export type CategoryKey =
   | "creation"
   | "mode"
   | "maison"
@@ -43,7 +44,11 @@ const CATEGORY_TINTS: Record<CategoryKey, string> = {
 
 // Donnees de demonstration : aucune de ces offres n'existe reellement en
 // base, elles servent uniquement a illustrer la mise en page.
-type Offer = DemoOffer & {
+//
+// `image` est optionnel : quand une vraie photo (URL Supabase Storage, par
+// exemple) sera disponible pour une offre, il suffira de renseigner ce champ
+// pour qu'elle remplace l'icone-pastille ci-dessous, sans autre changement.
+export type Offer = DemoOffer & {
   category: CategoryKey;
   vendor: string;
   location: string;
@@ -51,6 +56,12 @@ type Offer = DemoOffer & {
   rating: number;
   reviews: number;
   priceIsFrom: boolean;
+  image?: string;
+  // Présent uniquement pour une vraie annonce (venant de Supabase) : la
+  // carte entière devient un lien vers la fiche produit réelle, où vit déjà
+  // le vrai système de négociation, plutôt que la modale de démonstration.
+  href?: string;
+  negociable?: boolean;
 };
 
 function buildDemoOffers(): Offer[] {
@@ -66,6 +77,9 @@ function buildDemoOffers(): Offer[] {
       reviews: 32,
       price: "38 €",
       priceIsFrom: false,
+      // Exemple : photo fournie -> remplace l'icone automatiquement.
+      image:
+        "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMzAwIj4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZzEiIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI0Q5QTk4QyIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiM4QjVFM0MiLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgogIDxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSJ1cmwoI2cxKSIvPgogIDxlbGxpcHNlIGN4PSIyMDAiIGN5PSIxOTAiIHJ4PSIxMTAiIHJ5PSI1NSIgZmlsbD0iIzZGNEEyRSIgb3BhY2l0eT0iMC41NSIvPgogIDxlbGxpcHNlIGN4PSIyMDAiIGN5PSIxNzAiIHJ4PSI5NSIgcnk9IjQyIiBmaWxsPSIjQzk4QTVFIi8+Cjwvc3ZnPgo=",
     },
     {
       id: "demo-2",
@@ -102,6 +116,9 @@ function buildDemoOffers(): Offer[] {
       reviews: 9,
       price: "120 €",
       priceIsFrom: false,
+      // Exemple : photo fournie -> remplace l'icone automatiquement.
+      image:
+        "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MDAgMzAwIj4KICA8ZGVmcz4KICAgIDxsaW5lYXJHcmFkaWVudCBpZD0iZzIiIHgxPSIwIiB5MT0iMCIgeDI9IjEiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzVCNDYzNiIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMyRTIxMTciLz4KICAgIDwvbGluZWFyR3JhZGllbnQ+CiAgPC9kZWZzPgogIDxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSJ1cmwoI2cyKSIvPgogIDxyZWN0IHg9IjExMCIgeT0iOTAiIHdpZHRoPSIxODAiIGhlaWdodD0iMTQwIiByeD0iMTgiIGZpbGw9IiM4QTZBNEMiLz4KICA8cmVjdCB4PSIxNTAiIHk9IjYwIiB3aWR0aD0iMTAwIiBoZWlnaHQ9IjYwIiByeD0iMzAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzhBNkE0QyIgc3Ryb2tlLXdpZHRoPSIxMCIvPgo8L3N2Zz4K",
     },
     {
       id: "demo-5",
@@ -210,8 +227,10 @@ export default function OffersSection({
   categories,
   labels,
   modalLabels,
+  realOffers = [],
 }: {
   categories: { key: CategoryKey; title: string; cta: string }[];
+  realOffers?: Offer[];
   labels: {
     categoriesEyebrow: string;
     categoriesTitle: string;
@@ -243,7 +262,8 @@ export default function OffersSection({
   const categoryLabels = Object.fromEntries(
     categories.map((c) => [c.key, c.title])
   ) as Record<CategoryKey, string>;
-  const offers = buildDemoOffers();
+  const isDemo = realOffers.length === 0;
+  const offers = isDemo ? buildDemoOffers() : realOffers;
 
   const [selectedCategory, setSelectedCategory] = useState<CategoryKey | null>(
     null
@@ -272,7 +292,7 @@ export default function OffersSection({
       {/* Categories */}
       <section id="categories" className="scroll-mt-[6rem] py-16">
         <div className="mx-auto max-w-6xl px-6">
-          <span className="mb-1.5 block font-mono text-[11px] font-medium tracking-wide text-primary uppercase">
+          <span className="mb-1.5 block font-mono text-xs font-medium tracking-wide text-primary uppercase">
             {labels.categoriesEyebrow}
           </span>
           <h2 className="font-serif text-3xl font-semibold text-ink">
@@ -312,7 +332,7 @@ export default function OffersSection({
                     <span className="block text-sm font-semibold text-ink">
                       {cat.title}
                     </span>
-                    <span className="mt-0.5 block text-xs text-ink-soft">
+                    <span className="mt-0.5 block text-sm text-ink-soft">
                       {cat.cta}
                     </span>
                   </span>
@@ -331,7 +351,7 @@ export default function OffersSection({
         <div className="mx-auto max-w-6xl px-6">
           <div className="mb-2 flex flex-wrap items-end justify-between gap-4">
             <div>
-              <span className="mb-1.5 block font-mono text-[11px] font-medium tracking-wide text-primary uppercase">
+              <span className="mb-1.5 block font-mono text-xs font-medium tracking-wide text-primary uppercase">
                 {labels.offersEyebrow}
               </span>
               <h2 className="font-serif text-3xl font-semibold text-ink">
@@ -348,37 +368,48 @@ export default function OffersSection({
               </button>
             )}
           </div>
-          <p className="mb-8 text-xs text-ink-soft">{labels.demoNotice}</p>
+          {isDemo && (
+            <p className="mb-8 text-sm text-ink-soft">{labels.demoNotice}</p>
+          )}
 
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {filteredOffers.map((offer) => {
               const isFavorite = favorites.has(offer.id);
-              return (
-                <div
-                  key={offer.id}
-                  className="group overflow-hidden rounded-2xl border border-line bg-paper transition-shadow hover:shadow-md"
-                >
+              const cardClassName =
+                "group overflow-hidden rounded-2xl border border-line bg-paper transition-shadow hover:shadow-md";
+
+              const cardBody = (
+                <>
                   <div
-                    className="relative flex aspect-[4/3] items-center justify-center"
-                    style={{ backgroundColor: CATEGORY_TINTS[offer.category] }}
+                    className="relative flex aspect-[4/3] items-center justify-center bg-cover bg-center"
+                    style={
+                      offer.image
+                        ? { backgroundImage: `url(${offer.image})` }
+                        : { backgroundColor: CATEGORY_TINTS[offer.category] }
+                    }
                   >
-                    {(() => {
-                      const Icon = CATEGORY_ICONS[offer.category];
-                      return (
-                        <Icon
-                          size={40}
-                          strokeWidth={1.3}
-                          className="text-primary-dark/70"
-                          aria-hidden="true"
-                        />
-                      );
-                    })()}
-                    <span className="absolute top-3 left-3 rounded-full bg-white/90 px-2.5 py-1 font-mono text-[10px] font-semibold tracking-wide text-primary-dark uppercase shadow-sm">
+                    {!offer.image &&
+                      (() => {
+                        const Icon = CATEGORY_ICONS[offer.category];
+                        return (
+                          <Icon
+                            size={40}
+                            strokeWidth={1.3}
+                            className="text-primary-dark/70"
+                            aria-hidden="true"
+                          />
+                        );
+                      })()}
+                    <span className="absolute top-3 left-3 rounded-full bg-white/90 px-2.5 py-1 font-mono text-[11px] font-semibold tracking-wide text-primary-dark uppercase shadow-sm">
                       {categoryLabels[offer.category]}
                     </span>
                     <button
                       type="button"
-                      onClick={() => toggleFavorite(offer.id)}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        toggleFavorite(offer.id);
+                      }}
                       aria-pressed={isFavorite}
                       aria-label={
                         isFavorite ? labels.unfavoriteLabel : labels.favoriteLabel
@@ -396,8 +427,8 @@ export default function OffersSection({
 
                   <div className="p-5">
                     <div className="mb-3 flex items-center justify-between gap-2">
-                      <span className="flex items-center gap-1.5 text-xs text-ink">
-                        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-[10px] font-semibold text-primary-dark">
+                      <span className="flex items-center gap-1.5 text-sm text-ink">
+                        <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-[11px] font-semibold text-primary-dark">
                           {offer.vendor[0]}
                         </span>
                         {offer.vendor}
@@ -409,7 +440,7 @@ export default function OffersSection({
                           />
                         )}
                       </span>
-                      <span className="flex items-center gap-1 text-xs text-ink-soft">
+                      <span className="flex items-center gap-1 text-sm text-ink-soft">
                         <Star
                           size={13}
                           className="fill-accent text-accent"
@@ -421,7 +452,7 @@ export default function OffersSection({
                     <h3 className="mb-1 text-[15px] font-semibold text-ink">
                       {offer.title}
                     </h3>
-                    <p className="mb-4 flex items-center gap-1 text-xs text-ink-soft">
+                    <p className="mb-4 flex items-center gap-1 text-sm text-ink-soft">
                       <MapPin size={12} aria-hidden="true" />
                       {offer.location}
                     </p>
@@ -429,21 +460,39 @@ export default function OffersSection({
                     <div className="flex items-center justify-between gap-3">
                       <p className="text-[15px] font-semibold text-ink">
                         {offer.priceIsFrom && (
-                          <span className="mr-1 text-xs font-normal text-ink-soft">
+                          <span className="mr-1 text-sm font-normal text-ink-soft">
                             {labels.fromLabel}
                           </span>
                         )}
                         {offer.price}
                       </p>
-                      <button
-                        type="button"
-                        onClick={() => setActiveOffer(offer)}
-                        className="rounded-full border border-primary px-4 py-2 text-xs font-semibold text-primary transition-colors hover:bg-primary hover:text-white"
-                      >
-                        {labels.negotiateLabel}
-                      </button>
+                      {offer.href ? (
+                        offer.negociable && (
+                          <span className="rounded-full border border-primary px-4 py-2 text-sm font-semibold text-primary">
+                            {labels.negotiateLabel}
+                          </span>
+                        )
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={() => setActiveOffer(offer)}
+                          className="rounded-full border border-primary px-4 py-2 text-sm font-semibold text-primary transition-colors hover:bg-primary hover:text-white"
+                        >
+                          {labels.negotiateLabel}
+                        </button>
+                      )}
                     </div>
                   </div>
+                </>
+              );
+
+              return offer.href ? (
+                <Link key={offer.id} href={offer.href} className={cardClassName}>
+                  {cardBody}
+                </Link>
+              ) : (
+                <div key={offer.id} className={cardClassName}>
+                  {cardBody}
                 </div>
               );
             })}

@@ -5,6 +5,7 @@ export type SellerType = "particulier" | "pro";
 
 export type SellerRole = "user" | "moderateur" | "admin";
 export type SellerStatus = "actif" | "suspendu";
+export type SiretStatus = "aucun" | "en_attente" | "verifie" | "rejete";
 
 export type Seller = {
   id: string;
@@ -18,6 +19,8 @@ export type Seller = {
   rating: number;
   role?: SellerRole;
   status?: SellerStatus;
+  siret?: string | null;
+  siret_status?: SiretStatus;
 };
 
 export type ListingStatus = "pending" | "approved" | "rejected" | "vendu";
@@ -113,16 +116,12 @@ export type SavedSearch = {
 
 export const categories = [
   "Toutes catégories",
-  "Véhicules",
-  "Immobilier",
-  "Multimédia",
-  "Maison & Jardin",
-  "Emploi",
-  "Services",
-  "Animaux",
-  "Dressing",
+  "Création",
+  "Mode",
+  "Maison",
   "Beauté",
-  "Artisanat & Métiers",
+  "Photo et vidéo",
+  "Services",
 ];
 
 // Postgres "numeric" columns (price, rating) come back as strings from
@@ -161,6 +160,63 @@ export async function getDonListings(limit = 12): Promise<Listing[]> {
 
   if (error) throw error;
   return (data ?? []).map(normalizeListing);
+}
+
+export type FeaturedListing = Listing & {
+  seller: Seller;
+  talentueux: boolean;
+  reviewsCount: number;
+  reviewsAvg: number;
+};
+
+// Annonces réelles des 6 catégories créateurs, affichées sur la page
+// d'accueil (section "Créations & services à découvrir") à la place des
+// données de démonstration, dès qu'il en existe. Enrichit chaque annonce
+// avec le badge Talentueux (pro_profiles.verified) et la moyenne d'avis
+// du vendeur, calculées ici plutôt qu'en base pour rester simple.
+export async function getFeaturedListings(limit = 9): Promise<FeaturedListing[]> {
+  const { data, error } = await supabase
+    .from("listings")
+    .select("*, seller:sellers(*)")
+    .eq("status", "approved")
+    .in("category", categories.filter((c) => c !== "Toutes catégories"))
+    .order("created_at", { ascending: false })
+    .limit(limit);
+
+  if (error) throw error;
+  const listings = (data ?? []).map(normalizeListing) as (Listing & {
+    seller: Seller;
+  })[];
+
+  const sellerIds = [...new Set(listings.map((l) => l.seller_id))];
+  if (sellerIds.length === 0) return [];
+
+  const [{ data: proProfiles }, { data: reviews }] = await Promise.all([
+    supabase.from("pro_profiles").select("seller_id, verified").in("seller_id", sellerIds),
+    supabase.from("reviews").select("seller_id, rating").in("seller_id", sellerIds),
+  ]);
+
+  const verifiedBySeller = new Map(
+    (proProfiles ?? []).map((p) => [p.seller_id, p.verified as boolean])
+  );
+
+  const reviewsBySeller = new Map<string, { count: number; total: number }>();
+  for (const r of reviews ?? []) {
+    const current = reviewsBySeller.get(r.seller_id) ?? { count: 0, total: 0 };
+    current.count += 1;
+    current.total += r.rating;
+    reviewsBySeller.set(r.seller_id, current);
+  }
+
+  return listings.map((listing) => {
+    const stats = reviewsBySeller.get(listing.seller_id);
+    return {
+      ...listing,
+      talentueux: verifiedBySeller.get(listing.seller_id) ?? false,
+      reviewsCount: stats?.count ?? 0,
+      reviewsAvg: stats ? stats.total / stats.count : 0,
+    };
+  });
 }
 
 export async function getListingById(id: number): Promise<Listing | null> {
@@ -325,6 +381,7 @@ export type DashboardCounts = {
   newListings: number;
   pendingReports: number;
   pendingTalents: number;
+  pendingSirets: number;
 };
 
 export async function getDashboardCounts(
@@ -334,7 +391,7 @@ export async function getDashboardCounts(
     Date.now() - 7 * 24 * 60 * 60 * 1000
   ).toISOString();
 
-  const [newUsers, newListings, pendingReports, pendingTalents] =
+  const [newUsers, newListings, pendingReports, pendingTalents, pendingSirets] =
     await Promise.all([
       supabaseClient
         .from("sellers")
@@ -353,6 +410,10 @@ export async function getDashboardCounts(
         .select("seller_id", { count: "exact", head: true })
         .eq("verified", false)
         .is("reviewed_at", null),
+      supabaseClient
+        .from("sellers")
+        .select("id", { count: "exact", head: true })
+        .eq("siret_status", "en_attente"),
     ]);
 
   return {
@@ -360,7 +421,21 @@ export async function getDashboardCounts(
     newListings: newListings.count ?? 0,
     pendingReports: pendingReports.count ?? 0,
     pendingTalents: pendingTalents.count ?? 0,
+    pendingSirets: pendingSirets.count ?? 0,
   };
+}
+
+export async function getPendingSirets(
+  supabaseClient: SupabaseClient
+): Promise<Seller[]> {
+  const { data, error } = await supabaseClient
+    .from("sellers")
+    .select("*")
+    .eq("siret_status", "en_attente")
+    .order("created_at", { ascending: true });
+
+  if (error) throw error;
+  return (data ?? []).map(normalizeSeller);
 }
 
 export async function getReports(

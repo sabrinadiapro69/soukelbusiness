@@ -22,6 +22,7 @@ export default async function AdminLayout({
     { href: "/admin/dashboard", label: t.navDashboard },
     { href: "/admin/signalements", label: t.navSignalements },
     { href: "/admin/talentueux", label: t.navTalentueux },
+    { href: "/admin/boutiques", label: t.navBoutiques },
     { href: "/admin/utilisateurs", label: t.navUtilisateurs },
     { href: "/admin/annonces", label: t.navAnnonces },
     { href: "/admin/journal", label: t.navJournal },

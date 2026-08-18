@@ -2,9 +2,11 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
+import SiretForm from "@/components/SiretForm";
 import { createClient } from "@/lib/supabase/server";
 import { getLocale } from "@/lib/i18n/locale";
 import { getDictionary } from "@/lib/i18n/dictionaries";
+import type { SiretStatus } from "@/lib/queries";
 
 export const dynamic = "force-dynamic";
 
@@ -32,14 +34,26 @@ export default async function ProPage() {
   } = await supabase.auth.getUser();
 
   let sellerType: "particulier" | "pro" | null = null;
+  let siretStatus: SiretStatus = "aucun";
   if (user) {
     const { data: seller } = await supabase
       .from("sellers")
-      .select("type")
+      .select("type, siret_status")
       .eq("id", user.id)
       .maybeSingle();
     sellerType = seller?.type ?? null;
+    siretStatus = seller?.siret_status ?? "aucun";
   }
+
+  const siretFormLabels = {
+    sectionTitle: t.siretSectionTitle,
+    sectionText: t.siretSectionText,
+    siretLabel: t.siretLabel,
+    siretPlaceholder: t.siretPlaceholder,
+    submit: t.siretSubmit,
+    submitting: t.siretSubmitting,
+    hint: t.siretHint,
+  };
 
   const benefits = [
     { title: t.benefit1Title, text: t.benefit1Text },
@@ -53,7 +67,7 @@ export default async function ProPage() {
       <SiteHeader />
 
       <main className="flex-1">
-        <section className="bg-bg-alt py-16">
+        <section id="ouvrir-boutique" className="scroll-mt-[6rem] bg-bg-alt py-16">
           <div className="mx-auto max-w-3xl px-6 text-center">
             <h1 className="font-serif text-3xl font-bold text-ink sm:text-4xl">
               {t.heroTitle}
@@ -71,25 +85,43 @@ export default async function ProPage() {
                   {t.ctaButtonSignup}
                 </Link>
               )}
-              {user && sellerType === "pro" && (
-                <Link
-                  href="/profil"
-                  className="inline-block rounded-full bg-accent px-7 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-accent-dark"
-                >
-                  {t.ctaButtonManage}
-                </Link>
-              )}
-              {user && sellerType === "particulier" && (
-                <div className="mx-auto max-w-md rounded-xl border border-line bg-paper px-5 py-4 text-sm text-ink-soft">
-                  <p>{t.alreadyParticulier}</p>
-                  <p className="mt-1">
-                    {t.contactToUpgrade}{" "}
-                    <Link href="/contact" className="text-accent hover:underline">
-                      {t.contactLink}
-                    </Link>
-                  </p>
+              {user && sellerType === "pro" && siretStatus === "verifie" && (
+                <div className="flex flex-col items-center gap-3">
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-4 py-1.5 text-sm font-semibold text-primary-dark">
+                    {t.siretVerifiedBadge}
+                  </span>
+                  <Link
+                    href="/profil"
+                    className="inline-block rounded-full bg-accent px-7 py-3.5 text-sm font-semibold text-white transition-colors hover:bg-accent-dark"
+                  >
+                    {t.ctaButtonManage}
+                  </Link>
                 </div>
               )}
+              {user && sellerType === "pro" && siretStatus === "en_attente" && (
+                <div className="mx-auto max-w-md rounded-xl border border-line bg-paper px-5 py-4 text-sm text-ink-soft">
+                  <p className="font-semibold text-ink">
+                    {t.siretPendingTitle}
+                  </p>
+                  <p className="mt-1">{t.siretPendingText}</p>
+                </div>
+              )}
+              {user &&
+                sellerType === "pro" &&
+                siretStatus === "rejete" && (
+                  <div className="flex flex-col items-center gap-4">
+                    <div className="mx-auto max-w-md rounded-xl border border-red-200 bg-red-50 px-5 py-4 text-sm text-red-700">
+                      <p className="font-semibold">{t.siretRejectedTitle}</p>
+                      <p className="mt-1">{t.siretRejectedText}</p>
+                    </div>
+                    <SiretForm labels={siretFormLabels} />
+                  </div>
+                )}
+              {user &&
+                ((sellerType === "particulier") ||
+                  (sellerType === "pro" && siretStatus === "aucun")) && (
+                  <SiretForm labels={siretFormLabels} />
+                )}
             </div>
           </div>
         </section>
@@ -142,10 +174,10 @@ export default async function ProPage() {
               </Link>
             ) : (
               <Link
-                href="/contact"
+                href="#ouvrir-boutique"
                 className="rounded-full bg-accent px-5 py-2.5 text-sm font-semibold whitespace-nowrap text-white transition-colors hover:bg-accent-dark"
               >
-                {t.contactLink}
+                {t.siretSectionTitle}
               </Link>
             )}
           </div>

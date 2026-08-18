@@ -16,6 +16,7 @@ export default async function AdminDashboardPage() {
     { label: t.newListingsLabel, value: counts.newListings },
     { label: t.pendingReportsLabel, value: counts.pendingReports },
     { label: t.pendingTalentsLabel, value: counts.pendingTalents },
+    { label: t.pendingSiretsLabel, value: counts.pendingSirets },
   ];
 
   return (

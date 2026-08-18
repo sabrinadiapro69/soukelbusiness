@@ -1,19 +1,19 @@
 import Link from "next/link";
-import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { BadgeCheck } from "lucide-react";
 import {
   formatEUR,
-  formatDaApprox,
-  formatRelativeTime,
-  getListingById,
+  formatMemberSince,
   getListingPhotoUrl,
-  getListingsByCategory,
-  getTauxChange,
-  type Offer,
+  getListingsBySeller,
+  getPortfolioBySeller,
+  getPortfolioPhotoUrl,
+  getProProfile,
+  getReviewsBySeller,
+  getSellerById,
 } from "@/lib/queries";
 import { createClient } from "@/lib/supabase/server";
-import NegotiationPanel from "@/components/NegotiationPanel";
 import ReportButton from "@/components/ReportButton";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
@@ -22,34 +22,43 @@ import { getDictionary } from "@/lib/i18n/dictionaries";
 
 export const dynamic = "force-dynamic";
 
+function StarRating({ rating }: { rating: number }) {
+  const fullStars = Math.round(rating);
+  return (
+    <span className="text-gold" aria-label={`${rating} sur 5 étoiles`}>
+      {"★".repeat(fullStars)}
+      <span className="text-line">{"★".repeat(5 - fullStars)}</span>
+    </span>
+  );
+}
+
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ id: string }>;
 }): Promise<Metadata> {
   const { id } = await params;
-  const listing = await getListingById(Number(id));
+  const seller = await getSellerById(id);
 
-  if (!listing) return {};
+  if (!seller) return {};
 
-  const priceLabel = listing.is_don ? "Don" : formatEUR(listing.price);
-  const description = `${priceLabel} · ${listing.category} · ${listing.location}. ${listing.description}`.slice(
-    0,
-    160
-  );
+  const title =
+    seller.type === "pro" ? `${seller.name}, professionnel` : seller.name;
+  const description =
+    seller.description || `Profil vendeur ${seller.name} sur Souk El Business.`;
 
   return {
-    title: listing.title,
-    description,
+    title,
+    description: description.slice(0, 160),
     openGraph: {
-      title: listing.title,
-      description,
-      type: "website",
+      title,
+      description: description.slice(0, 160),
+      type: "profile",
     },
   };
 }
 
-export default async function ProduitPage({
+export default async function VendeurPage({
   params,
   searchParams,
 }: {
@@ -58,46 +67,32 @@ export default async function ProduitPage({
 }) {
   const { id } = await params;
   const { reported, report_error } = await searchParams;
-  const listing = await getListingById(Number(id));
+  const seller = await getSellerById(id);
 
-  if (!listing) {
+  if (!seller) {
     notFound();
   }
 
   const locale = await getLocale();
   const dict = await getDictionary(locale);
-  const t = dict.produit;
+  const t = dict.vendeur;
   const reportDict = dict.report;
-
-  const similarListings = await getListingsByCategory(
-    listing.category,
-    listing.id
-  );
-
-  const taux = await getTauxChange().catch(() => 260);
-
-  const requestHeaders = await headers();
-  const host = requestHeaders.get("host");
-  const protocol = host?.startsWith("localhost") ? "http" : "https";
-  const listingUrl = `${protocol}://${host}/produits/${listing.id}`;
-  const whatsappMessage = `${listing.title} — ${listing.is_don ? t.don : formatEUR(listing.price)}\n${listingUrl}`;
-  const whatsappHref = `https://wa.me/?text=${encodeURIComponent(whatsappMessage)}`;
 
   const supabase = await createClient();
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
-  let offer: Offer | null = null;
-  if (user) {
-    const { data } = await supabase
-      .from("offers")
-      .select("*")
-      .eq("listing_id", listing.id)
-      .eq("buyer_id", user.id)
-      .maybeSingle();
-    offer = data ? { ...data, montant_propose: Number(data.montant_propose) } : null;
-  }
+  const [sellerListings, reviews, proProfile, portfolio] = await Promise.all([
+    getListingsBySeller(seller.id),
+    getReviewsBySeller(seller.id).catch(() => []),
+    seller.type === "pro"
+      ? getProProfile(seller.id).catch(() => null)
+      : Promise.resolve(null),
+    seller.type === "pro"
+      ? getPortfolioBySeller(seller.id).catch(() => [])
+      : Promise.resolve([]),
+  ]);
 
   return (
     <div className="flex flex-1 flex-col">
@@ -111,183 +106,188 @@ export default async function ProduitPage({
           {t.back}
         </Link>
 
-        <div className="mt-6 grid grid-cols-1 gap-10 lg:grid-cols-2">
-          <div>
-            <div className="flex h-80 items-center justify-center overflow-hidden rounded-2xl bg-bg-alt text-8xl">
-              {listing.photos.length > 0 ? (
-                <img
-                  src={getListingPhotoUrl(listing.photos[0])}
-                  alt={listing.title}
-                  className="h-full w-full object-cover"
-                />
-              ) : (
-                listing.emoji
-              )}
-            </div>
-            {listing.photos.length > 1 && (
-              <div className="mt-3 flex gap-3">
-                {listing.photos.slice(1).map((path) => (
-                  <img
-                    key={path}
-                    src={getListingPhotoUrl(path)}
-                    alt={listing.title}
-                    className="h-20 w-20 rounded-xl object-cover"
-                  />
-                ))}
-              </div>
-            )}
+        <div className="mt-6 flex flex-col gap-6 rounded-2xl border border-line bg-paper p-6 sm:flex-row sm:items-center">
+          <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-full bg-bg-alt text-5xl">
+            {seller.avatar_emoji}
           </div>
-
-          <div className="flex flex-col gap-4">
-            <div className="flex items-start justify-between gap-3">
-              <h1 className="text-2xl font-bold text-ink">{listing.title}</h1>
+          <div className="flex-1">
+            <div className="flex flex-wrap items-center gap-3">
+              <h1 className="text-2xl font-bold text-ink">{seller.name}</h1>
               <span
-                className={`shrink-0 rounded-full px-3 py-1 text-xs font-semibold ${
-                  listing.seller?.type === "pro"
+                className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                  seller.type === "pro"
                     ? "bg-dawn-soft text-accent-dark"
                     : "bg-bg-alt text-ink-soft"
                 }`}
               >
-                {listing.seller?.type === "pro" ? t.pro : t.particulier}
+                {seller.type === "pro" ? t.professionnel : t.particulier}
+              </span>
+              {proProfile?.verified && (
+                <span className="flex items-center gap-1.5 rounded-full bg-primary px-3.5 py-1.5 text-xs font-bold text-white shadow-sm">
+                  <BadgeCheck size={15} strokeWidth={2} aria-hidden="true" />
+                  {t.talentueux}
+                </span>
+              )}
+            </div>
+            {proProfile?.metier && (
+              <p className="mt-1 text-sm font-medium text-ink-soft">
+                {proProfile.metier}
+              </p>
+            )}
+            <p className="mt-2 max-w-2xl text-sm text-ink-soft">
+              {seller.description}
+            </p>
+            <div className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm text-ink-soft">
+              <span>
+                {t.wilayaDe} {seller.city}
+              </span>
+              <span>
+                {t.memberSince} {formatMemberSince(seller.member_since)}
+              </span>
+              <span>
+                🤝 {seller.transactions_count} {t.transactions}
+              </span>
+              <span>
+                <StarRating rating={seller.rating} />{" "}
+                {seller.rating.toFixed(1)}/5
               </span>
             </div>
-
-            {listing.is_don ? (
-              <div className="flex items-center gap-3">
-                <span className="rounded-full bg-primary/10 px-3 py-1.5 text-lg font-bold text-primary-dark">
-                  {t.don}
-                </span>
-              </div>
-            ) : (
-              <>
-                <div className="flex flex-wrap items-center gap-3">
-                  <span className="font-mono text-3xl font-bold text-accent-dark">
-                    {formatEUR(listing.price)}
-                  </span>
-                  <span
-                    className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
-                      listing.negociable
-                        ? "bg-primary/10 text-primary-dark"
-                        : "bg-bg-alt text-ink-soft"
-                    }`}
-                  >
-                    {listing.negociable ? t.negociable : t.ferme}
-                  </span>
-                </div>
-                <span className="text-xs text-ink-soft">
-                  {formatDaApprox(listing.price, taux)} {t.tauxIndicatif}
-                </span>
-              </>
-            )}
-
-            <p className="leading-relaxed text-ink-soft">
-              {listing.description}
-            </p>
-
-            <div className="flex items-center gap-4 text-sm text-ink-soft">
-              <span>{listing.category}</span>
-              <span>•</span>
-              <span>📍 {listing.location}</span>
-              <span>•</span>
-              <span>{formatRelativeTime(listing.created_at)}</span>
-            </div>
-
-            {reported === "1" && (
-              <p className="rounded-lg border border-line bg-bg-alt px-4 py-2.5 text-sm text-ink">
-                {reportDict.sentToast}
-              </p>
-            )}
-            {report_error === "limit" && (
-              <p className="rounded-lg border border-red-200 bg-red-50 px-4 py-2.5 text-sm text-red-700">
-                {reportDict.limitErrorToast}
-              </p>
-            )}
-
-            <ReportButton
-              type="annonce"
-              targetId={listing.id}
-              redirectTo={`/produits/${listing.id}`}
-              isLoggedIn={Boolean(user)}
-              label={reportDict.buttonListing}
-              motifLabel={reportDict.motifLabel}
-              descriptionLabel={reportDict.descriptionLabel}
-              submitLabel={reportDict.submit}
-              cancelLabel={reportDict.cancel}
-            />
-
-            <div className="mt-4 rounded-2xl border border-line bg-paper p-5">
-              <p className="text-sm text-ink-soft">{t.soldBy}</p>
-              <Link
-                href={`/vendeurs/${listing.seller_id}`}
-                className="mt-1 inline-block font-semibold text-ink hover:text-accent"
-              >
-                {listing.seller?.name}
-              </Link>
-              <p className="text-sm text-ink-soft">📍 {listing.location}</p>
-              <button className="mt-4 w-full rounded-full border border-accent px-6 py-3 text-sm font-semibold text-accent transition-colors hover:bg-dawn-soft">
-                {t.contactSeller}
-              </button>
-              <a
-                href={whatsappHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="mt-2 flex w-full items-center justify-center gap-2 rounded-full bg-[#25D366] px-6 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#1ebe57]"
-              >
-                {t.shareWhatsapp}
-              </a>
-            </div>
-
-            {!listing.is_don && (
-              <NegotiationPanel
-                listingId={listing.id}
-                askingPrice={listing.price}
-                negociable={listing.negociable}
-                sellerName={listing.seller?.name ?? dict.negotiation.defaultSellerName}
-                userId={user?.id ?? null}
-                offer={offer}
-              />
-            )}
           </div>
         </div>
 
-        {similarListings.length > 0 && (
-          <section className="mt-16">
-            <h2 className="text-xl font-bold text-ink">{t.similarListings}</h2>
-            <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-3">
-              {similarListings.map((item) => (
+        {reported === "1" && (
+          <p className="mt-4 rounded-lg border border-line bg-bg-alt px-4 py-2.5 text-sm text-ink">
+            {reportDict.sentToast}
+          </p>
+        )}
+        {report_error === "limit" && (
+          <p className="mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-2.5 text-sm text-red-700">
+            {reportDict.limitErrorToast}
+          </p>
+        )}
+
+        <div className="mt-3">
+          <ReportButton
+            type="utilisateur"
+            targetId={seller.id}
+            redirectTo={`/vendeurs/${seller.id}`}
+            isLoggedIn={Boolean(user)}
+            label={reportDict.buttonSeller}
+            motifLabel={reportDict.motifLabel}
+            descriptionLabel={reportDict.descriptionLabel}
+            submitLabel={reportDict.submit}
+            cancelLabel={reportDict.cancel}
+          />
+        </div>
+
+        <section className="mt-12">
+          <h2 className="text-xl font-bold text-ink">
+            {t.productsOf} {seller.name}
+          </h2>
+          {sellerListings.length > 0 ? (
+            <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+              {sellerListings.map((listing) => (
                 <Link
-                  key={item.id}
-                  href={`/produits/${item.id}`}
+                  key={listing.id}
+                  href={`/produits/${listing.id}`}
                   className="flex flex-col overflow-hidden rounded-xl border border-line bg-paper transition-shadow hover:shadow-lg"
                 >
                   <div className="flex h-28 items-center justify-center overflow-hidden bg-bg-alt text-3xl">
-                    {item.photos.length > 0 ? (
+                    {listing.photos.length > 0 ? (
                       <img
-                        src={getListingPhotoUrl(item.photos[0])}
-                        alt={item.title}
+                        src={getListingPhotoUrl(listing.photos[0])}
+                        alt={listing.title}
                         className="h-full w-full object-cover"
                       />
                     ) : (
-                      item.emoji
+                      listing.emoji
                     )}
                   </div>
                   <div className="flex flex-col gap-1 p-4">
-                    <h3 className="font-semibold text-ink">{item.title}</h3>
-                    {item.is_don ? (
+                    <h3 className="font-semibold text-ink">
+                      {listing.title}
+                    </h3>
+                    {listing.is_don ? (
                       <span className="w-fit rounded-full bg-primary/10 px-2 py-0.5 text-xs font-bold text-primary-dark">
-                        {t.don}
+                        {dict.produit.don}
                       </span>
                     ) : (
                       <span className="font-mono font-bold text-accent-dark">
-                        {formatEUR(item.price)}
+                        {formatEUR(listing.price)}
                       </span>
                     )}
                   </div>
                 </Link>
               ))}
             </div>
+          ) : (
+            <p className="mt-4 text-sm text-ink-soft">{t.noListings}</p>
+          )}
+        </section>
+
+        {seller.type === "pro" && portfolio.length > 0 && (
+          <section className="mt-12">
+            <h2 className="text-xl font-bold text-ink">{t.portfolio}</h2>
+            <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {portfolio.map((item) => (
+                <div
+                  key={item.id}
+                  className="rounded-xl border border-line bg-paper p-4"
+                >
+                  <div className="flex gap-2">
+                    {item.photos.map((path) => (
+                      <img
+                        key={path}
+                        src={getPortfolioPhotoUrl(path)}
+                        alt={item.title}
+                        className="h-20 w-20 rounded-lg object-cover"
+                      />
+                    ))}
+                  </div>
+                  <p className="mt-2 text-sm font-semibold text-ink">
+                    {item.title}
+                  </p>
+                  {item.description && (
+                    <p className="mt-1 text-xs text-ink-soft">
+                      {item.description}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
           </section>
         )}
+
+        <section className="mt-12">
+          <h2 className="text-xl font-bold text-ink">
+            {t.reviews} ({reviews.length})
+          </h2>
+          {reviews.length > 0 ? (
+            <div className="mt-6 flex flex-col gap-4">
+              {reviews.map((review) => (
+                <div
+                  key={review.id}
+                  className="rounded-2xl border border-line bg-paper p-5"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="font-semibold text-ink">
+                      {review.buyer?.avatar_emoji} {review.buyer?.name ?? t.buyer}
+                    </span>
+                    <StarRating rating={review.rating} />
+                  </div>
+                  <p className="mt-2 text-sm text-ink-soft">
+                    {review.comment}
+                  </p>
+                  <p className="mt-2 text-xs text-ink-soft/70">
+                    {formatMemberSince(review.created_at)}
+                  </p>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="mt-4 text-sm text-ink-soft">{t.noReviews}</p>
+          )}
+        </section>
       </main>
 
       <SiteFooter />

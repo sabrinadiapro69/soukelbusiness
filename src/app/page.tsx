@@ -8,11 +8,31 @@ import {
 } from "lucide-react";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
-import OffersSection from "@/components/home/OffersSection";
+import OffersSection, {
+  type CategoryKey,
+  type Offer,
+} from "@/components/home/OffersSection";
+import {
+  formatEUR,
+  getFeaturedListings,
+  getListingPhotoUrl,
+} from "@/lib/queries";
 import { getLocale } from "@/lib/i18n/locale";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 
 export const dynamic = "force-dynamic";
+
+// Le champ "category" des annonces stocke toujours le libellé français
+// (voir src/lib/queries.ts, categories), quelle que soit la langue
+// d'affichage : cette table de correspondance est donc stable.
+const CATEGORY_LABEL_TO_KEY: Record<string, CategoryKey> = {
+  Création: "creation",
+  Mode: "mode",
+  Maison: "maison",
+  Beauté: "beaute",
+  "Photo et vidéo": "photo",
+  Services: "services",
+};
 
 export default async function Home() {
   const locale = await getLocale();
@@ -27,6 +47,27 @@ export default async function Home() {
     { key: "photo" as const, title: t.categoryPhotoTitle, cta: t.categoryDiscover },
     { key: "services" as const, title: t.categoryServicesTitle, cta: t.categoryDiscover },
   ];
+
+  const featuredListings = await getFeaturedListings(9).catch(() => []);
+  const realOffers: Offer[] = featuredListings
+    .filter((listing) => CATEGORY_LABEL_TO_KEY[listing.category])
+    .map((listing) => ({
+      id: String(listing.id),
+      category: CATEGORY_LABEL_TO_KEY[listing.category],
+      title: listing.title,
+      vendor: listing.seller.name,
+      location: listing.commune
+        ? `${listing.commune}, ${listing.location}`
+        : listing.location,
+      verified: listing.talentueux,
+      rating: listing.reviewsAvg,
+      reviews: listing.reviewsCount,
+      price: listing.is_don ? dict.produit.don : formatEUR(listing.price),
+      priceIsFrom: false,
+      image: listing.photos[0] ? getListingPhotoUrl(listing.photos[0]) : undefined,
+      href: `/produits/${listing.id}`,
+      negociable: listing.negociable,
+    }));
 
   const offersLabels = {
     categoriesEyebrow: t.categoriesEyebrow,
@@ -80,7 +121,7 @@ export default async function Home() {
         <section className="border-b border-line bg-bg py-14 sm:py-20">
           <div className="mx-auto grid max-w-6xl items-center gap-12 px-6 lg:grid-cols-[1.05fr_0.95fr]">
             <div>
-              <span className="mb-4 block font-mono text-[11px] font-medium tracking-wide text-primary uppercase">
+              <span className="mb-4 block font-mono text-xs font-medium tracking-wide text-primary uppercase">
                 {t.heroEyebrow}
               </span>
               <h1 className="font-serif text-4xl leading-[1.1] font-semibold text-ink sm:text-5xl">
@@ -139,13 +180,13 @@ export default async function Home() {
             <div className="relative hidden aspect-[4/3.2] lg:block">
               <div className="absolute top-0 right-4 w-64 rotate-[3deg] rounded-2xl border border-line bg-paper p-3 shadow-md">
                 <div className="aspect-[4/3] rounded-xl bg-[#F5E9E3]" />
-                <span className="absolute -top-2.5 -left-2.5 rounded-full bg-accent px-2.5 py-1 text-[10px] font-semibold text-white shadow-sm">
+                <span className="absolute -top-2.5 -left-2.5 rounded-full bg-accent-dark px-2.5 py-1 text-xs font-semibold text-white shadow-sm">
                   {t.heroCardBadge}
                 </span>
                 <p className="mt-2 text-sm font-semibold text-ink">
                   {t.heroCard1Title}
                 </p>
-                <p className="text-xs text-ink-soft">
+                <p className="text-sm text-ink-soft">
                   {t.heroCard1Vendor} · {t.heroCard1Meta}
                 </p>
               </div>
@@ -154,7 +195,7 @@ export default async function Home() {
                 <p className="mt-2 text-sm font-semibold text-ink">
                   {t.heroCard2Title}
                 </p>
-                <p className="text-xs text-ink-soft">
+                <p className="text-sm text-ink-soft">
                   {t.heroCard2Vendor} · {t.heroCard2Meta}
                 </p>
               </div>
@@ -167,13 +208,14 @@ export default async function Home() {
           categories={categories}
           labels={offersLabels}
           modalLabels={modalLabels}
+          realOffers={realOffers}
         />
 
         {/* Mise en avant des créateurs */}
         <section className="py-16">
           <div className="mx-auto grid max-w-6xl items-center gap-10 px-6 lg:grid-cols-2">
             <div>
-              <span className="mb-1.5 block font-mono text-[11px] font-medium tracking-wide text-primary uppercase">
+              <span className="mb-1.5 block font-mono text-xs font-medium tracking-wide text-primary uppercase">
                 {t.creatorsEyebrow}
               </span>
               <h2 className="font-serif text-3xl font-semibold text-ink">
@@ -207,7 +249,7 @@ export default async function Home() {
           className="scroll-mt-[6rem] border-y border-line bg-bg-alt py-16"
         >
           <div className="mx-auto max-w-6xl px-6">
-            <span className="mb-1.5 block font-mono text-[11px] font-medium tracking-wide text-primary uppercase">
+            <span className="mb-1.5 block font-mono text-xs font-medium tracking-wide text-primary uppercase">
               {t.howLabel}
             </span>
             <h2 className="font-serif text-3xl font-semibold text-ink">
@@ -253,7 +295,7 @@ export default async function Home() {
             <h2 className="font-serif text-3xl font-semibold text-white">
               {t.sellerCtaTitle}
             </h2>
-            <p className="max-w-md text-[15px] leading-relaxed text-white/85">
+            <p className="max-w-md text-[15px] leading-relaxed text-white">
               {t.sellerCtaText}
             </p>
             <Link
@@ -262,7 +304,7 @@ export default async function Home() {
             >
               {t.sellerCtaButton}
             </Link>
-            <p className="text-xs text-white/70">{t.sellerCtaHint}</p>
+            <p className="text-sm text-white">{t.sellerCtaHint}</p>
           </div>
         </section>
       </main>

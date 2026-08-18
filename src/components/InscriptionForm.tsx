@@ -21,6 +21,7 @@ export default function InscriptionForm({
   const [name, setName] = useState("");
   const [city, setCity] = useState("");
   const [type, setType] = useState<"particulier" | "pro">(defaultType);
+  const [siret, setSiret] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [accepted, setAccepted] = useState(false);
@@ -52,7 +53,10 @@ export default function InscriptionForm({
       email,
       password,
       options: {
-        data: { name, city, type },
+        data:
+          type === "pro"
+            ? { name, city, type, siret: siret.replace(/\s/g, "") }
+            : { name, city, type },
       },
     });
 
@@ -165,6 +169,25 @@ export default function InscriptionForm({
           ))}
         </div>
       </div>
+
+      {type === "pro" && (
+        <div>
+          <label className="text-sm font-medium text-ink">
+            {dict.siretLabel}
+          </label>
+          <input
+            type="text"
+            required
+            inputMode="numeric"
+            pattern="[0-9 ]{14,17}"
+            placeholder={dict.siretPlaceholder}
+            value={siret}
+            onChange={(e) => setSiret(e.target.value)}
+            className="mt-1 w-full rounded-xl border border-line px-4 py-2 text-sm text-ink outline-none focus:border-accent"
+          />
+          <p className="mt-1 text-xs text-ink-soft">{dict.siretHint}</p>
+        </div>
+      )}
 
       <div>
         <label className="text-sm font-medium text-ink">{dict.email}</label>
