@@ -560,19 +560,27 @@ const fr = {
     ctaButtonManage: "Gérer mon profil pro",
     siretSectionTitle: "Ouvrir votre boutique",
     siretSectionText:
-      "Pour ouvrir votre boutique, indiquez votre numéro SIRET. Il sert à authentifier votre activité professionnelle.",
+      "Pour ouvrir votre boutique, indiquez vos coordonnées et votre numéro SIRET. Ils servent à authentifier votre activité professionnelle avant validation.",
+    siretNameLabel: "Votre nom",
+    siretCompanyNameLabel: "Nom de l'entreprise",
+    siretPhoneLabel: "Téléphone",
+    siretContactEmailLabel: "Email de contact",
     siretLabel: "Numéro SIRET (14 chiffres)",
     siretPlaceholder: "Ex : 123 456 789 00012",
-    siretSubmit: "Envoyer mon SIRET",
+    siretSubmit: "Envoyer ma demande",
     siretSubmitting: "Envoi...",
-    siretHint: "Nous vérifions votre numéro avant d'activer votre boutique.",
+    siretHint: "Nous vérifions vos informations avant d'activer votre boutique.",
     siretPendingTitle: "Vérification en cours",
     siretPendingText:
-      "Votre numéro SIRET a bien été reçu et sera examiné prochainement.",
-    siretRejectedTitle: "SIRET non validé",
+      "Votre demande a bien été reçue et sera examinée prochainement.",
+    siretRejectedTitle: "Demande non validée",
     siretRejectedText:
-      "Le numéro fourni n'a pas pu être validé. Vérifiez-le et renvoyez-le ci-dessous.",
+      "Les informations fournies n'ont pas pu être validées. Vérifiez-les et renvoyez-les ci-dessous.",
     siretVerifiedBadge: "Boutique vérifiée",
+    particulierBoutiqueTitle: "Vendre en tant que particulier",
+    particulierBoutiqueText:
+      "Sans SIRET, vous pouvez publier jusqu'à 10 annonces actives, dans le cadre de la vente occasionnelle entre particuliers encadrée par la loi. Pour vendre sans limite, ouvrez une boutique professionnelle ci-dessous.",
+    particulierBoutiqueCta: "Publier une annonce",
   },
   admin: {
     navDashboard: "Tableau de bord",

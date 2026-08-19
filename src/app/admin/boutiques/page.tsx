@@ -28,7 +28,10 @@ export default async function AdminBoutiquesPage() {
             <div className="flex-1">
               <h2 className="font-semibold text-ink">{seller.name}</h2>
               <p className="text-sm text-ink-soft">
-                SIRET {seller.siret} · {seller.city}
+                {seller.company_name} · SIRET {seller.siret}
+              </p>
+              <p className="mt-1 text-sm text-ink-soft">
+                {seller.phone} · {seller.contact_email} · {seller.city}
               </p>
             </div>
             <div className="flex gap-2">

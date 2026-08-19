@@ -555,19 +555,26 @@ const en: Dictionary = {
     ctaButtonManage: "Manage my pro profile",
     siretSectionTitle: "Open your shop",
     siretSectionText:
-      "To open your shop, enter your SIRET number. It's used to authenticate your professional activity.",
+      "To open your shop, enter your details and SIRET number. They're used to authenticate your professional activity before approval.",
+    siretNameLabel: "Your name",
+    siretCompanyNameLabel: "Company name",
+    siretPhoneLabel: "Phone number",
+    siretContactEmailLabel: "Contact email",
     siretLabel: "SIRET number (14 digits)",
     siretPlaceholder: "e.g. 123 456 789 00012",
-    siretSubmit: "Submit my SIRET",
+    siretSubmit: "Submit my request",
     siretSubmitting: "Sending...",
-    siretHint: "We verify your number before activating your shop.",
+    siretHint: "We verify your details before activating your shop.",
     siretPendingTitle: "Verification in progress",
-    siretPendingText:
-      "Your SIRET number was received and will be reviewed shortly.",
-    siretRejectedTitle: "SIRET not validated",
+    siretPendingText: "Your request was received and will be reviewed shortly.",
+    siretRejectedTitle: "Request not validated",
     siretRejectedText:
-      "The number provided could not be validated. Check it and resubmit below.",
+      "The details provided could not be validated. Check them and resubmit below.",
     siretVerifiedBadge: "Verified shop",
+    particulierBoutiqueTitle: "Sell as an individual",
+    particulierBoutiqueText:
+      "Without a SIRET, you can list up to 10 active listings, within the legal framework for occasional sales between individuals. To sell without limit, open a professional shop below.",
+    particulierBoutiqueCta: "Post a listing",
   },
   admin: {
     navDashboard: "Dashboard",

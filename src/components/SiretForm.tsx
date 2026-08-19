@@ -11,6 +11,10 @@ export default function SiretForm({
   labels: {
     sectionTitle: string;
     sectionText: string;
+    nameLabel: string;
+    companyNameLabel: string;
+    phoneLabel: string;
+    contactEmailLabel: string;
     siretLabel: string;
     siretPlaceholder: string;
     submit: string;
@@ -34,6 +38,64 @@ export default function SiretForm({
             {state.error}
           </p>
         )}
+
+        <div>
+          <label htmlFor="siret-name" className="text-sm font-medium text-ink">
+            {labels.nameLabel}
+          </label>
+          <input
+            id="siret-name"
+            name="name"
+            type="text"
+            required
+            className="mt-1 w-full rounded-xl border border-line px-4 py-2 text-sm text-ink outline-none focus:border-accent"
+          />
+        </div>
+
+        <div>
+          <label
+            htmlFor="siret-company-name"
+            className="text-sm font-medium text-ink"
+          >
+            {labels.companyNameLabel}
+          </label>
+          <input
+            id="siret-company-name"
+            name="companyName"
+            type="text"
+            required
+            className="mt-1 w-full rounded-xl border border-line px-4 py-2 text-sm text-ink outline-none focus:border-accent"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="siret-phone" className="text-sm font-medium text-ink">
+            {labels.phoneLabel}
+          </label>
+          <input
+            id="siret-phone"
+            name="phone"
+            type="tel"
+            required
+            className="mt-1 w-full rounded-xl border border-line px-4 py-2 text-sm text-ink outline-none focus:border-accent"
+          />
+        </div>
+
+        <div>
+          <label
+            htmlFor="siret-contact-email"
+            className="text-sm font-medium text-ink"
+          >
+            {labels.contactEmailLabel}
+          </label>
+          <input
+            id="siret-contact-email"
+            name="contactEmail"
+            type="email"
+            required
+            className="mt-1 w-full rounded-xl border border-line px-4 py-2 text-sm text-ink outline-none focus:border-accent"
+          />
+        </div>
 
         <div>
           <label htmlFor="siret" className="text-sm font-medium text-ink">

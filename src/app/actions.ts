@@ -25,6 +25,11 @@ async function getUserEmail(userId: string): Promise<string | null> {
 
 const MAX_PHOTO_SIZE = 5 * 1024 * 1024; // 5 Mo
 
+// Un compte particulier peut vendre occasionnellement sans SIRET, mais la
+// loi française encadre ce type de vente : au-delà de ce nombre d'annonces
+// actives, l'activité doit passer par un compte professionnel vérifié.
+const PARTICULIER_LISTING_LIMIT = 10;
+
 export async function signOutAction() {
   const supabase = await createClient();
   await supabase.auth.signOut();
@@ -156,6 +161,26 @@ export async function createListingAction(
       error:
         "Vous avez publié trop d'annonces récemment. Merci de réessayer dans une heure.",
     };
+  }
+
+  const { data: seller } = await supabase
+    .from("sellers")
+    .select("type")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  if (seller?.type === "particulier") {
+    const { count: activeCount } = await supabase
+      .from("listings")
+      .select("id", { count: "exact", head: true })
+      .eq("seller_id", user.id)
+      .in("status", ["pending", "approved"]);
+
+    if ((activeCount ?? 0) >= PARTICULIER_LISTING_LIMIT) {
+      return {
+        error: `Les comptes particuliers sont limités à ${PARTICULIER_LISTING_LIMIT} annonces actives (vente occasionnelle encadrée par la loi). Ouvrez une boutique professionnelle pour publier sans limite.`,
+      };
+    }
   }
 
   const uploadResults = await Promise.all(
@@ -565,8 +590,18 @@ export async function submitSiretAction(
 
   if (!user) redirect("/connexion");
 
+  const name = formData.get("name")?.toString().trim() ?? "";
+  const companyName = formData.get("companyName")?.toString().trim() ?? "";
+  const phone = formData.get("phone")?.toString().trim() ?? "";
+  const contactEmail = formData.get("contactEmail")?.toString().trim() ?? "";
   const siret = formData.get("siret")?.toString().replace(/\s/g, "") ?? "";
 
+  if (!name || !companyName || !phone || !contactEmail) {
+    return {
+      error:
+        "Merci de renseigner votre nom, le nom de l'entreprise, votre téléphone et votre email.",
+    };
+  }
   if (!isValidSiret(siret)) {
     return {
       error:
@@ -578,10 +613,21 @@ export async function submitSiretAction(
   // (voir siret-verification-schema.sql, security-audit-column-locks.sql) :
   // on passe par service_role, après avoir vérifié l'utilisateur ci-dessus,
   // pour cette soumission comme pour une nouvelle tentative après refus.
+  // name/company_name/phone/contact_email n'ont pas besoin de cette
+  // protection (simples informations déclaratives, comme le reste du
+  // profil), mais sont mises à jour ici avec le reste par simplicité.
   const adminClient = createAdminClient();
   const { error } = await adminClient
     .from("sellers")
-    .update({ siret, siret_status: "en_attente", type: "pro" })
+    .update({
+      name,
+      company_name: companyName,
+      phone,
+      contact_email: contactEmail,
+      siret,
+      siret_status: "en_attente",
+      type: "pro",
+    })
     .eq("id", user.id);
 
   if (error) {

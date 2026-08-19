@@ -21,6 +21,9 @@ export type Seller = {
   status?: SellerStatus;
   siret?: string | null;
   siret_status?: SiretStatus;
+  company_name?: string | null;
+  phone?: string | null;
+  contact_email?: string | null;
 };
 
 export type ListingStatus = "pending" | "approved" | "rejected" | "vendu";

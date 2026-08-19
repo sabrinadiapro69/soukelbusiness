@@ -48,6 +48,10 @@ export default async function ProPage() {
   const siretFormLabels = {
     sectionTitle: t.siretSectionTitle,
     sectionText: t.siretSectionText,
+    nameLabel: t.siretNameLabel,
+    companyNameLabel: t.siretCompanyNameLabel,
+    phoneLabel: t.siretPhoneLabel,
+    contactEmailLabel: t.siretContactEmailLabel,
     siretLabel: t.siretLabel,
     siretPlaceholder: t.siretPlaceholder,
     submit: t.siretSubmit,
@@ -117,11 +121,26 @@ export default async function ProPage() {
                     <SiretForm labels={siretFormLabels} />
                   </div>
                 )}
-              {user &&
-                ((sellerType === "particulier") ||
-                  (sellerType === "pro" && siretStatus === "aucun")) && (
+              {user && sellerType === "particulier" && (
+                <div className="flex flex-col items-center gap-6">
+                  <div className="mx-auto max-w-md rounded-xl border border-line bg-paper px-5 py-4 text-sm text-ink-soft">
+                    <p className="font-semibold text-ink">
+                      {t.particulierBoutiqueTitle}
+                    </p>
+                    <p className="mt-1">{t.particulierBoutiqueText}</p>
+                    <Link
+                      href="/publier"
+                      className="mt-3 inline-block rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-dark"
+                    >
+                      {t.particulierBoutiqueCta}
+                    </Link>
+                  </div>
                   <SiretForm labels={siretFormLabels} />
-                )}
+                </div>
+              )}
+              {user && sellerType === "pro" && siretStatus === "aucun" && (
+                <SiretForm labels={siretFormLabels} />
+              )}
             </div>
           </div>
         </section>
