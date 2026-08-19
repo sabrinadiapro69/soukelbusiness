@@ -5,14 +5,12 @@ import { useMemo, useState } from "react";
 import {
   categories,
   formatEUR,
-  formatDaApprox,
   formatRelativeTime,
   getListingPhotoUrl,
   type Listing,
   type SellerType,
 } from "@/lib/queries";
 import { wilayas } from "@/lib/wilayas";
-import { wilayasAlgerie } from "@/lib/wilayas-algerie";
 import { communesByWilaya } from "@/lib/communes";
 import type { Dictionary } from "@/lib/i18n/dictionaries/fr";
 import type { Locale } from "@/lib/i18n/locale";
@@ -22,7 +20,6 @@ type SortOrder = "recent" | "price-asc" | "price-desc";
 
 export default function ProduitsFilters({
   listings,
-  taux,
   dict,
   locale,
   initialQuery = "",
@@ -34,7 +31,6 @@ export default function ProduitsFilters({
   saveSearchAction,
 }: {
   listings: Listing[];
-  taux: number;
   dict: Dictionary["produits"];
   locale: Locale;
   initialQuery?: string;
@@ -115,20 +111,11 @@ export default function ProduitsFilters({
           className="rounded-full border border-line bg-paper px-4 py-2.5 text-sm text-ink-soft"
         >
           <option value="">{dict.filterWilayaAll}</option>
-          <optgroup label={dict.franceGroupLabel}>
-            {wilayas.map((w) => (
-              <option key={w} value={w}>
-                {w}
-              </option>
-            ))}
-          </optgroup>
-          <optgroup label={dict.algerieGroupLabel} disabled>
-            {wilayasAlgerie.map((w) => (
-              <option key={w} value={w}>
-                {w}
-              </option>
-            ))}
-          </optgroup>
+          {wilayas.map((w) => (
+            <option key={w} value={w}>
+              {w}
+            </option>
+          ))}
         </select>
         {communeOptions.length > 0 && (
           <select
@@ -265,9 +252,6 @@ export default function ProduitsFilters({
                       {listing.negociable ? dict.cardNegociable : dict.cardFerme}
                     </span>
                   </div>
-                  <span className="text-[11px] text-ink-soft/70">
-                    {formatDaApprox(listing.price, taux)}
-                  </span>
                 </>
               )}
               <div className="mt-auto flex items-center justify-between text-xs text-ink-soft">

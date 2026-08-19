@@ -4,7 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { wilayas } from "@/lib/wilayas";
-import { wilayasAlgerie } from "@/lib/wilayas-algerie";
 import type { Dictionary } from "@/lib/i18n/dictionaries/fr";
 import type { Locale } from "@/lib/i18n/locale";
 import { formatConfirmationSent } from "@/lib/i18n/format";
@@ -128,20 +127,11 @@ export default function InscriptionForm({
           <option value="" disabled>
             {dict.chooseWilaya}
           </option>
-          <optgroup label={dict.franceGroupLabel}>
-            {wilayas.map((w) => (
-              <option key={w} value={w}>
-                {w}
-              </option>
-            ))}
-          </optgroup>
-          <optgroup label={dict.algerieGroupLabel} disabled>
-            {wilayasAlgerie.map((w) => (
-              <option key={w} value={w}>
-                {w}
-              </option>
-            ))}
-          </optgroup>
+          {wilayas.map((w) => (
+            <option key={w} value={w}>
+              {w}
+            </option>
+          ))}
         </select>
       </div>
 

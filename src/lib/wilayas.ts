@@ -1,6 +1,4 @@
-// Le site est pour l'instant réservé à la diaspora algérienne en France,
-// en attendant une mise en conformité avec la réglementation algérienne.
-// Voir aussi wilayas-algerie.ts (conservé pour réactivation future).
+// Villes proposées pour la localisation (France).
 export const wilayas = [
   "Paris",
   "Marseille",

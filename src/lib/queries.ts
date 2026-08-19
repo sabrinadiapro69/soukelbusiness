@@ -704,28 +704,8 @@ export async function getTopTalents(
   );
 }
 
-// Le site cible la diaspora en France : les prix sont désormais saisis et
-// stockés en euros. Le dinar n'est plus qu'une conversion indicative.
 export function formatEUR(price: number): string {
   return `${new Intl.NumberFormat("fr-FR", { maximumFractionDigits: 2 }).format(price)} €`;
-}
-
-const DEFAULT_TAUX_EUR_DA = 260;
-
-export async function getTauxChange(): Promise<number> {
-  const { data, error } = await supabase
-    .from("parametres")
-    .select("taux_eur_da")
-    .eq("id", 1)
-    .maybeSingle();
-
-  if (error || !data) return DEFAULT_TAUX_EUR_DA;
-  return Number(data.taux_eur_da);
-}
-
-export function formatDaApprox(priceEur: number, tauxEurDa: number): string {
-  const da = priceEur * tauxEurDa;
-  return `≈ ${new Intl.NumberFormat("fr-FR").format(Math.round(da))} DA`;
 }
 
 export function formatMemberSince(dateStr: string): string {

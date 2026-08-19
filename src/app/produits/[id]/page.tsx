@@ -4,12 +4,10 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import {
   formatEUR,
-  formatDaApprox,
   formatRelativeTime,
   getListingById,
   getListingPhotoUrl,
   getListingsByCategory,
-  getTauxChange,
   type Offer,
 } from "@/lib/queries";
 import { createClient } from "@/lib/supabase/server";
@@ -73,8 +71,6 @@ export default async function ProduitPage({
     listing.category,
     listing.id
   );
-
-  const taux = await getTauxChange().catch(() => 260);
 
   const requestHeaders = await headers();
   const host = requestHeaders.get("host");
@@ -159,25 +155,20 @@ export default async function ProduitPage({
                 </span>
               </div>
             ) : (
-              <>
-                <div className="flex flex-wrap items-center gap-3">
-                  <span className="font-mono text-3xl font-bold text-accent-dark">
-                    {formatEUR(listing.price)}
-                  </span>
-                  <span
-                    className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
-                      listing.negociable
-                        ? "bg-primary/10 text-primary-dark"
-                        : "bg-bg-alt text-ink-soft"
-                    }`}
-                  >
-                    {listing.negociable ? t.negociable : t.ferme}
-                  </span>
-                </div>
-                <span className="text-xs text-ink-soft">
-                  {formatDaApprox(listing.price, taux)} {t.tauxIndicatif}
+              <div className="flex flex-wrap items-center gap-3">
+                <span className="font-mono text-3xl font-bold text-accent-dark">
+                  {formatEUR(listing.price)}
                 </span>
-              </>
+                <span
+                  className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
+                    listing.negociable
+                      ? "bg-primary/10 text-primary-dark"
+                      : "bg-bg-alt text-ink-soft"
+                  }`}
+                >
+                  {listing.negociable ? t.negociable : t.ferme}
+                </span>
+              </div>
             )}
 
             <p className="leading-relaxed text-ink-soft">

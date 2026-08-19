@@ -5,7 +5,6 @@ import { createListingAction, type CreateListingState } from "@/app/actions";
 import { compressPhotoInput } from "@/lib/imageCompression";
 import { categories } from "@/lib/queries";
 import { wilayas } from "@/lib/wilayas";
-import { wilayasAlgerie } from "@/lib/wilayas-algerie";
 import { communesByWilaya } from "@/lib/communes";
 import type { Dictionary } from "@/lib/i18n/dictionaries/fr";
 
@@ -148,20 +147,11 @@ export default function PublierForm({
           <option value="" disabled>
             {dict.chooseWilaya}
           </option>
-          <optgroup label={dict.franceGroupLabel}>
-            {wilayas.map((w) => (
-              <option key={w} value={w}>
-                {w}
-              </option>
-            ))}
-          </optgroup>
-          <optgroup label={dict.algerieGroupLabel} disabled>
-            {wilayasAlgerie.map((w) => (
-              <option key={w} value={w}>
-                {w}
-              </option>
-            ))}
-          </optgroup>
+          {wilayas.map((w) => (
+            <option key={w} value={w}>
+              {w}
+            </option>
+          ))}
         </select>
       </div>
 

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import ProduitsFilters from "@/components/ProduitsFilters";
-import { getListings, getTauxChange } from "@/lib/queries";
+import { getListings } from "@/lib/queries";
 import { getLocale } from "@/lib/i18n/locale";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { createClient } from "@/lib/supabase/server";
@@ -13,7 +13,7 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Toutes les annonces",
   description:
-    "Parcourez les annonces de véhicules, immobilier, mode, électronique et services de la diaspora algérienne en France.",
+    "Parcourez les créations et services de créateurs, artistes, artisans et prestataires indépendants en France.",
 };
 
 export default async function ProduitsPage({
@@ -36,10 +36,7 @@ export default async function ProduitsPage({
     data: { user },
   } = await supabase.auth.getUser();
 
-  const [listings, taux] = await Promise.all([
-    getListings(),
-    getTauxChange().catch(() => 260),
-  ]);
+  const listings = await getListings();
 
   return (
     <div className="flex flex-1 flex-col">
@@ -51,7 +48,6 @@ export default async function ProduitsPage({
         </h1>
         <ProduitsFilters
           listings={listings}
-          taux={taux}
           dict={dict.produits}
           locale={locale}
           initialQuery={q ?? ""}
