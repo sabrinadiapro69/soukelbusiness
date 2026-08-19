@@ -179,7 +179,10 @@ export default async function Home() {
 
             <div className="relative hidden aspect-[4/3.2] lg:block">
               <div className="absolute top-0 right-4 w-64 rotate-[3deg] rounded-2xl border border-line bg-paper p-3 shadow-md">
-                <div className="aspect-[4/3] rounded-xl bg-[#F5E9E3]" />
+                <div
+                  className="aspect-[4/3] rounded-xl bg-cover bg-center bg-[#F5E9E3]"
+                  style={{ backgroundImage: "url(/hero/sac-cuir-vegetal.jpg)" }}
+                />
                 <span className="absolute -top-2.5 -left-2.5 rounded-full bg-accent-dark px-2.5 py-1 text-xs font-semibold text-white shadow-sm">
                   {t.heroCardBadge}
                 </span>
@@ -191,7 +194,10 @@ export default async function Home() {
                 </p>
               </div>
               <div className="absolute bottom-0 left-2 w-60 -rotate-[4deg] rounded-2xl border border-line bg-paper p-3 shadow-md">
-                <div className="aspect-[4/3] rounded-xl bg-[#EDEEE3]" />
+                <div
+                  className="aspect-[4/3] rounded-xl bg-cover bg-center bg-[#EDEEE3]"
+                  style={{ backgroundImage: "url(/hero/bol-gres.jpg)" }}
+                />
                 <p className="mt-2 text-sm font-semibold text-ink">
                   {t.heroCard2Title}
                 </p>
