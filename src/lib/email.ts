@@ -5,10 +5,8 @@ const resend = process.env.RESEND_API_KEY
   ? new Resend(process.env.RESEND_API_KEY)
   : null;
 
-// En attendant qu'un nom de domaine soit vérifié sur Resend, l'envoi se
-// fait depuis leur domaine de test — ne délivre qu'à l'adresse du
-// compte Resend tant qu'aucun domaine n'est configuré.
-const FROM = "Souk El Business <onboarding@resend.dev>";
+const FROM = "Souk El Business <contact@soukelbusiness.com>";
+const REPLY_TO = "contact@one-concept.fr";
 
 function escapeHtml(value: string): string {
   return value
@@ -37,7 +35,13 @@ async function sendEmail(to: string, subject: string, html: string) {
     return;
   }
   try {
-    await resend.emails.send({ from: FROM, to, subject, html: baseTemplate(html) });
+    await resend.emails.send({
+      from: FROM,
+      to,
+      subject,
+      html: baseTemplate(html),
+      replyTo: REPLY_TO,
+    });
   } catch (err) {
     console.error("Échec de l'envoi d'email :", err);
   }
