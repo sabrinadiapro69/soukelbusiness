@@ -7,6 +7,7 @@ import {
   formatEUR,
   formatRelativeTime,
   getListingPhotoUrl,
+  getSellerDisplayName,
   type Listing,
   type SellerType,
 } from "@/lib/queries";
@@ -97,12 +98,14 @@ export default function ProduitsFilters({
       <div className="mt-4 flex flex-col gap-3 sm:flex-row">
         <input
           type="text"
+          aria-label={dict.searchPlaceholder}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder={dict.searchPlaceholder}
-          className="w-full rounded-full border border-line bg-paper px-4 py-2.5 text-sm outline-none focus:border-ink sm:max-w-sm"
+          className="w-full rounded-full border border-line bg-paper px-4 py-2.5 text-sm outline-none focus:border-ink focus-visible:ring-2 focus-visible:ring-ink/20 sm:max-w-sm"
         />
         <select
+          aria-label={dict.filterWilayaAll}
           value={wilayaFilter}
           onChange={(e) => {
             setWilayaFilter(e.target.value);
@@ -119,6 +122,7 @@ export default function ProduitsFilters({
         </select>
         {communeOptions.length > 0 && (
           <select
+            aria-label={dict.filterCommuneAll}
             value={communeFilter}
             onChange={(e) => setCommuneFilter(e.target.value)}
             disabled={!wilayaFilter}
@@ -177,6 +181,7 @@ export default function ProduitsFilters({
 
         <div className="flex flex-wrap gap-3">
           <select
+            aria-label={dict.categoryFilterLabel}
             value={category}
             onChange={(e) => setCategory(e.target.value)}
             className="rounded-full border border-line bg-paper px-4 py-2 text-sm text-ink-soft"
@@ -188,6 +193,7 @@ export default function ProduitsFilters({
             ))}
           </select>
           <select
+            aria-label={dict.sortLabel}
             value={sort}
             onChange={(e) => setSort(e.target.value as SortOrder)}
             className="rounded-full border border-line bg-paper px-4 py-2 text-sm text-ink-soft"
@@ -255,7 +261,7 @@ export default function ProduitsFilters({
                 </>
               )}
               <div className="mt-auto flex items-center justify-between text-xs text-ink-soft">
-                <span>{listing.seller?.name}</span>
+                <span>{listing.seller && getSellerDisplayName(listing.seller)}</span>
                 <span>
                   📍 {listing.commune ? `${listing.commune}, ` : ""}
                   {listing.location}

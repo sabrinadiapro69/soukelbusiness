@@ -708,6 +708,19 @@ export function formatEUR(price: number): string {
   return `${new Intl.NumberFormat("fr-FR", { maximumFractionDigits: 2 }).format(price)} €`;
 }
 
+// Une boutique pro doit apparaître publiquement sous le nom de son
+// enseigne (company_name, renseigné à la demande de SIRET), pas sous le
+// nom personnel du compte — celui-ci reste réservé aux pages internes
+// (vues d'administration, "Mon profil" du compte lui-même).
+export function getSellerDisplayName(
+  seller: Pick<Seller, "name" | "type" | "company_name">
+): string {
+  if (seller.type === "pro" && seller.company_name) {
+    return seller.company_name;
+  }
+  return seller.name;
+}
+
 export function formatMemberSince(dateStr: string): string {
   return new Intl.DateTimeFormat("fr-FR", {
     month: "long",

@@ -12,6 +12,7 @@ import {
   getProProfile,
   getReviewsBySeller,
   getSellerById,
+  getSellerDisplayName,
 } from "@/lib/queries";
 import { createClient } from "@/lib/supabase/server";
 import ReportButton from "@/components/ReportButton";
@@ -42,10 +43,11 @@ export async function generateMetadata({
 
   if (!seller) return {};
 
+  const displayName = getSellerDisplayName(seller);
   const title =
-    seller.type === "pro" ? `${seller.name}, professionnel` : seller.name;
+    seller.type === "pro" ? `${displayName}, professionnel` : displayName;
   const description =
-    seller.description || `Profil vendeur ${seller.name} sur Souk El Business.`;
+    seller.description || `Profil vendeur ${displayName} sur Souk El Business.`;
 
   return {
     title,
@@ -94,6 +96,8 @@ export default async function VendeurPage({
       : Promise.resolve([]),
   ]);
 
+  const displayName = getSellerDisplayName(seller);
+
   return (
     <div className="flex flex-1 flex-col">
       <SiteHeader />
@@ -112,7 +116,7 @@ export default async function VendeurPage({
           </div>
           <div className="flex-1">
             <div className="flex flex-wrap items-center gap-3">
-              <h1 className="text-2xl font-bold text-ink">{seller.name}</h1>
+              <h1 className="text-2xl font-bold text-ink">{displayName}</h1>
               <span
                 className={`rounded-full px-3 py-1 text-xs font-semibold ${
                   seller.type === "pro"
@@ -182,7 +186,7 @@ export default async function VendeurPage({
 
         <section className="mt-12">
           <h2 className="text-xl font-bold text-ink">
-            {t.productsOf} {seller.name}
+            {t.productsOf} {displayName}
           </h2>
           {sellerListings.length > 0 ? (
             <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">

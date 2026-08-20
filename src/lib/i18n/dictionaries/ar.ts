@@ -5,12 +5,6 @@ const ar: Dictionary = {
     location: "فرنسا",
     change: "تغيير",
     assistance: "المساعدة",
-    pro: "سوق البيزنس برو",
-    rayons: "الأقسام",
-    artisanat: "الحرف",
-    dressing: "الملابس",
-    annonces: "الإعلانات",
-    confiance: "الثقة",
     explorer: "استكشاف",
     createurs: "المبدعون",
     commentCaMarche: "كيف يعمل الموقع",
@@ -25,7 +19,6 @@ const ar: Dictionary = {
     deconnexion: "تسجيل الخروج",
     connexion: "تسجيل الدخول",
     inscription: "إنشاء حساب",
-    deposer: "+ أضف إعلانا",
   },
   footer: {
     tagline: "مواهب من هنا، في مكان واحد.",
@@ -100,6 +93,19 @@ const ar: Dictionary = {
     creatorsPoint4: "أسعار قابلة للتفاوض",
     creatorsPoint5: "علاقة دون وسيط تجاري في هذه النسخة الأولى",
 
+    talentueuxEyebrow: "مواهبنا",
+    talentueuxTitle: "المبدعون الموهوبون لهذا الشهر",
+    talentueuxText:
+      "مجموعة مختارة من البائعين الذين تحقق فريقنا من حرفيتهم وجديتهم.",
+    talentueuxEmpty: "لا يوجد موهوب موثق حاليًا.",
+    talentueuxVerified: "موهوب موثق",
+
+    donsEyebrow: "تضامن",
+    donsTitle: "تبرعات المجتمع",
+    donsText:
+      "أغراض يتم التبرع بها مجانًا من أعضاء المجتمع، بروح التعاضد التي يقوم عليها سوق البيزنس.",
+    donsEmpty: "لا يوجد تبرع متاح حاليًا.",
+
     howLabel: "كيف يعمل الموقع",
     howTitle: "كيف يعمل الموقع؟",
     howStep1Title: "استكشف",
@@ -118,6 +124,8 @@ const ar: Dictionary = {
   produits: {
     pageTitle: "جميع الإعلانات",
     searchPlaceholder: "ابحث بكلمة مفتاحية",
+    categoryFilterLabel: "تصفية حسب الفئة",
+    sortLabel: "الترتيب حسب",
     filterAll: "جميع البائعين",
     filterParticuliers: "أفراد",
     filterPro: "محترفون",
@@ -215,10 +223,6 @@ const ar: Dictionary = {
     metierPlaceholder: "مثال: سباك، خياطة، مصور...",
     categoriesLabel: "مجالاتك",
     categoriesHint: "اختر فئة واحدة أو أكثر تناسب نشاطك.",
-    categorieEvenements: "المناسبات",
-    categorieDecoration: "ديكور المنزل",
-    categorieMode: "الموضة",
-    categorieCreation: "الإبداع",
     saving: "جارٍ الحفظ...",
     save: "حفظ",
     myPortfolio: "معرض أعمالي",

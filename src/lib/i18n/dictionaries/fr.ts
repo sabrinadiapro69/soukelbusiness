@@ -3,12 +3,6 @@ const fr = {
     location: "France",
     change: "changer",
     assistance: "Assistance",
-    pro: "Souk El Business Pro",
-    rayons: "Rayons",
-    artisanat: "Artisanat",
-    dressing: "Dressing",
-    annonces: "Annonces",
-    confiance: "Confiance",
     explorer: "Explorer",
     createurs: "Créateurs",
     commentCaMarche: "Comment ça marche",
@@ -23,7 +17,6 @@ const fr = {
     deconnexion: "Se déconnecter",
     connexion: "Se connecter",
     inscription: "S'inscrire",
-    deposer: "+ Déposer une annonce",
   },
   footer: {
     tagline: "Les talents d'ici, réunis au même endroit.",
@@ -100,6 +93,19 @@ const fr = {
     creatorsPoint5:
       "Relation sans intermédiaire commercial dans cette première version",
 
+    talentueuxEyebrow: "Nos talents",
+    talentueuxTitle: "Les créateurs Talentueux du moment",
+    talentueuxText:
+      "Une sélection de vendeurs vérifiés par notre équipe pour leur savoir-faire et leur sérieux.",
+    talentueuxEmpty: "Aucun talentueux vérifié pour le moment.",
+    talentueuxVerified: "Talentueux vérifié",
+
+    donsEyebrow: "Solidarité",
+    donsTitle: "Dons de la communauté",
+    donsText:
+      "Des objets donnés gratuitement par des membres de la communauté, dans l'esprit d'entraide de Souk El Business.",
+    donsEmpty: "Aucun don disponible pour le moment.",
+
     howLabel: "Comment ça marche",
     howTitle: "Comment ça marche ?",
     howStep1Title: "Explorez",
@@ -120,6 +126,8 @@ const fr = {
   produits: {
     pageTitle: "Toutes les annonces",
     searchPlaceholder: "Rechercher par mot-clé",
+    categoryFilterLabel: "Filtrer par catégorie",
+    sortLabel: "Trier par",
     filterAll: "Tous les vendeurs",
     filterParticuliers: "Particuliers",
     filterPro: "Professionnels",
@@ -225,10 +233,6 @@ const fr = {
     categoriesLabel: "Vos univers",
     categoriesHint:
       "Cochez une ou plusieurs catégories qui correspondent à votre activité.",
-    categorieEvenements: "Événements",
-    categorieDecoration: "Décoration d'intérieur",
-    categorieMode: "Mode",
-    categorieCreation: "Création",
     saving: "Enregistrement...",
     save: "Enregistrer",
     myPortfolio: "Mon portfolio",

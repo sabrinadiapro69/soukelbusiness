@@ -12,10 +12,15 @@ import OffersSection, {
   type CategoryKey,
   type Offer,
 } from "@/components/home/OffersSection";
+import TalentueuxSection from "@/components/home/TalentueuxSection";
+import DonsScroll from "@/components/DonsScroll";
 import {
   formatEUR,
+  getDonListings,
   getFeaturedListings,
   getListingPhotoUrl,
+  getSellerDisplayName,
+  getTopTalents,
 } from "@/lib/queries";
 import { getLocale } from "@/lib/i18n/locale";
 import { getDictionary } from "@/lib/i18n/dictionaries";
@@ -49,13 +54,15 @@ export default async function Home() {
   ];
 
   const featuredListings = await getFeaturedListings(9).catch(() => []);
+  const topTalents = await getTopTalents(4).catch(() => []);
+  const donListings = await getDonListings(10).catch(() => []);
   const realOffers: Offer[] = featuredListings
     .filter((listing) => CATEGORY_LABEL_TO_KEY[listing.category])
     .map((listing) => ({
       id: String(listing.id),
       category: CATEGORY_LABEL_TO_KEY[listing.category],
       title: listing.title,
-      vendor: listing.seller.name,
+      vendor: getSellerDisplayName(listing.seller),
       location: listing.commune
         ? `${listing.commune}, ${listing.location}`
         : listing.location,
@@ -150,7 +157,7 @@ export default async function Home() {
                     name="q"
                     type="text"
                     placeholder={t.searchWhatPlaceholder}
-                    className="w-full rounded-xl px-2 py-1.5 text-sm text-ink outline-none placeholder:text-ink-soft/60"
+                    className="w-full rounded-xl px-2 py-1.5 text-sm text-ink outline-none placeholder:text-ink-soft/85"
                   />
                 </div>
                 <div className="flex-1 border-line sm:border-l sm:pl-3">
@@ -165,7 +172,7 @@ export default async function Home() {
                     name="wilaya"
                     type="text"
                     placeholder={t.searchWherePlaceholder}
-                    className="w-full rounded-xl px-2 py-1.5 text-sm text-ink outline-none placeholder:text-ink-soft/60"
+                    className="w-full rounded-xl px-2 py-1.5 text-sm text-ink outline-none placeholder:text-ink-soft/85"
                   />
                 </div>
                 <button
@@ -246,6 +253,38 @@ export default async function Home() {
                 </li>
               ))}
             </ul>
+          </div>
+        </section>
+
+        {/* Talentueux */}
+        <TalentueuxSection
+          talents={topTalents}
+          eyebrow={t.talentueuxEyebrow}
+          title={t.talentueuxTitle}
+          text={t.talentueuxText}
+          emptyLabel={t.talentueuxEmpty}
+          verifiedLabel={t.talentueuxVerified}
+        />
+
+        {/* Dons */}
+        <section className="py-16">
+          <div className="mx-auto max-w-6xl px-6">
+            <span className="mb-1.5 block font-mono text-xs font-medium tracking-wide text-primary uppercase">
+              {t.donsEyebrow}
+            </span>
+            <h2 className="font-serif text-3xl font-semibold text-ink">
+              {t.donsTitle}
+            </h2>
+            <p className="mt-3 max-w-md text-[15px] leading-relaxed text-ink-soft">
+              {t.donsText}
+            </p>
+            <div className="mt-10">
+              <DonsScroll
+                listings={donListings}
+                donLabel={dict.produit.don}
+                emptyLabel={t.donsEmpty}
+              />
+            </div>
           </div>
         </section>
 

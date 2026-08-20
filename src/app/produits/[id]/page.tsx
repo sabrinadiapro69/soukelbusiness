@@ -8,6 +8,7 @@ import {
   getListingById,
   getListingPhotoUrl,
   getListingsByCategory,
+  getSellerDisplayName,
   type Offer,
 } from "@/lib/queries";
 import { createClient } from "@/lib/supabase/server";
@@ -212,7 +213,7 @@ export default async function ProduitPage({
                 href={`/vendeurs/${listing.seller_id}`}
                 className="mt-1 inline-block font-semibold text-ink hover:text-accent"
               >
-                {listing.seller?.name}
+                {listing.seller && getSellerDisplayName(listing.seller)}
               </Link>
               <p className="text-sm text-ink-soft">📍 {listing.location}</p>
               <button className="mt-4 w-full rounded-full border border-accent px-6 py-3 text-sm font-semibold text-accent transition-colors hover:bg-dawn-soft">
@@ -233,7 +234,11 @@ export default async function ProduitPage({
                 listingId={listing.id}
                 askingPrice={listing.price}
                 negociable={listing.negociable}
-                sellerName={listing.seller?.name ?? dict.negotiation.defaultSellerName}
+                sellerName={
+                  listing.seller
+                    ? getSellerDisplayName(listing.seller)
+                    : dict.negotiation.defaultSellerName
+                }
                 userId={user?.id ?? null}
                 offer={offer}
               />

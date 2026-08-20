@@ -5,12 +5,6 @@ const en: Dictionary = {
     location: "France",
     change: "change",
     assistance: "Support",
-    pro: "Souk El Business Pro",
-    rayons: "Categories",
-    artisanat: "Crafts",
-    dressing: "Dressing",
-    annonces: "Listings",
-    confiance: "Trust",
     explorer: "Explore",
     createurs: "Creators",
     commentCaMarche: "How it works",
@@ -25,7 +19,6 @@ const en: Dictionary = {
     deconnexion: "Sign out",
     connexion: "Sign in",
     inscription: "Sign up",
-    deposer: "+ Post a listing",
   },
   footer: {
     tagline: "Local talent, all in one place.",
@@ -101,6 +94,19 @@ const en: Dictionary = {
     creatorsPoint4: "Negotiable prices",
     creatorsPoint5: "No commercial middleman in this first version",
 
+    talentueuxEyebrow: "Our talents",
+    talentueuxTitle: "This month's Talented creators",
+    talentueuxText:
+      "A selection of sellers verified by our team for their craftsmanship and reliability.",
+    talentueuxEmpty: "No verified Talented creator at the moment.",
+    talentueuxVerified: "Verified Talented creator",
+
+    donsEyebrow: "Solidarity",
+    donsTitle: "Community donations",
+    donsText:
+      "Items given away for free by community members, in the spirit of mutual support at Souk El Business.",
+    donsEmpty: "No donation available at the moment.",
+
     howLabel: "How it works",
     howTitle: "How does it work?",
     howStep1Title: "Explore",
@@ -121,6 +127,8 @@ const en: Dictionary = {
   produits: {
     pageTitle: "All listings",
     searchPlaceholder: "Search by keyword",
+    categoryFilterLabel: "Filter by category",
+    sortLabel: "Sort by",
     filterAll: "All sellers",
     filterParticuliers: "Individuals",
     filterPro: "Professionals",
@@ -225,10 +233,6 @@ const en: Dictionary = {
     categoriesLabel: "Your specialties",
     categoriesHint:
       "Check one or more categories that match your activity.",
-    categorieEvenements: "Events",
-    categorieDecoration: "Interior decoration",
-    categorieMode: "Fashion",
-    categorieCreation: "Creation",
     saving: "Saving...",
     save: "Save",
     myPortfolio: "My portfolio",
