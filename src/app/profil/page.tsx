@@ -173,6 +173,14 @@ export default async function ProfilPage() {
             categories={proProfile?.categories ?? []}
             portfolio={portfolio ?? []}
             dict={dict.profilForm}
+            categoryLabels={{
+              creation: dict.home.categoryCreationTitle,
+              mode: dict.home.categoryModeTitle,
+              maison: dict.home.categoryMaisonTitle,
+              beaute: dict.home.categoryBeauteTitle,
+              photo: dict.home.categoryPhotoTitle,
+              services: dict.home.categoryServicesTitle,
+            }}
           />
         </div>
       </main>

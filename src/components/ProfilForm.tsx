@@ -29,7 +29,14 @@ const emojiOptions = [
 
 const initialState: UpdateProfileState = { error: null };
 
-const categorieOptions = ["evenements", "decoration", "mode", "creation"] as const;
+const categorieOptions = [
+  "creation",
+  "mode",
+  "maison",
+  "beaute",
+  "photo",
+  "services",
+] as const;
 
 export default function ProfilForm({
   seller,
@@ -37,6 +44,7 @@ export default function ProfilForm({
   categories,
   portfolio,
   dict,
+  categoryLabels,
 }: {
   seller: {
     name: string;
@@ -49,19 +57,13 @@ export default function ProfilForm({
   categories: string[];
   portfolio: PortfolioItem[];
   dict: Dictionary["profilForm"];
+  categoryLabels: Record<(typeof categorieOptions)[number], string>;
 }) {
   const [state, formAction, pending] = useActionState(
     updateProfileAction,
     initialState
   );
   const [avatar, setAvatar] = useState(seller.avatar_emoji);
-
-  const categorieLabels: Record<(typeof categorieOptions)[number], string> = {
-    evenements: dict.categorieEvenements,
-    decoration: dict.categorieDecoration,
-    mode: dict.categorieMode,
-    creation: dict.categorieCreation,
-  };
 
   return (
     <>
@@ -101,23 +103,29 @@ export default function ProfilForm({
       </div>
 
       <div>
-        <label className="text-sm font-medium text-ink">{dict.name}</label>
+        <label htmlFor="profil-name" className="text-sm font-medium text-ink">
+          {dict.name}
+        </label>
         <input
+          id="profil-name"
           type="text"
           name="name"
           required
           defaultValue={seller.name}
-          className="mt-1 w-full rounded-xl border border-line px-4 py-2 text-sm text-ink outline-none focus:border-accent"
+          className="mt-1 w-full rounded-xl border border-line px-4 py-2 text-sm text-ink outline-none focus:border-accent focus-visible:ring-2 focus-visible:ring-accent/30"
         />
       </div>
 
       <div>
-        <label className="text-sm font-medium text-ink">{dict.wilaya}</label>
+        <label htmlFor="profil-city" className="text-sm font-medium text-ink">
+          {dict.wilaya}
+        </label>
         <select
+          id="profil-city"
           name="city"
           required
           defaultValue={seller.city}
-          className="mt-1 w-full rounded-xl border border-line px-4 py-2 text-sm text-ink outline-none focus:border-accent"
+          className="mt-1 w-full rounded-xl border border-line px-4 py-2 text-sm text-ink outline-none focus:border-accent focus-visible:ring-2 focus-visible:ring-accent/30"
         >
           <option value="" disabled>
             {dict.chooseWilaya}
@@ -131,26 +139,30 @@ export default function ProfilForm({
       </div>
 
       <div>
-        <label className="text-sm font-medium text-ink">{dict.bio}</label>
+        <label htmlFor="profil-description" className="text-sm font-medium text-ink">
+          {dict.bio}
+        </label>
         <textarea
+          id="profil-description"
           name="description"
           rows={4}
           defaultValue={seller.description}
-          className="mt-1 w-full rounded-xl border border-line px-4 py-2 text-sm text-ink outline-none focus:border-accent"
+          className="mt-1 w-full rounded-xl border border-line px-4 py-2 text-sm text-ink outline-none focus:border-accent focus-visible:ring-2 focus-visible:ring-accent/30"
         />
       </div>
 
       {seller.type === "pro" && (
         <div>
-          <label className="text-sm font-medium text-ink">
+          <label htmlFor="profil-metier" className="text-sm font-medium text-ink">
             {dict.metier}
           </label>
           <input
+            id="profil-metier"
             type="text"
             name="metier"
             placeholder={dict.metierPlaceholder}
             defaultValue={metier}
-            className="mt-1 w-full rounded-xl border border-line px-4 py-2 text-sm text-ink outline-none focus:border-accent"
+            className="mt-1 w-full rounded-xl border border-line px-4 py-2 text-sm text-ink outline-none focus:border-accent focus-visible:ring-2 focus-visible:ring-accent/30"
           />
         </div>
       )}
@@ -174,7 +186,7 @@ export default function ProfilForm({
                   defaultChecked={categories.includes(option)}
                   className="h-4 w-4 accent-accent"
                 />
-                {categorieLabels[option]}
+                {categoryLabels[option]}
               </label>
             ))}
           </div>
@@ -246,20 +258,23 @@ export default function ProfilForm({
             type="text"
             name="title"
             required
+            aria-label={dict.titlePlaceholder}
             placeholder={dict.titlePlaceholder}
-            className="w-full rounded-xl border border-line px-4 py-2 text-sm text-ink outline-none focus:border-accent"
+            className="w-full rounded-xl border border-line px-4 py-2 text-sm text-ink outline-none focus:border-accent focus-visible:ring-2 focus-visible:ring-accent/30"
           />
           <input
             type="text"
             name="description"
+            aria-label={dict.descriptionPlaceholder}
             placeholder={dict.descriptionPlaceholder}
-            className="w-full rounded-xl border border-line px-4 py-2 text-sm text-ink outline-none focus:border-accent"
+            className="w-full rounded-xl border border-line px-4 py-2 text-sm text-ink outline-none focus:border-accent focus-visible:ring-2 focus-visible:ring-accent/30"
           />
           <div>
-            <label className="text-xs font-medium text-ink-soft">
+            <label htmlFor="portfolio-photo1" className="text-xs font-medium text-ink-soft">
               {dict.photo1}
             </label>
             <input
+              id="portfolio-photo1"
               type="file"
               name="photo1"
               accept="image/*"
@@ -269,10 +284,11 @@ export default function ProfilForm({
             />
           </div>
           <div>
-            <label className="text-xs font-medium text-ink-soft">
+            <label htmlFor="portfolio-photo2" className="text-xs font-medium text-ink-soft">
               {dict.photo2}
             </label>
             <input
+              id="portfolio-photo2"
               type="file"
               name="photo2"
               accept="image/*"
@@ -281,10 +297,11 @@ export default function ProfilForm({
             />
           </div>
           <div>
-            <label className="text-xs font-medium text-ink-soft">
+            <label htmlFor="portfolio-photo3" className="text-xs font-medium text-ink-soft">
               {dict.photo3}
             </label>
             <input
+              id="portfolio-photo3"
               type="file"
               name="photo3"
               accept="image/*"
